@@ -1,0 +1,141 @@
+# Interfaces: what to reach for
+
+Facts about the published libraries, and the judgement about which level a
+screen needs. The commands themselves are in
+[interface.md](interface.md), and this page does not repeat them.
+
+The Prime's own commands cover more than people expect, and where they stop,
+somebody has usually written the missing piece.
+
+## Which level
+
+| What the screen has to do | Reach for |
+|---|---|
+| Ask for one value | `INPUT` with a single field |
+| Ask for several at once | `INPUT` with a field list, after reading its limits |
+| Choose one of a handful | `CHOOSE` |
+| Choose one of many, scrolling | `CHOOSE_R`, or your own list |
+| Say something and wait | `MSGBOX`, or `TEXTOUT_P` plus a key wait |
+| Offer up to six actions | `DRAWMENU`, or `LibMenu` for toggles and pages |
+| A table you move around and edit | your own, on the windowed-list pattern |
+| A whole app with its own event loop | your own, or start from `SkeletonApp` |
+
+Two of those rows are worth expanding before you commit to a design. `INPUT`
+is modal and builds its labels once, and a text field makes the user type
+quotes: both are measured, and both decide layouts
+([interface.input-fields](interface.md#interface.input-fields),
+[interface.input-modal](interface.md#interface.input-modal)). And a table
+beats a form when a value can be unknown, because a form has no way to say "I
+do not know this one"
+([interface.md](interface.md#what-the-design-of-a-screen-comes-down-to)).
+
+## Using somebody else's library
+
+A PPL library is a program: you install it the way you install yours, and then
+call its exported functions. Three things to know first. Exported names are
+global, so a library that exports `draw` or `reset` will collide with yours
+([ppl.global-namespace](ppl.md#ppl.global-namespace)); prefix your own, and
+check with `hpprime lint A.txt B.txt --set`, which flags exported names that
+would clash between files installed together. Order matters, because a program
+only sees another's functions if it was compiled afterwards
+([ppl.compilation-order](ppl.md#ppl.compilation-order)), so install the
+library first. And read it before you trust it: these are one-person projects
+with no test suite, and reading the source is also the fastest way to learn
+the platform -- the key codes and menu geometry in this kit came from exactly
+that.
+
+Where they live: [hpcalc.org](https://www.hpcalc.org/prime/). Most were
+announced on the HP Museum forum, which blocks automated access, so a person
+has to fetch them.
+
+## When to write your own
+
+Once, and then use it four times. The list with a window -- selection, paging,
+a scrollbar, digit jump, touch -- is the same widget as your data screen, your
+results screen and your diagnostics screen. The pattern, and the behaviour
+worth copying, is in
+[interface.md](interface.md#what-the-design-of-a-screen-comes-down-to).
+Whatever you write, keep the split: selection, paging and what each key means
+are pure logic and can be tested on your PC with `hpprime run`, and the module
+that touches pixels stays as thin as you can make it, because it is the only
+part that cannot be.
+
+---
+
+<a name="libraries.published"></a>
+## What the published libraries give you
+
+| | |
+|---|---|
+| Identifier | `libraries.published` |
+| Kind | rule |
+| Known from | unverified |
+
+**CHOOSE_R**, Jacob Wall, version 1.0, 2019 -- `CHOOSE_R(title, items,
+cur_sel, del_opt)`. `items` is a list of strings, numbered for you from 1;
+`cur_sel` is where the highlight starts; `del_opt` puts a Delete option on the
+menu. It answers 0 if cancelled, the index if something was chosen, and the
+negative index if Delete was used. Over the built-in `CHOOSE` it adds a
+scrolling window with a scrollbar, touch, colours taken from the calculator's
+theme, and an automatic exit after a period of inactivity. Its internals are
+the clearest worked example of the windowed list.
+
+**LibMenu**, version 3, 2016 -- the six labels along the bottom, with entries
+that toggle and tabs that group them into pages: `reset()`, `draw()`,
+`events()`, `deftab(from, to, active)`, `entry(pos, txt, action)`,
+`entrytoggle(pos, txt)`, `gettoggle(pos)`, `chgflag(pos)`.
+
+**SZ_Show_Text**, Sasa, version 1.1, 2018 -- a text display utility, for when
+the answer is a paragraph rather than a number.
+
+**PrimeLibs**, José Felten, version 1.0 alpha -- the only Python toolkit here:
+`gui.py` (widget classes), `pointer.py` (touch), `kbd.py` (the keyboard, with
+shift and alpha layers), `palette.py` (theme colours), `time.py` (the module
+MicroPython does not have, built on `eval('ticks')`), `filebrowser.py`, and
+the rest. Every widget derives from `Component`, which carries position and
+size and answers `isPressed()` and `isTapped()`, so an app is a loop that
+updates and draws a tree of them.
+
+**SkeletonApp**, Andreas Möller -- an app skeleton with a complete event loop:
+drags, long press, and a handler per gesture. This kit's soft-menu geometry
+was measured from it. For an app driven by arrows, `Enter` and six buttons,
+its full event framework is more than you need: take the loop and leave the
+rest.
+
+**Evidence.** Read, not run. The signatures and behaviour above are taken from
+each library's own source and header comments; nothing here has been executed
+on a calculator by this kit, and versions move.
+
+<a name="libraries.skeletonapp-container"></a>
+## SkeletonApp's .hpprgm is not the container this kit reads
+
+| | |
+|---|---|
+| Identifier | `libraries.skeletonapp-container` |
+| Kind | rule |
+| Known from | unverified |
+
+The file begins `B6 03 00 00` rather than the `7C 61 8A B2` magic
+([formats.container](formats.md#formats.container)), so `hpprime read` refuses
+it. Take the source from the PDF that ships with it.
+
+**Evidence.** Read from the downloaded file's first bytes. Which tool wrote it
+that way, and whether other libraries of the same vintage share the format,
+has not been looked into.
+
+<a name="libraries.usb-keyboard"></a>
+## A USB keyboard can be read from Python, and nobody here has tried it
+
+| | |
+|---|---|
+| Identifier | `libraries.usb-keyboard` |
+| Kind | rule |
+| Known from | unverified |
+
+`PrimeLibs`'s `kbd.py` reads a USB keyboard through `eval('uopen()')` and
+`usbrecv`, with control, alt and shift layers. It is not in HP's documentation
+either.
+
+**Evidence.** Read from that library's source. One probe app with a USB
+keyboard attached would settle whether it works on a G2 with firmware
+2.4.15515.

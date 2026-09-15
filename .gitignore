@@ -1,0 +1,18 @@
+__pycache__/
+*.pyc
+
+# calculator binaries you leave lying around while testing
+*.hpprgm
+*.hpappprgm
+*.hpapp
+*.hpappnote
+*.hpmat
+*.hplist
+*.hpappdir/
+
+# ...but the ones the kit ships DO belong in the repository: they are the
+# skeleton of a program and of an app, they come from files that run on a G2,
+# and they carry no source of anyone's inside.
+!templates/code.hpprgm
+!templates/app/*
+!tests/fixtures/*.hpprgm
