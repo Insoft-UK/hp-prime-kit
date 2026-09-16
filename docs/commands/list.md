@@ -54,7 +54,7 @@ Numbers alone still answer a list: `CONCAT(1,2,3,4)` is `{1,2,3,4}` and not a
 number (HP help), so this is also the way to build a list out of loose values.
 
 **The interpreter does not cover any of these three forms** (unverified: that
-is this kit's interpreter on the PC, not a calculator). `hpprime run` stops on
+is the interpreter on the PC, not a calculator). `hpprime run` stops on
 them rather than answering, so the checker records a note instead of running
 them, and what is written above is HP's statement rather than something
 verified on a machine.
@@ -441,7 +441,7 @@ would come second; it comes last. That is what the argument is for, and it is
 easy to mistake for a direction flag.
 
 **The interpreter refuses that form cleanly**, saying it does not cover `SORT`
-with a second argument (unverified: that is this kit's interpreter on the PC,
+with a second argument (unverified: that is the interpreter on the PC,
 not a calculator). That is a proper refusal rather than a crash, which is not
 true of every uncovered name.
 
@@ -525,8 +525,8 @@ and the rest close up.
 
 **HP writes this name in lower case and the inventory keeps it that way**
 (HP help). There is a separate `SUPPRESS` on HP's list, filed under a
-different group, so the two are not the same name written carelessly. This
-kit's linter compares names without regard to case and cannot tell them
+different group, so the two are not the same name written carelessly. The
+linter compares names without regard to case and cannot tell them
 apart, which it already documents as a limitation.
 
 The position counts from 1 (emulator),

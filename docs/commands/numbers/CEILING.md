@@ -25,7 +25,7 @@ what [FLOOR](FLOOR.md) does.
 
 A list is taken element by element and answers a list (HP help). The
 interpreter covers the plain form but not the list one, where it stops rather
-than answering (unverified: that is this kit's interpreter on the PC, not a
+than answering (unverified: that is the interpreter on the PC, not a
 calculator), so that row is HP's statement and not something run here.
 
 Together with [FLOOR](FLOOR.md), [IP](IP.md) and [FP](FP.md) this is the set

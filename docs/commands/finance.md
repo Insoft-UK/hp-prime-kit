@@ -333,7 +333,7 @@ did not supply is needed before it computes.
 
 **HP's own list is truncated** (HP help): the syntax row ends part way
 through the sixth argument's name, so the full argument list is not published
-in the data this kit holds. Six were sent because six are visible, and the
+in the list of names here. Six were sent because six are visible, and the
 call was accepted, which says the visible six are enough to get an answer and
 not that they are all of them.
 
@@ -921,7 +921,7 @@ flows used here go out once and come back three times, so the safe rate has
 nothing to apply to. A list that turns negative again part way through is the
 case the two names are said to treat differently, and it is one row away.
 
-The same happened in Phase 6 with two unit commands that agreed on the pair
+The same happened with two unit commands that agreed on the pair
 they were given (emulator), and the answer then was the same: record the
 agreement, name the probe, and do not invent the difference.
 
@@ -1712,8 +1712,8 @@ here measures what the calculator will accept: a different number of digits
 in the year, a date built by the calculator itself rather than typed, or a
 date held in one of the app's own variables are all untried.
 
-The probe is one call whose date comes from the machine rather than from this
-kit (unverified), which separates a bad format from a command that needs
+The probe is one call whose date comes from the machine rather than from these
+pages (unverified), which separates a bad format from a command that needs
 something else entirely.
 
 The third argument chooses a 360-day calendar (HP help) and was not reached.
@@ -2078,7 +2078,7 @@ present value, a rate or a payback period of nothing has none to give. Filling `
 again would settle it.
 
 **Its twin function answers, given the flows as arguments** (emulator):
-[CashFlowFMRR](finance/CashFlowFMRR.md) was measured in Phase 7 and returned a value. A program
+[CashFlowFMRR](finance/CashFlowFMRR.md) was measured and returned a value. A program
 wanting this number does not need the app at all.
 
 The interpreter does not implement it, so `hpprime run` cannot check a program
@@ -2123,7 +2123,7 @@ nothing more. It read `0.00` once Finance was active.
 (emulator), [apps.finance-shows-two-decimals](../topics/apps.md#apps.finance-shows-two-decimals).
 
 **Its twin function answers without the app** (emulator):
-[TvmFV](finance/TvmFV.md) was measured in Phase 7 from a batch nobody had touched, so
+[TvmFV](finance/TvmFV.md) was measured from a batch nobody had touched, so
 with the Function app active, and it answered. A program that cannot select
 the Finance app can still compute this value by calling the function with
 its arguments.
@@ -2437,7 +2437,7 @@ nothing more. It read `0.00` once Finance was active.
 (emulator), [apps.finance-shows-two-decimals](../topics/apps.md#apps.finance-shows-two-decimals).
 
 **Its twin function answers without the app** (emulator):
-[TvmIPYR](finance/TvmIPYR.md) was measured in Phase 7 from a batch nobody had touched, so
+[TvmIPYR](finance/TvmIPYR.md) was measured from a batch nobody had touched, so
 with the Function app active, and it answered. A program that cannot select
 the Finance app can still compute this value by calling the function with
 its arguments.
@@ -2492,7 +2492,7 @@ present value, a rate or a payback period of nothing has none to give. Filling `
 again would settle it.
 
 **Its twin function answers, given the flows as arguments** (emulator):
-[CashFlowIRR](finance/CashFlowIRR.md) was measured in Phase 7 and returned a value. A program
+[CashFlowIRR](finance/CashFlowIRR.md) was measured and returned a value. A program
 wanting this number does not need the app at all.
 
 The interpreter does not implement it, so `hpprime run` cannot check a program
@@ -2804,7 +2804,7 @@ present value, a rate or a payback period of nothing has none to give. Filling `
 again would settle it.
 
 **Its twin function answers, given the flows as arguments** (emulator):
-[CashFlowMIRR](finance/CashFlowMIRR.md) was measured in Phase 7 and returned a value. A program
+[CashFlowMIRR](finance/CashFlowMIRR.md) was measured and returned a value. A program
 wanting this number does not need the app at all.
 
 The interpreter does not implement it, so `hpprime run` cannot check a program
@@ -3068,7 +3068,7 @@ present value, a rate or a payback period of nothing has none to give. Filling `
 again would settle it.
 
 **Its twin function answers, given the flows as arguments** (emulator):
-[CashFlowNFV](finance/CashFlowNFV.md) was measured in Phase 7 and returned a value. A program
+[CashFlowNFV](finance/CashFlowNFV.md) was measured and returned a value. A program
 wanting this number does not need the app at all.
 
 The interpreter does not implement it, so `hpprime run` cannot check a program
@@ -3117,7 +3117,7 @@ present value, a rate or a payback period of nothing has none to give. Filling `
 again would settle it.
 
 **Its twin function answers, given the flows as arguments** (emulator):
-[CashFlowNPV](finance/CashFlowNPV.md) was measured in Phase 7 and returned a value. A program
+[CashFlowNPV](finance/CashFlowNPV.md) was measured and returned a value. A program
 wanting this number does not need the app at all.
 
 The interpreter does not implement it, so `hpprime run` cannot check a program
@@ -3166,7 +3166,7 @@ present value, a rate or a payback period of nothing has none to give. Filling `
 again would settle it.
 
 **Its twin function answers, given the flows as arguments** (emulator):
-[CashFlowNUS](finance/CashFlowNUS.md) was measured in Phase 7 and returned a value. A program
+[CashFlowNUS](finance/CashFlowNUS.md) was measured and returned a value. A program
 wanting this number does not need the app at all.
 
 The interpreter does not implement it, so `hpprime run` cannot check a program
@@ -3211,7 +3211,7 @@ nothing more. It read `0.00` once Finance was active.
 (emulator), [apps.finance-shows-two-decimals](../topics/apps.md#apps.finance-shows-two-decimals).
 
 **Its twin function answers without the app** (emulator):
-[TvmNbPmt](finance/TvmNbPmt.md) was measured in Phase 7 from a batch nobody had touched, so
+[TvmNbPmt](finance/TvmNbPmt.md) was measured from a batch nobody had touched, so
 with the Function app active, and it answered. A program that cannot select
 the Finance app can still compute this value by calling the function with
 its arguments.
@@ -3389,7 +3389,7 @@ nothing more. It read `0.00` once Finance was active.
 (emulator), [apps.finance-shows-two-decimals](../topics/apps.md#apps.finance-shows-two-decimals).
 
 **Its twin function answers without the app** (emulator):
-[TvmPMT](finance/TvmPMT.md) was measured in Phase 7 from a batch nobody had touched, so
+[TvmPMT](finance/TvmPMT.md) was measured from a batch nobody had touched, so
 with the Function app active, and it answered. A program that cannot select
 the Finance app can still compute this value by calling the function with
 its arguments.
@@ -3488,7 +3488,7 @@ nothing more. It read `0.00` once Finance was active.
 (emulator), [apps.finance-shows-two-decimals](../topics/apps.md#apps.finance-shows-two-decimals).
 
 **Its twin function answers without the app** (emulator):
-[TvmPV](finance/TvmPV.md) was measured in Phase 7 from a batch nobody had touched, so
+[TvmPV](finance/TvmPV.md) was measured from a batch nobody had touched, so
 with the Function app active, and it answered. A program that cannot select
 the Finance app can still compute this value by calling the function with
 its arguments.
@@ -3543,7 +3543,7 @@ present value, a rate or a payback period of nothing has none to give. Filling `
 again would settle it.
 
 **Its twin function answers, given the flows as arguments** (emulator):
-[CashFlowPB](finance/CashFlowPB.md) was measured in Phase 7 and returned a value. A program
+[CashFlowPB](finance/CashFlowPB.md) was measured and returned a value. A program
 wanting this number does not need the app at all.
 
 The interpreter does not implement it, so `hpprime run` cannot check a program

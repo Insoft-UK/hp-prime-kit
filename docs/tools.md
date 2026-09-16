@@ -393,8 +393,9 @@ The documentation under `docs/commands/` and `docs/topics/` follows one
 format, stated in [format.md](format.md), and this command holds it to that
 format. Every entry has its fields in order; every example and every
 behaviour paragraph carries a label saying how it is known; names and fact
-identifiers are unique, and every link to one resolves; and nothing in it
-points at the layer built on top of it.
+identifiers are unique, and every link to one resolves; nothing in it
+points at the layer built on top of it; and nothing speaks of how it was
+built, such as a phase of the work or "this kit".
 
 For a command that `hpprime run` implements, every example goes through the
 interpreter and has to give the result the entry states. An example the

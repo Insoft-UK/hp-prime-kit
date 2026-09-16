@@ -41,7 +41,7 @@ only sees another's functions if it was compiled afterwards
 ([ppl.compilation-order](ppl.md#ppl.compilation-order)), so install the
 library first. And read it before you trust it: these are one-person projects
 with no test suite, and reading the source is also the fastest way to learn
-the platform -- the key codes and menu geometry in this kit came from exactly
+the platform -- the key codes and menu geometry here came from exactly
 that.
 
 Where they live: [hpcalc.org](https://www.hpcalc.org/prime/). Most were
@@ -97,17 +97,17 @@ size and answers `isPressed()` and `isTapped()`, so an app is a loop that
 updates and draws a tree of them.
 
 **SkeletonApp**, Andreas Möller -- an app skeleton with a complete event loop:
-drags, long press, and a handler per gesture. This kit's soft-menu geometry
+drags, long press, and a handler per gesture. The soft-menu geometry on these pages
 was measured from it. For an app driven by arrows, `Enter` and six buttons,
 its full event framework is more than you need: take the loop and leave the
 rest.
 
 **Evidence.** Read, not run. The signatures and behaviour above are taken from
 each library's own source and header comments; nothing here has been executed
-on a calculator by this kit, and versions move.
+on a calculator, and versions move.
 
 <a name="libraries.skeletonapp-container"></a>
-## SkeletonApp's .hpprgm is not the container this kit reads
+## SkeletonApp's .hpprgm is not the container the tools read
 
 | | |
 |---|---|

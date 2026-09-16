@@ -26,7 +26,7 @@ Most of this group takes points wherever it can, and several commands accept
 a segment where the syntax says Line, so a reader could reasonably expect a
 point to serve as a displacement. It does not.
 
-**This is the second command in the phase to correct its own published
+**This is the second command in this group to correct its own published
 syntax** (emulator), after [perpendicular](perpendicular.md) replied that it
 expects three points. Both times the machine was more precise than HP's list.
 

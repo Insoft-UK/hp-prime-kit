@@ -27,7 +27,7 @@ reading and leaves it a reading. A second run on data that rejects would
 separate them, and this documentation does not have one.
 
 **A program should not compare it against 1 on the strength of this entry**
-(emulator). Two geometry tests in Phase 7 answered codes rather than truths --
+(emulator). Two geometry tests answered codes rather than truths --
 `is_isosceles` answered 3 and `is_parallelogram` 4 -- so a code that happens
 to be 1 here is exactly the shape of trap this documentation exists to
 name.

@@ -129,7 +129,7 @@ still opened `Prime`; and on 2026-09-11, with `Prime` in use and a clone
 called `DOCS` free, a second emulator made an empty `Prime_1` at 19:40:31 and
 opened that, leaving `DOCS` untouched. The lock behaviour was measured the
 same day, when the window on `Prime` closed at 23:10:33 and its lock went with
-it while `Prime_1`'s stayed, with its window's pid in it. This kit used to say
+it while `Prime_1`'s stayed, with its window's pid in it. This page used to say
 a new window takes the first calculator not in use; the `DOCS` case refutes
 that.
 
@@ -213,7 +213,7 @@ a `.hpprgm` rather than an app, and not the same steps by hand.
 
 The protocol has been reverse-engineered before -- PrimeComm, 2014 -- and what
 is written about those efforts says they no longer work against current
-firmware. Nothing here has tried it, and this kit has no route that does: on
+firmware. Nothing here has tried it, and the tools here have no route that does: on
 hardware, the drag in the CK window is the way. On the emulator there is a
 real one, [deploy.emulator-folder](#deploy.emulator-folder).
 
@@ -244,7 +244,7 @@ the executable path as the value name, but if the box is ticked on a
 particular shortcut it will not appear there, and you have to look at the
 `.lnk` you actually launch it from, which need not be the one on the desktop.
 
-**Evidence.** Diagnosed and fixed on the machine this kit is developed on,
+**Evidence.** Diagnosed and fixed on the machine this documentation is written on,
 with a G2 connected.
 
 <a name="deploy.no-manual-compile"></a>
@@ -303,7 +303,7 @@ uses it, and it is how a two-commit drift was actually found here.
 | Kind | rule |
 | Known from | G2 |
 
-A program with a template's header and the source put in by the kit, never
+A program with a template's header and the source put in by `hpprime write`, never
 touched by the CK or by the calculator, has been loaded, compiled and run on
 an HP Prime G2. Twice: once with a template taken from the machine it was
 built on, and once with `templates/code.hpprgm`, the one this repository
@@ -338,7 +338,7 @@ program is in `examples/selftest/`, so the experiment can be repeated with
 
 A template is a code `.hpprgm` with no compiled block, its source starting at
 offset 152 ([formats.source-offset-152](formats.md#formats.source-offset-152)).
-The kit ships one at `templates/code.hpprgm` and every tool picks it up on its
+One ships at `templates/code.hpprgm` and every tool picks it up on its
 own, so you only need your own if that one ever fails you.
 
 What does not work is assuming there are some in the CK mirror: everything in

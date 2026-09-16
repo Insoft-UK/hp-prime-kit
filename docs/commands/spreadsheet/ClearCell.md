@@ -28,8 +28,8 @@ What that 0 reports is not established: it may be the command's own success,
 or the state of a cell that was already empty (unverified).
 
 **It changes the calculator rather than only reporting on it** (HP help),
-which is why it ran on the throwaway `Prime_1` and never on the user's own
-machine. On a sheet reset before the run there was nothing to clear, so
+which is why it ran on a throwaway calculator, reset before the run, and never
+on one anybody uses. On a sheet reset before the run there was nothing to clear, so
 nothing was lost either way.
 
 **The probe is a cell with something in it** (unverified): run

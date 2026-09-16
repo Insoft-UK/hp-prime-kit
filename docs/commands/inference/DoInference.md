@@ -56,7 +56,7 @@ entry settles it for this command and does not settle it for that one.
 
 **This entry said the opposite until these rows existed** (emulator). It said
 the command was refused from a batch, that a reset calculator left the app
-holding nothing, and that measuring it would take keypresses. The refusal was
+holding nothing, and that measuring it would take pressing keys by hand. The refusal was
 the wrong app, the app was not empty, and a batch measured it with one
 selection made by hand beforehand.
 

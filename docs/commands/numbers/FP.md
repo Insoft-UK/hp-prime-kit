@@ -25,12 +25,12 @@ a positive one, which would not hold if the sign were dropped.
 **`0.2` is not exactly what a binary machine holds.** Running `FP(23.2)` on
 the PC answers 0.1999999999999993, and the checker treats that and HP's `0.2`
 as the same number because it compares within a small tolerance (unverified:
-this kit's interpreter on the PC, not a calculator). A program that compares
+the interpreter on the PC, not a calculator). A program that compares
 the result with `== 0.2` will find they differ, and that is a real trap rather
 than a rounding curiosity.
 
 A list is taken element by element (HP help), and the interpreter covers the
-plain form but not the list one (unverified: this kit's interpreter on the PC,
+plain form but not the list one (unverified: the interpreter on the PC,
 not a calculator).
 
 ## Related

@@ -34,7 +34,7 @@ did not supply is needed before it computes.
 
 **HP's own list is truncated** (HP help): the syntax row ends part way
 through the sixth argument's name, so the full argument list is not published
-in the data this kit holds. Six were sent because six are visible, and the
+in the list of names here. Six were sent because six are visible, and the
 call was accepted, which says the visible six are enough to get an answer and
 not that they are all of them.
 

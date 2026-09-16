@@ -28,7 +28,7 @@ written in the habits of another language will assume, and the shapes differ
 so the mistake shows up later as a type error rather than a wrong number.
 
 The interpreter covers the plain number and raises on the matrix form
-(unverified: this kit's interpreter on the PC, not a calculator), so that row
+(unverified: the interpreter on the PC, not a calculator), so that row
 rests on HP's help until the batch runs it.
 
 For the size of a matrix rather than its norm, the command is

@@ -22,7 +22,7 @@ it had when the loop was left (emulator).
 
 `BREAK n` leaves n levels of loop at once, and it really does leave them: in
 the second example the statement after the inner loop never runs, so the
-answer is 0 and not 9 (emulator). This kit's interpreter dropped the number
+answer is 0 and not 9 (emulator). The interpreter on the PC dropped the number
 and left one loop until that measurement, which is the third divergence the
 documentation caught in one batch.
 

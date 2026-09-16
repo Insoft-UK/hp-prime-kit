@@ -42,7 +42,7 @@ Every entry in this group, in full. Each one is written in its own file, and tha
 | [POLYROOT](#POLYROOT) | The roots of a polynomial. |
 | [QPI](#QPI) | Turns a decimal into an exact form, as a fraction or a multiple of pi. |
 | [QUOTE](#QUOTE) | Hands back an expression without evaluating it. |
-| [SERIAL](#SERIAL) | Answers this calculator's serial number, which this kit never keeps. |
+| [SERIAL](#SERIAL) | Answers this calculator's serial number, which is never stored here. |
 | [SIN](#SIN) | The sine. |
 | [SUPPRESS](#SUPPRESS) | Removes the element at a position. |
 | [TAN](#TAN) | The tangent. |
@@ -315,7 +315,7 @@ The cosine.
 `COS(1)` answers 0.540302305868 (emulator): the cosine of one radian. The
 mode is recorded once, in [ACOT](trigonometry/ACOT.md).
 
-**That same number appeared elsewhere in this phase.**
+**That same number appears elsewhere in this documentation.**
 [mkisom](matrix/mkisom.md) answers a rotation matrix whose entries are the
 cosine and sine of 1, and its first element is this value to every digit
 (emulator). A command in another group built from these, which is what says
@@ -417,8 +417,8 @@ though nobody got to it.
 The reason is the batch itself (emulator). A batch runs a program on an
 emulator window and reads its answers back when that window closes. A command
 that stops a program and waits for a person at the keyboard does not return,
-so it would hold the window open with no result and cost a round of somebody
-pressing keys for nothing.
+so it would hold the window open with no result, waiting for somebody to press
+keys.
 
 It takes a call, not a name (HP help): the argument is the program being
 started together with its arguments, which is why the syntax shows two sets
@@ -460,7 +460,7 @@ The Dirac delta, which is infinite at zero.
 
 `Dirac(0)` is positive infinity, and the calculator writes it `+Inf`
 (emulator). The answer here is the text of it rather than the number,
-because the number is what this kit cannot yet read back.
+because the number is what the tools here cannot yet read back.
 
 **Infinity is stored as an ordinary real** (emulator). `TYPE` answers 0, the
 same code a plain number gets, so nothing in the type says the value is
@@ -480,7 +480,7 @@ lost batch. What the bare call does at the top level of a program is not
 measured here (unverified).
 
 Asking for the text and the type, rather than the value, is also deliberate
-(emulator): this kit's decoder does not know that sign nibble and raises on
+(emulator): the decoder that reads these results does not know that sign nibble and raises on
 it, and one unreadable cell used to lose every row beside it.
 
 The interpreter does not implement it, so `hpprime run` cannot check a program
@@ -647,7 +647,7 @@ e raised to the value.
 
 **HP prints that rounded.** The interpreter answers 148.41315910258, and the
 checker treats the two as the same number because it compares within a small
-tolerance (unverified: this kit's interpreter on the PC, not a calculator). A
+tolerance (unverified: the interpreter on the PC, not a calculator). A
 test expecting HP's printed digits will not match.
 
 A list is taken element by element, and the zero in it answers 1 (emulator),
@@ -842,12 +842,12 @@ On HP's list of names, and refused as a call.
 HP's list carries the name with no syntax string (HP help).
 
 What the name is for is not measured here (unverified). An app can carry an
-icon, and this kit builds apps with one, so the likeliest reading is that the
+icon, and `hpprime build` gives apps one, so the likeliest reading is that the
 name belongs to an app's source rather than to an expression a program
 evaluates. That would explain a refusal at the point where it was tried,
 which was a value asked for on Home.
 
-Where this kit does put an icon into an app is documented under
+Where an app built here gets its icon is documented under
 [apps](../topics/apps.md), and none of that goes through this name
 (unverified).
 
@@ -978,8 +978,8 @@ The natural logarithm.
 
 ### Behaviour
 
-`LN(1)` is 0 (HP help), and the interpreter agrees (unverified: that is this
-kit's interpreter on the PC, not a calculator).
+`LN(1)` is 0 (HP help), and the interpreter agrees (unverified: that is the
+interpreter on the PC, not a calculator).
 
 **This is the natural logarithm and [LOG](catalog/LOG.md) is the base-ten one**
 (HP help), which is the opposite of the convention in several languages
@@ -1745,7 +1745,7 @@ that uses it (unverified).
 
 ## SERIAL
 
-Answers this calculator's serial number, which this kit never keeps.
+Answers this calculator's serial number, which is never stored here.
 
 | | |
 |---|---|
@@ -1927,8 +1927,8 @@ groups, all consistent on a single angle.
 
 Unlike a sine or a cosine it has no bound, and near a quarter turn it grows
 without limit. What it answers exactly there was not run (unverified), and the
-calculator does have a way to write infinity, measured elsewhere in this
-phase.
+calculator does have a way to write infinity, measured in
+[Dirac](catalog/Dirac.md).
 
 It answers a plain real, type 0 (emulator),
 [ppl.type-codes](../topics/ppl.md#ppl.type-codes).

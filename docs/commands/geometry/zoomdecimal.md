@@ -21,7 +21,7 @@ Refused, with the whole zoom family.
 
 **Its name suggests a view where one pixel is a round decimal step**
 (HP help), which would tie it to the screen's own units. This documentation
-measured those units in Phase 5 and recorded them under
+measured those units and recorded them under
 [interface.draw-units](../../topics/interface.md#interface.draw-units), but
 nothing connects that measurement to this command (unverified).
 

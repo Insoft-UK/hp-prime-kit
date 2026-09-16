@@ -32,7 +32,7 @@ polygon that did come back, such as the `polygon(...)` that
 works and this row was never about it, or it does not and the row finally
 means something.
 
-[area](area.md) answered for a circle in the same phase (emulator), so the
+[area](area.md) answered for a circle (emulator), so the
 measuring family is not refused as a whole.
 
 The interpreter does not implement it, so `hpprime run` cannot check a program

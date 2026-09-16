@@ -38,7 +38,7 @@ its five names refuse on data sets that could not be filled,
 says whether the commands work.
 
 The probe is a way to put data into `S1` at all (unverified), which is
-keypresses in the Statistics app rather than a batch.
+pressing keys in the Statistics app rather than a batch.
 
 The interpreter does not implement it, so `hpprime run` cannot check a program
 that uses it (unverified).

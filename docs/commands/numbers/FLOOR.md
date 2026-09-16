@@ -24,7 +24,7 @@ is the difference from [IP](IP.md), which simply drops the fractional part
 and answers -3 for the same number.
 
 A list is taken element by element (HP help). The interpreter covers the plain
-form and not the list one (unverified: this kit's interpreter on the PC, not a
+form and not the list one (unverified: the interpreter on the PC, not a
 calculator), so that row rests on HP's help alone.
 
 Choosing between this, [CEILING](CEILING.md) and [IP](IP.md) only matters for

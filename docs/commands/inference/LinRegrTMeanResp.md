@@ -35,7 +35,7 @@ to the same answer, which is why this example cannot separate them. The probe
 is data that does not lie exactly on a line.
 
 **This documentation has met that situation three times now** (emulator),
-with two unit commands in Phase 6, with `CashFlowMIRR` beside
+with two unit commands, with `CashFlowMIRR` beside
 `CashFlowFMRR`, and with `is_orthogonal` beside `is_perpendicular`. The
 answer each time is the same: record the agreement, name the probe, guess
 nothing.

@@ -93,7 +93,7 @@ written in the habits of another language will assume, and the shapes differ
 so the mistake shows up later as a type error rather than a wrong number.
 
 The interpreter covers the plain number and raises on the matrix form
-(unverified: this kit's interpreter on the PC, not a calculator), so that row
+(unverified: the interpreter on the PC, not a calculator), so that row
 rests on HP's help until the batch runs it.
 
 For the size of a matrix rather than its norm, the command is
@@ -446,7 +446,7 @@ so this row is checked on the PC as well as stated.
 **A list of matrices answers a list of determinants.**
 `DET({[[1,2],[5,6]],[[3,4],[-6,-2]]})` answers `{-4,18}` (emulator), one per
 matrix. The interpreter refuses that form cleanly, saying it needs a matrix
-(unverified: this kit's interpreter on the PC, not a calculator), so the
+(unverified: the interpreter on the PC, not a calculator), so the
 example is not in the table above: a clean refusal against a stated value is
 a problem for the checker rather than a note.
 
@@ -674,7 +674,7 @@ carry, all four measured together (emulator): these commands map over a list
 rather than refusing it.
 
 The interpreter does not cover the list form and stops on it (unverified:
-this kit's interpreter on the PC, not a calculator), so that row is the
+the interpreter on the PC, not a calculator), so that row is the
 calculator's word alone.
 
 It takes a size and not a matrix, which makes it the odd one of the group:
@@ -956,7 +956,7 @@ It answers `TYPE` 4 (emulator),
 [ppl.type-codes](../topics/ppl.md#ppl.type-codes).
 
 This is the matrix counterpart of [MAKELIST](list/MAKELIST.md), which was
-measured in the same phase and does take a named variable (emulator).
+measured the same way and does take a named variable (emulator).
 
 The interpreter does not implement it, so `hpprime run` cannot check a program
 that uses it (unverified).
@@ -1049,8 +1049,7 @@ measured (unverified). HP's syntax shows further arguments that choose
 between them, and a name to store the result into.
 
 `RANDSEED` is the command that would make a run repeatable, and the pair has
-not been measured together (unverified); it belongs to the probability group
-and comes later in this phase.
+not been measured together (unverified); it belongs to the probability group.
 
 The interpreter does not implement it, so `hpprime run` cannot check a program
 that uses it (unverified).
@@ -1257,7 +1256,7 @@ system with it end to end).
 A list of matrices answers one reduced matrix per input (emulator):
 `RREF({[[-2,2,1],[1,4,0]],[[1,3,1],[3,6,9]]})` answers
 `{[[1,0,-0.4],[0,1,0.1]],[[1,0,7],[0,1,-2]]}`. The interpreter refuses that
-form cleanly (unverified: this kit's interpreter on the PC, not a
+form cleanly (unverified: the interpreter on the PC, not a
 calculator), which is why it is not in the table above.
 
 ### Related
@@ -1551,7 +1550,7 @@ The singular value decomposition of a matrix.
 **It answers three objects**: two matrices with a vector of singular values
 between them (emulator). The example asks how many rather than showing them,
 and that is not squeamishness -- the full answer came back longer than the
-160 characters this kit's harness carries, so the stored row for the direct
+160 characters the harness carries, so the stored row for the direct
 call is cut and could not be quoted faithfully (emulator).
 
 The middle object is what [SVL](matrix/SVL.md) answers on its own:
@@ -2361,8 +2360,7 @@ nibble of 2 where an ordinary negative uses 9 (emulator). `hpprime examples`
 could not decode it, and because a batch is collected all at once, seventeen
 calls were lost with it. The two examples above avoid the number field
 entirely -- one asks for text, the other for a type code -- which is why they
-came home. What the kit does about the format is written down in the project's
-own notes rather than here.
+came home.
 
 The interpreter does not implement it, so `hpprime run` cannot check a program
 that uses it (unverified).

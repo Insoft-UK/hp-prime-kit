@@ -501,7 +501,7 @@ It answers 1 (emulator), and that is nearly all this measurement says.
 
 The list that was passed, `{0,9,{9,9}}`, mixes two plain numbers and a pair,
 which is not a shape anybody would write on purpose: it was accepted anyway
-(emulator). So the command tolerates a list this kit does not understand, and
+(emulator). So the command tolerates a list nobody here understands, and
 what it drew from it is unknown. How the points are really written -- pairs,
 or a flat list of alternating coordinates -- has not been measured
 (unverified), and the call above should not be copied.
@@ -877,7 +877,7 @@ of the forms without `_P` (HP help); that form has not been run here
 (unverified).
 
 This is the usual way to show a selected row without drawing it twice
-(unverified: it is what the `_P` form is used for in this kit's own programs,
+(unverified: it is what the `_P` form is used for in the example programs here,
 not something measured), [INVERT_P](drawing/INVERT_P.md).
 
 The interpreter records the call rather than drawing it

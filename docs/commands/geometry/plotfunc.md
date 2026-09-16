@@ -38,8 +38,8 @@ stored row rather than typed,
 [plotparam](plotparam.md) called directly gives an error, though this command
 produces one on demand.
 
-This row was measured in the probe that opened phase 7's geometry work, which
-is why it predates the rest of the family (emulator).
+This row was measured in the first probe of the geometry family, which is why
+it predates the rest of the family (emulator).
 
 The interpreter does not implement it, so `hpprime run` cannot check a program
 that uses it (unverified).

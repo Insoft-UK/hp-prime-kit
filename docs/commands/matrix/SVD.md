@@ -19,7 +19,7 @@ The singular value decomposition of a matrix.
 **It answers three objects**: two matrices with a vector of singular values
 between them (emulator). The example asks how many rather than showing them,
 and that is not squeamishness -- the full answer came back longer than the
-160 characters this kit's harness carries, so the stored row for the direct
+160 characters the harness carries, so the stored row for the direct
 call is cut and could not be quoted faithfully (emulator).
 
 The middle object is what [SVL](SVL.md) answers on its own:

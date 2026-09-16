@@ -32,8 +32,8 @@ not been run (unverified).
 
 The name carries an arrow, U+2192, and the arrow is part of the name rather
 than an operator (emulator: the call ran with it). This is also where a
-linter that splits names on the arrow goes wrong, which is why the rules in
-this kit read the whole name.
+linter that splits names on the arrow goes wrong, which is why the linter's
+rules read the whole name.
 
 The interpreter does not implement it, so `hpprime run` cannot check a program
 that uses it (unverified).

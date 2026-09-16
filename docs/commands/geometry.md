@@ -41,7 +41,7 @@ Every entry in this group, in full. Each one is written in its own file, and tha
 | [is_orthogonal](#is_orthogonal) | Whether two lines meet at a right angle. |
 | [is_parallelogram](#is_parallelogram) | Answers a code for the kind of quadrilateral, not a yes or no. |
 | [is_perpendicular](#is_perpendicular) | Whether two lines are perpendicular, which this example cannot tell from is_orthogonal. |
-| [isopolygon](#isopolygon) | A regular polygon, whose answer is the first in this phase to be cut. |
+| [isopolygon](#isopolygon) | A regular polygon, whose answer is long enough to be cut. |
 | [line](#line) | Refused, where the two commands beside it answered. |
 | [locus](#locus) | The path a point traces, refused for the two points given. |
 | [median_line](#median_line) | The line from a vertex to the middle of the opposite side. |
@@ -220,7 +220,7 @@ would be, and nothing measured here supports or refutes that (unverified).
 
 **A batch is the wrong place to find out** (emulator). If these names touch
 the app's construction list, they need the app open with a construction in
-it, which is keypresses rather than a batch.
+it, which takes pressing keys rather than a batch.
 
 The interpreter does not implement it, so `hpprime run` cannot check a program
 that uses it (unverified).
@@ -395,8 +395,8 @@ symbolic object of type 8,
 
 **That is a right angle in radians, and it was known before asking**
 (emulator). The two arms lie along the axes, so the angle is a quarter turn;
-in degrees it would have been 90. The answer agrees with the mode Phase 6
-measured, where `HAngle` answered 0 beside three inverse trigonometric
+in degrees it would have been 90. The answer agrees with the mode recorded in
+[ACOT](trigonometry/ACOT.md), where `HAngle` answered 0 beside three inverse trigonometric
 answers in radians.
 
 **It is exact rather than decimal** (emulator): half of pi written as such
@@ -739,7 +739,7 @@ a conic to find.
 looping over the answer does nothing and reports nothing.
 
 **It is the only name in this family that takes an expression rather than
-points** (HP help), and expressions have gone wrong twice in this phase
+points** (HP help), and expressions have gone wrong twice elsewhere
 already: [arcLen](geometry/arcLen.md) answered a number a third short and
 [LineTan](catalog/LineTan.md) collapsed its argument before use. Whether
 `X` and `Y` reached this command as symbols or as values is not measured here
@@ -1667,8 +1667,8 @@ plain real of type 0,
 
 **A square is a parallelogram, so this is not a refusal** (emulator). The
 number is most likely a classification, a square being the most particular
-kind a parallelogram can be, and no scale for it is published in the data this
-kit holds (HP help).
+kind a parallelogram can be, and no scale for it is published in the list of
+names here (HP help).
 
 **[is_isosceles](geometry/is_isosceles.md) behaves the same way**, answering 3 for a
 triangle that is isosceles (emulator). Two of the nine tests in this family
@@ -1725,7 +1725,7 @@ distinction. The account and the probe are in
 [is_orthogonal](geometry/is_orthogonal.md).
 
 **The same situation has arisen twice before in this documentation**
-(emulator): two unit commands in Phase 6 agreed on the pair they were given,
+(emulator): two unit commands agreed on the pair they were given,
 and so did `CashFlowMIRR` beside `CashFlowFMRR`. The answer each time was to
 record the agreement, name the probe, and not guess the difference.
 
@@ -1742,7 +1742,7 @@ that uses it (unverified).
 
 ## isopolygon
 
-A regular polygon, whose answer is the first in this phase to be cut.
+A regular polygon, whose answer is long enough to be cut.
 
 | | |
 |---|---|
@@ -1759,7 +1759,7 @@ A regular polygon, whose answer is the first in this phase to be cut.
 ### Behaviour
 
 **The answer was cut at 160 characters, and the row says so** (emulator). It
-is the first answer in Phase 7 long enough to reach the harness's width, and
+is long enough to reach the harness's width, and
 the marker in the stored row is the harness's own, not the calculator's. Only
 the first two vertices and part of the third survive.
 
@@ -1870,7 +1870,7 @@ in this group: a caller can see which call went wrong without tracking it.
 
 **The line break arrives as the two characters backslash and n** (emulator),
 not as a break, which is the same thing `STRING` does to a multi-line answer
-elsewhere in this kit.
+elsewhere in this documentation.
 
 **The second argument is not a point** (HP help): HP calls it an Element,
 meaning something the first point is constrained to move along. Two plain
@@ -2240,7 +2240,7 @@ polygon that did come back, such as the `polygon(...)` that
 works and this row was never about it, or it does not and the row finally
 means something.
 
-[area](geometry/area.md) answered for a circle in the same phase (emulator), so the
+[area](geometry/area.md) answered for a circle (emulator), so the
 measuring family is not refused as a whole.
 
 The interpreter does not implement it, so `hpprime run` cannot check a program
@@ -2379,7 +2379,7 @@ which call went wrong without tracking it.
 **The line break arrives as the two characters backslash and n** (emulator),
 not as a break, the same thing [locus](geometry/locus.md) and
 [plotode](geometry/plotode.md) do and the same thing `STRING` does elsewhere in this
-kit.
+documentation.
 
 **The second argument is wrong and HP says what it should be** (HP help): a
 VectorVar, meaning a pair of variables for a direction field, where a single
@@ -2442,8 +2442,8 @@ stored row rather than typed,
 [plotparam](geometry/plotparam.md) called directly gives an error, though this command
 produces one on demand.
 
-This row was measured in the probe that opened phase 7's geometry work, which
-is why it predates the rest of the family (emulator).
+This row was measured in the first probe of the geometry family, which is why
+it predates the rest of the family (emulator).
 
 The interpreter does not implement it, so `hpprime run` cannot check a program
 that uses it (unverified).
@@ -2485,8 +2485,8 @@ something to plot.
 something other than plain points -- a curve and a point, an expression, an
 expression -- and all three answer nothing while raising nothing.
 
-**An expression reaching a command unevaluated has gone wrong twice already
-in this phase** (emulator): [arcLen](geometry/arcLen.md) answered a number a third
+**An expression reaching a command unevaluated has gone wrong twice
+elsewhere** (emulator): [arcLen](geometry/arcLen.md) answered a number a third
 short, and [LineTan](catalog/LineTan.md) collapsed its argument before
 use. Whether `X` and `Y` arrived here as symbols is not measured
 (unverified).
@@ -2722,7 +2722,7 @@ cobweb construction a sequence plot is drawn from.
 
 **The answer was cut at 160 characters** (emulator), the harness's width, so
 the Result cell above holds a beginning and the marker that says so. It is
-the second answer in this phase to overflow, after
+the second answer in this group to overflow, after
 [isopolygon](geometry/isopolygon.md), and both overflowed for the same reason: the
 calculator answers with construction rather than with a picture.
 
@@ -2821,7 +2821,7 @@ is what came back to twelve figures.
 
 **The angle is in radians** (emulator), agreeing with
 [angle](geometry/angle.md), which answered half of pi for a right angle, and with the
-mode Phase 6 measured.
+mode recorded in [ACOT](trigonometry/ACOT.md).
 
 **The radius is exact and the angle is not** (emulator). Five arrives whole
 while the angle is a decimal, because one is a whole number and the other is
@@ -3050,8 +3050,8 @@ so is more honest than an entry that reads as though nobody reached it.
 
 **A random answer is not an example** (emulator). Whatever it returns changes
 between runs, so a stored row would record one draw and the checker would
-hold every later run to it. Phase 6 met this with `RANDOM`, `RANDINT`,
-`RANDNORM`, `RANDMAT` and `RANDSEED` and settled it the same way: the entry
+hold every later run to it. `RANDOM`, `RANDINT`, `RANDNORM`, `RANDMAT` and
+`RANDSEED` met this first and settled it the same way: the entry
 says what the command is for and stores nothing.
 
 HP's list gives the name no syntax string (HP help), so even the call above is
@@ -3668,7 +3668,7 @@ Most of this group takes points wherever it can, and several commands accept
 a segment where the syntax says Line, so a reader could reasonably expect a
 point to serve as a displacement. It does not.
 
-**This is the second command in the phase to correct its own published
+**This is the second command in this group to correct its own published
 syntax** (emulator), after [perpendicular](geometry/perpendicular.md) replied that it
 expects three points. Both times the machine was more precise than HP's list.
 
@@ -3841,7 +3841,7 @@ Refused, with the whole zoom family.
 
 **Its name suggests a view where one pixel is a round decimal step**
 (HP help), which would tie it to the screen's own units. This documentation
-measured those units in Phase 5 and recorded them under
+measured those units and recorded them under
 [interface.draw-units](../topics/interface.md#interface.draw-units), but
 nothing connects that measurement to this command (unverified).
 
@@ -3931,7 +3931,7 @@ nothing at all.
 [locus](geometry/locus.md) or [translation](geometry/translation.md), which explain themselves
 in text. Nothing here says what these commands would want.
 
-The probe is keypresses rather than a batch (unverified): the same names
+The probe takes pressing keys rather than a batch (unverified): the same names
 called from inside the Geometry app with a plot on screen.
 
 The interpreter does not implement it, so `hpprime run` cannot check a program

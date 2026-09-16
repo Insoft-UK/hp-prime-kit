@@ -30,8 +30,8 @@ here measures what the calculator will accept: a different number of digits
 in the year, a date built by the calculator itself rather than typed, or a
 date held in one of the app's own variables are all untried.
 
-The probe is one call whose date comes from the machine rather than from this
-kit (unverified), which separates a bad format from a command that needs
+The probe is one call whose date comes from the machine rather than from these
+pages (unverified), which separates a bad format from a command that needs
 something else entirely.
 
 The third argument chooses a 360-day calendar (HP help) and was not reached.

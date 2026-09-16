@@ -32,7 +32,7 @@ system with it end to end).
 A list of matrices answers one reduced matrix per input (emulator):
 `RREF({[[-2,2,1],[1,4,0]],[[1,3,1],[3,6,9]]})` answers
 `{[[1,0,-0.4],[0,1,0.1]],[[1,0,7],[0,1,-2]]}`. The interpreter refuses that
-form cleanly (unverified: this kit's interpreter on the PC, not a
+form cleanly (unverified: the interpreter on the PC, not a
 calculator), which is why it is not in the table above.
 
 ## Related

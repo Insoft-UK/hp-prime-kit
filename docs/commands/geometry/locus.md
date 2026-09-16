@@ -23,7 +23,7 @@ in this group: a caller can see which call went wrong without tracking it.
 
 **The line break arrives as the two characters backslash and n** (emulator),
 not as a break, which is the same thing `STRING` does to a multi-line answer
-elsewhere in this kit.
+elsewhere in this documentation.
 
 **The second argument is not a point** (HP help): HP calls it an Element,
 meaning something the first point is constrained to move along. Two plain

@@ -36,7 +36,7 @@ nothing at all.
 [locus](locus.md) or [translation](translation.md), which explain themselves
 in text. Nothing here says what these commands would want.
 
-The probe is keypresses rather than a batch (unverified): the same names
+The probe takes pressing keys rather than a batch (unverified): the same names
 called from inside the Geometry app with a plot on screen.
 
 The interpreter does not implement it, so `hpprime run` cannot check a program

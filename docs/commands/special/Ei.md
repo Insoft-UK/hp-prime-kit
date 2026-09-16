@@ -21,7 +21,7 @@ The exponential integral.
 [Ci](Ci.md) and [Si](Si.md).
 
 Five of the nine names in this group answer that way, one rewrites itself and
-one computes, which makes the group the clearest example in the phase of a
+one computes, which makes the group the clearest example in this documentation of a
 family whose members do not behave alike (emulator).
 
 It has a singularity at zero and its value there is not a number, so what the

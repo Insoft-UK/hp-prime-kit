@@ -30,7 +30,7 @@ its own.
 
 **It is one of the four that would have answered something long** (emulator),
 with [STAT1](STAT1.md), [STAT2](STAT2.md) and [AMORT](AMORT.md). All four
-refused, so nothing in phase 7 has yet tested a long answer against the
+refused, so none of the four tested a long answer against the
 harness's width.
 
 The interpreter does not implement it, so `hpprime run` cannot check a program

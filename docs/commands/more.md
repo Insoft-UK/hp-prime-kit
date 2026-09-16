@@ -531,7 +531,7 @@ Milliseconds since the calculator started.
 **No parentheses in PPL**: it is written `zt := TICKS;`, like `GETKEY` (G2),
 [ppl.getkey-no-parentheses](../topics/ppl.md#ppl.getkey-no-parentheses).
 From Python, across the bridge, a published library writes `eval('ticks')`
-bare and this kit's examples write `ticks()`; which form that side needs has
+bare and the examples here write `ticks()`; which form that side needs has
 not been measured (unverified),
 [micropython.eval-parentheses](../topics/micropython.md#micropython.eval-parentheses).
 
@@ -582,7 +582,7 @@ rest come from HP's help: 1 integer, 3 complex, 5 error, 8 function, 9 unit,
 and 14.x for a CAS object. The whole table is
 [ppl.type-codes](../topics/ppl.md#ppl.type-codes).
 
-**Watch 3 and 4.** This kit had them the other way round until HP's help was
+**Watch 3 and 4.** This documentation had them the other way round until HP's help was
 read, so `IF TYPE(v) == 3` branched on complex numbers where it meant
 matrices. The measurement above settles 4; 3 is still HP's word (HP help).
 
@@ -638,8 +638,8 @@ not been run (unverified).
 
 The name carries an arrow, U+2192, and the arrow is part of the name rather
 than an operator (emulator: the call ran with it). This is also where a
-linter that splits names on the arrow goes wrong, which is why the rules in
-this kit read the whole name.
+linter that splits names on the arrow goes wrong, which is why the linter's
+rules read the whole name.
 
 The interpreter does not implement it, so `hpprime run` cannot check a program
 that uses it (unverified).

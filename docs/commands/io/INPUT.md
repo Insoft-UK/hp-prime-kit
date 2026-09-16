@@ -37,8 +37,8 @@ The variables have to exist already, with the right type (G2).
 
 `hpprime run` records the call rather than drawing it and answers a neutral
 value, so a calculation runs end to end on the PC with no interface, and what
-the form looked like is not something it can check (unverified: that is this
-kit's interpreter, not the calculator)
+the form looked like is not something it can check (unverified: that is the
+interpreter, not the calculator)
 ([interface.md](../../topics/interface.md#what-the-design-of-a-screen-comes-down-to)).
 
 ## Related

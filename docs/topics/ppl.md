@@ -67,10 +67,10 @@ not propagate errors.
 
 HP's help gets further than this repository once assumed: `LEFT`'s zero case,
 `MOD` as a Euclidean remainder and the `TYPE` codes are all in it, and reading
-it corrected four of this kit's own answers. What it does not do is cover the
+it corrected four answers this documentation had wrong. What it does not do is cover the
 edges evenly -- `RIGHT` and `MID` get no sentence about theirs -- or say
 anything about the limits below that break compilation. Look it up first, and
-measure the rest. Its examples are the kit's test data:
+measure the rest. Its examples are the interpreter's test data:
 `tests/hp_examples.txt` holds every one that applies to a command the
 interpreter implements, and `python tests/test_hpdocs.py` runs them.
 
@@ -290,7 +290,7 @@ line that is exactly `END` as `end-semicolon`.
 | Kind | refuted hypothesis |
 | Known from | G2 |
 
-This kit used to state, as a rule, that indexing a global declared in a
+This page used to state, as a rule, that indexing a global declared in a
 different program fails, because the compiler reads `NAMES(1)` as a call to a
 function called `NAMES`. That is too broad. A list declared `EXPORT
 L:={"a","b",…}`, with contents, is indexed from another program and passed to
@@ -419,7 +419,7 @@ area, so `CONJ(3+4*i)` reads as `3-4*` followed by that glyph.
 
 This is the same shape as [ppl.minus-sign](#ppl.minus-sign): the calculator
 takes ASCII on input and answers with a character of its own. Unlike the
-minus sign, nothing in this kit normalises it, so a program comparing an
+minus sign, nothing here normalises it, so a program comparing an
 answer against text it wrote itself will not match, and a result stored in
 `results.tsv` carries the glyph literally.
 
@@ -450,7 +450,7 @@ the minus sign, [ppl.minus-sign](#ppl.minus-sign), the imaginary unit,
 holding on to -- what goes in is ASCII and what comes back is the
 calculator's own typography -- because a program comparing an answer against
 text it wrote itself will not match, and only the minus sign is normalised
-anywhere in this kit.
+anywhere here.
 
 **Evidence.** Measured on the Virtual Calculator 2.4, build 2025-09-15:
 `LQ([[1,2],[3,4]])` and `SCHUR([[1,2],[3,4]])` both answer decompositions
@@ -499,7 +499,7 @@ type, after [ppl.minus-sign](#ppl.minus-sign),
 
 `TYPE(v)` answers 0 for a real, 1 for an integer, 2 for a string, 3 for a
 complex, 4 for a matrix, 5 for an error, 6 for a list, 8 for a function, 9 for
-a unit, and 14.x for a CAS object. Watch 3 and 4: this kit had them the other
+a unit, and 14.x for a CAS object. Watch 3 and 4: this documentation had them the other
 way round until HP's help was read, and `IF TYPE(v) == 3` then branches on
 complex numbers instead of matrices.
 
@@ -601,7 +601,7 @@ In PPL source it is `zk := GETKEY;`. From Python, across the bridge, it is
 Handing a big matrix to a function copies it. With large data, reach for a
 global instead of an argument.
 
-**Evidence.** Recorded in this kit's table of run-time traps, measured on a G2
+**Evidence.** Recorded in a table of run-time traps, measured on a G2
 with firmware 2.4.15515. The record does not name the program, and the cost
 was not timed.
 
@@ -617,7 +617,7 @@ was not timed.
 `EXPR("")` is an error, so check `SIZE(s) > 0` before evaluating whatever came
 out of a field.
 
-**Evidence.** Recorded in this kit's table of run-time traps, measured on a G2
+**Evidence.** Recorded in a table of run-time traps, measured on a G2
 with firmware 2.4.15515.
 
 <a name="ppl.expr-dynamic-access"></a>
@@ -632,7 +632,7 @@ with firmware 2.4.15515.
 `EXPR("NAME")` gives the variable whose name was built on the fly. Do it once
 at load time, never once per element.
 
-**Evidence.** Recorded in this kit's table of run-time traps, measured on a G2
+**Evidence.** Recorded in a table of run-time traps, measured on a G2
 with firmware 2.4.15515. How much slower it is than a direct reference was not
 timed; what was measured is that a per-element loop was the part that had to
 be changed.
@@ -650,7 +650,7 @@ An `EXPORT`ed name is visible from Home and from every other program, so two
 programs exporting `AREA` collide, and so does a program exporting a name an
 app already uses. Prefix them.
 
-**Evidence.** Recorded in this kit's table of run-time traps, measured on a G2
+**Evidence.** Recorded in a table of run-time traps, measured on a G2
 with firmware 2.4.15515. What the calculator does when the collision is with
 an app's own function, rather than another program's, has not been measured.
 
@@ -666,7 +666,7 @@ an app's own function, rather than another program's, has not been measured.
 Even on a calculator that displays `,` as the decimal separator, source is
 written with `.`.
 
-**Evidence.** Recorded in this kit's table of run-time traps, measured on a G2
+**Evidence.** Recorded in a table of run-time traps, measured on a G2
 with firmware 2.4.15515.
 
 <a name="ppl.compilation-order"></a>

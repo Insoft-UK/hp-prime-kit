@@ -28,7 +28,7 @@ Numbers alone still answer a list: `CONCAT(1,2,3,4)` is `{1,2,3,4}` and not a
 number (HP help), so this is also the way to build a list out of loose values.
 
 **The interpreter does not cover any of these three forms** (unverified: that
-is this kit's interpreter on the PC, not a calculator). `hpprime run` stops on
+is the interpreter on the PC, not a calculator). `hpprime run` stops on
 them rather than answering, so the checker records a note instead of running
 them, and what is written above is HP's statement rather than something
 verified on a machine.

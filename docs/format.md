@@ -44,6 +44,29 @@ with the evidence in its entry; or run through `hpprime run`, because its
 command runs on the PC. The tests fail on anything else: an example nobody
 has run is a claim nobody has checked.
 
+## How the examples were run
+
+Three words recur in the evidence of entries and facts, and each means one
+thing:
+
+- **A batch** is a set of examples run together on the Virtual Calculator, as
+  the calls of one generated program. The calculator is reset before every
+  batch, so each answer starts from the same state, and a reset calculator
+  has the Function app active:
+  [apps.reset-leaves-function-active](topics/apps.md#apps.reset-leaves-function-active).
+- **The harness** is that generated program. It runs each call inside
+  `IFERR`, so a refusal costs its own row rather than the batch, and it brings
+  back whether the call answered, what `TYPE` says, and the answer's text as
+  `STRING` makes it on the calculator, cut at 160 characters with a marker
+  saying so.
+- **A probe** is a call made to settle a question rather than to illustrate a
+  command. Its answer is stored the way an example's is. An entry that names
+  a probe nobody has run is saying how an open question would be settled.
+
+Some things a batch cannot reach, such as selecting an app or opening a view.
+Those were done by pressing keys, and an entry says so where it relies on
+them.
+
 ## A command entry
 
 One file per command, `docs/commands/<group>/<NAME>.md`, and nothing about

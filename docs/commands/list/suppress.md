@@ -21,8 +21,8 @@ and the rest close up.
 
 **HP writes this name in lower case and the inventory keeps it that way**
 (HP help). There is a separate `SUPPRESS` on HP's list, filed under a
-different group, so the two are not the same name written carelessly. This
-kit's linter compares names without regard to case and cannot tell them
+different group, so the two are not the same name written carelessly. The
+linter compares names without regard to case and cannot tell them
 apart, which it already documents as a limitation.
 
 The position counts from 1 (emulator),

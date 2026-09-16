@@ -19,7 +19,7 @@ The cosine.
 `COS(1)` answers 0.540302305868 (emulator): the cosine of one radian. The
 mode is recorded once, in [ACOT](../trigonometry/ACOT.md).
 
-**That same number appeared elsewhere in this phase.**
+**That same number appears elsewhere in this documentation.**
 [mkisom](../matrix/mkisom.md) answers a rotation matrix whose entries are the
 cosine and sine of 1, and its first element is this value to every digit
 (emulator). A command in another group built from these, which is what says

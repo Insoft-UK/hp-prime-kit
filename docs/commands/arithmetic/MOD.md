@@ -32,7 +32,7 @@ What it does with a negative left argument, where languages disagree about
 the sign of the answer, was not run (unverified). The probe is `-9 MOD 4`.
 
 **Neither spelling works on both machines.** The calculator compiles
-`9 MOD 4` and refuses `MOD(9,4)` (emulator). This kit's interpreter is the
+`9 MOD 4` and refuses `MOD(9,4)` (emulator). The interpreter on the PC is the
 other way round: it has `MOD` as a function and answers `MOD(9,4)` as 1,
 while the infix form it does not know at all -- `9 MOD 4` comes back as 9,
 and so does `9 MOD 4 + 100`, with the rest of the expression dropped and no

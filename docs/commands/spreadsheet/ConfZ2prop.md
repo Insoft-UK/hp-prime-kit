@@ -27,7 +27,7 @@ what makes the finding about the group rather than about argument shapes.
 
 **HP's syntax row is truncated in the inventory** (HP help), ending part way
 through the fourth argument's name, so the full list is not published in the
-data this kit holds. Four were sent because four are visible.
+list of names here. Four were sent because four are visible.
 
 The interpreter does not implement it, so `hpprime run` cannot check a program
 that uses it (unverified).

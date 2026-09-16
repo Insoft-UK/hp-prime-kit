@@ -28,7 +28,7 @@ A positive argument is the ordinary meaning: 2 places gives 7.87 (HP help).
 **The places may themselves be a list**, applied element by element alongside
 the values: `{22/6,7/6,13/6}` with `{-3,3,4}` gives three significant figures,
 then three decimal places, then four (HP help). The interpreter does not cover
-that form and stops rather than answering (unverified: this kit's interpreter
+that form and stops rather than answering (unverified: the interpreter
 on the PC, not a calculator), so it rests on HP's help alone.
 
 Rounding for display is not the same as rounding a stored value, and this

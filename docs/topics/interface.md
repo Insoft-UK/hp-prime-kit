@@ -84,7 +84,7 @@ geometry module with no imports. What cannot: drawing, reading keys, reading
 touch, whether a dialog closes where you think, how long a real data entry
 takes, and whether the calculation behind it is fast enough
 ([ppl.md](ppl.md#ppl.speed-anchor)). This is why the pixel module should be as
-thin as you can make it. The kit's interpreter follows the same rule:
+thin as you can make it. The interpreter on the PC follows the same rule:
 `TEXTOUT_P`, `INPUT`, `CHOOSE`, `MSGBOX` and `WAIT` are recorded in
 `machine.io` and return a neutral value, so a calculation runs with no
 interface.

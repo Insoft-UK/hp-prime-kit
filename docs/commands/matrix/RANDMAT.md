@@ -30,8 +30,7 @@ measured (unverified). HP's syntax shows further arguments that choose
 between them, and a name to store the result into.
 
 `RANDSEED` is the command that would make a run repeatable, and the pair has
-not been measured together (unverified); it belongs to the probability group
-and comes later in this phase.
+not been measured together (unverified); it belongs to the probability group.
 
 The interpreter does not implement it, so `hpprime run` cannot check a program
 that uses it (unverified).

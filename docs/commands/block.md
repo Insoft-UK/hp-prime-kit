@@ -135,8 +135,8 @@ Leaves the function, with a value.
 
 `RETURN` inside a `FOR` or a `REPEAT` is allowed, and leaves the function from
 there (G2): [ppl.return-in-loop](../topics/ppl.md#ppl.return-in-loop). That
-was a hypothesis this kit held as a rule until a program that runs contradicted
-it, which is why the fact is kept as a refuted hypothesis rather than deleted.
+was once held as a rule, until a program that runs contradicted it, which is
+why the fact is kept as a refuted hypothesis rather than deleted.
 
 A bare `RETURN;` compiles, and the function answers 0 (G2). There is no way to
 write a function that answers nothing at all: without a `RETURN` it answers the

@@ -28,8 +28,8 @@ That is measured, it is easy to mistake for a bug in your own menu, and the
 fix is a debounce that counts the screen as touched when a dialog closes.
 
 `hpprime run` records the call and answers a neutral value, so a program that
-shows messages still runs end to end on the PC (unverified: that is this
-kit's interpreter, not the calculator)
+shows messages still runs end to end on the PC (unverified: that is the
+interpreter, not the calculator)
 ([interface.md](../../topics/interface.md#what-the-design-of-a-screen-comes-down-to)).
 
 ## Related

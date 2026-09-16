@@ -32,8 +32,8 @@ here most likely reports the new state or the success of setting it. One row
 cannot tell those apart, and this entry does not choose.
 
 **It changes the calculator rather than only reporting on it** (HP help),
-which is why it was sent to the throwaway `Prime_1` and never to the user's
-own machine. [UNCHECK](UNCHECK.md) is its opposite and also answered 1.
+which is why it was sent to a throwaway calculator and never to one anybody
+uses. [UNCHECK](UNCHECK.md) is its opposite and also answered 1.
 
 The probe worth one row is `ISCHECK` after `CHECK` (unverified), which would
 show whether the change took.

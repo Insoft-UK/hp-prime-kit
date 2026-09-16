@@ -24,7 +24,7 @@ rest come from HP's help: 1 integer, 3 complex, 5 error, 8 function, 9 unit,
 and 14.x for a CAS object. The whole table is
 [ppl.type-codes](../../topics/ppl.md#ppl.type-codes).
 
-**Watch 3 and 4.** This kit had them the other way round until HP's help was
+**Watch 3 and 4.** This documentation had them the other way round until HP's help was
 read, so `IF TYPE(v) == 3` branched on complex numbers where it meant
 matrices. The measurement above settles 4; 3 is still HP's word (HP help).
 

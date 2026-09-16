@@ -316,8 +316,8 @@ HP's help gives the form above and no example, and what a real handler name
 looks like on this firmware has not been measured here: one program declaring
 one, installed and pressed, would settle it (unverified).
 
-What is measured is the other way of reading keys, which is what the apps in
-this kit use: a program polls `GETKEY`, and a code is a position rather than a
+What is measured is the other way of reading keys, which is what the example
+apps here use: a program polls `GETKEY`, and a code is a position rather than a
 character (G2),
 [interface.getkey-position](../topics/interface.md#interface.getkey-position),
 with the 51 codes in
@@ -443,7 +443,8 @@ been wrong. A program wanting a root has to take the return value.
 
 **What does write it is untested** (unverified). The likely answer is the
 app's own plot view, where the Fcn menu computes a root and displays it;
-whether that fills this variable is a keypress probe, not a batch one.
+whether that fills this variable takes pressing keys in the app to find out,
+which a batch cannot do.
 
 **The first two rows are the same read before and after the command**
 (emulator), which is why both are kept: one value would have been a reading,

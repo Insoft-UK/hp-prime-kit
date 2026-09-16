@@ -26,7 +26,7 @@ is what came back to twelve figures.
 
 **The angle is in radians** (emulator), agreeing with
 [angle](angle.md), which answered half of pi for a right angle, and with the
-mode Phase 6 measured.
+mode recorded in [ACOT](../trigonometry/ACOT.md).
 
 **The radius is exact and the angle is not** (emulator). Five arrives whole
 while the angle is a decimal, because one is a whole number and the other is

@@ -31,8 +31,8 @@ The calculator offers no `COS` in this group because `COS` is filed under
 are the reciprocals it keeps separate.
 
 What it answers where the cosine is zero, and the secant infinite, was not run
-(unverified). The calculator has a way to write infinity, measured elsewhere
-in this phase, so whether it returns that or refuses is the question.
+(unverified). The calculator has a way to write infinity, measured in
+[Dirac](../catalog/Dirac.md), so whether it returns that or refuses is the question.
 
 The interpreter does not implement it, so `hpprime run` cannot check a program
 that uses it (unverified).

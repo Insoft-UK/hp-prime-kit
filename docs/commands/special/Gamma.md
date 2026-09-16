@@ -23,7 +23,7 @@ shifted by one, so `Gamma(n)` is the factorial of `n-1` rather than of `n`.
 to get wrong in either direction. A program wanting the factorial of 5
 must call `Gamma(6)`.
 
-It cross-checks against the factorial operator measured in the same phase:
+It cross-checks against the factorial operator `!`, measured the same way:
 `5!` answers 120, and 120 divided by 24 is 5 (emulator). Two commands
 agreeing through arithmetic is worth more than either row alone.
 

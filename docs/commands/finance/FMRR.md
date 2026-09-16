@@ -33,7 +33,7 @@ present value, a rate or a payback period of nothing has none to give. Filling `
 again would settle it.
 
 **Its twin function answers, given the flows as arguments** (emulator):
-[CashFlowFMRR](CashFlowFMRR.md) was measured in Phase 7 and returned a value. A program
+[CashFlowFMRR](CashFlowFMRR.md) was measured and returned a value. A program
 wanting this number does not need the app at all.
 
 The interpreter does not implement it, so `hpprime run` cannot check a program

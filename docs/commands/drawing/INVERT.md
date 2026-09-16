@@ -30,7 +30,7 @@ of the forms without `_P` (HP help); that form has not been run here
 (unverified).
 
 This is the usual way to show a selected row without drawing it twice
-(unverified: it is what the `_P` form is used for in this kit's own programs,
+(unverified: it is what the `_P` form is used for in the example programs here,
 not something measured), [INVERT_P](INVERT_P.md).
 
 The interpreter records the call rather than drawing it

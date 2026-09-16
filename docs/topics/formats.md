@@ -4,7 +4,7 @@ Facts about the files the calculator reads and writes, rather than about one
 command. Each has an identifier, says how it is known, and is stated here
 once.
 
-This is the most technical page in the kit and the one you least need in order
+This is the most technical page here and the one you least need in order
 to start: writing your first program needs none of it, and the
 [guided path](../start/02-first-program.md) does that in three commands. Come
 here when something does not add up, when you want to move a lot of data, or
@@ -479,7 +479,7 @@ from the source anyway
 read back by the calculator.
 
 <a name="formats.other-files"></a>
-## What else is in the folder, and what the kit refuses to read
+## What else is in the folder, and what the tools refuse to read
 
 | | |
 |---|---|
@@ -487,7 +487,7 @@ read back by the calculator.
 | Kind | rule |
 | Known from | G2 |
 
-| | What it is | Read by the kit? |
+| | What it is | Read by the tools? |
 |---|---|---|
 | `.hpprgm` | a program | yes |
 | `.hpappdir/` | an app | yes, and its `.hpappprgm` as a program |

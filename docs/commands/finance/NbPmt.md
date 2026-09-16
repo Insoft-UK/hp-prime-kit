@@ -29,7 +29,7 @@ nothing more. It read `0.00` once Finance was active.
 (emulator), [apps.finance-shows-two-decimals](../../topics/apps.md#apps.finance-shows-two-decimals).
 
 **Its twin function answers without the app** (emulator):
-[TvmNbPmt](TvmNbPmt.md) was measured in Phase 7 from a batch nobody had touched, so
+[TvmNbPmt](TvmNbPmt.md) was measured from a batch nobody had touched, so
 with the Function app active, and it answered. A program that cannot select
 the Finance app can still compute this value by calling the function with
 its arguments.

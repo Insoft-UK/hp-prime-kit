@@ -32,7 +32,8 @@ been wrong. A program wanting a root has to take the return value.
 
 **What does write it is untested** (unverified). The likely answer is the
 app's own plot view, where the Fcn menu computes a root and displays it;
-whether that fills this variable is a keypress probe, not a batch one.
+whether that fills this variable takes pressing keys in the app to find out,
+which a batch cannot do.
 
 **The first two rows are the same read before and after the command**
 (emulator), which is why both are kept: one value would have been a reading,

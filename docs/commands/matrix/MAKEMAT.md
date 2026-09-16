@@ -32,7 +32,7 @@ It answers `TYPE` 4 (emulator),
 [ppl.type-codes](../../topics/ppl.md#ppl.type-codes).
 
 This is the matrix counterpart of [MAKELIST](../list/MAKELIST.md), which was
-measured in the same phase and does take a named variable (emulator).
+measured the same way and does take a named variable (emulator).
 
 The interpreter does not implement it, so `hpprime run` cannot check a program
 that uses it (unverified).

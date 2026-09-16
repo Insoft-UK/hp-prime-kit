@@ -27,7 +27,7 @@ The arguments may be arithmetic: `15+1/4` gives 15 and `10-4/5` gives 9
 (HP help), so the expression is worked out before the cut.
 
 A list is taken element by element (HP help), and the interpreter covers the
-plain form but not the list one (unverified: this kit's interpreter on the PC,
+plain form but not the list one (unverified: the interpreter on the PC,
 not a calculator).
 
 With [FP](FP.md) it makes a pair: the whole part and the fraction, which

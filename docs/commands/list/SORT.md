@@ -28,7 +28,7 @@ would come second; it comes last. That is what the argument is for, and it is
 easy to mistake for a direction flag.
 
 **The interpreter refuses that form cleanly**, saying it does not cover `SORT`
-with a second argument (unverified: that is this kit's interpreter on the PC,
+with a second argument (unverified: that is the interpreter on the PC,
 not a calculator). That is a proper refusal rather than a crash, which is not
 true of every uncovered name.
 

@@ -19,7 +19,7 @@ Milliseconds since the calculator started.
 **No parentheses in PPL**: it is written `zt := TICKS;`, like `GETKEY` (G2),
 [ppl.getkey-no-parentheses](../../topics/ppl.md#ppl.getkey-no-parentheses).
 From Python, across the bridge, a published library writes `eval('ticks')`
-bare and this kit's examples write `ticks()`; which form that side needs has
+bare and the examples here write `ticks()`; which form that side needs has
 not been measured (unverified),
 [micropython.eval-parentheses](../../topics/micropython.md#micropython.eval-parentheses).
 

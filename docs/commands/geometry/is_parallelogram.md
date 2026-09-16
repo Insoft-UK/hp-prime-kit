@@ -22,8 +22,8 @@ plain real of type 0,
 
 **A square is a parallelogram, so this is not a refusal** (emulator). The
 number is most likely a classification, a square being the most particular
-kind a parallelogram can be, and no scale for it is published in the data this
-kit holds (HP help).
+kind a parallelogram can be, and no scale for it is published in the list of
+names here (HP help).
 
 **[is_isosceles](is_isosceles.md) behaves the same way**, answering 3 for a
 triangle that is isosceles (emulator). Two of the nine tests in this family

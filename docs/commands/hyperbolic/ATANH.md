@@ -25,8 +25,8 @@ at 1 or above would have measured an error rather than a value (unverified:
 the refusal was avoided rather than measured).
 
 What it does at exactly 1, where the answer is infinite, is the case worth
-settling: the calculator has a way to write infinity, measured elsewhere in
-this phase, so the interesting question is whether this returns it or refuses.
+settling: the calculator has a way to write infinity, measured in
+[Dirac](../catalog/Dirac.md), so the interesting question is whether this returns it or refuses.
 The probe is `ATANH(1)` (unverified).
 
 [ASINH](ASINH.md) accepts anything and [ACOSH](ACOSH.md) needs 1 or more, so

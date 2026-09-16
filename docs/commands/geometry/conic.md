@@ -26,7 +26,7 @@ a conic to find.
 looping over the answer does nothing and reports nothing.
 
 **It is the only name in this family that takes an expression rather than
-points** (HP help), and expressions have gone wrong twice in this phase
+points** (HP help), and expressions have gone wrong twice elsewhere
 already: [arcLen](arcLen.md) answered a number a third short and
 [LineTan](../catalog/LineTan.md) collapsed its argument before use. Whether
 `X` and `Y` reached this command as symbols or as values is not measured here

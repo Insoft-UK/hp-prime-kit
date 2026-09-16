@@ -22,7 +22,7 @@ so this row is checked on the PC as well as stated.
 **A list of matrices answers a list of determinants.**
 `DET({[[1,2],[5,6]],[[3,4],[-6,-2]]})` answers `{-4,18}` (emulator), one per
 matrix. The interpreter refuses that form cleanly, saying it needs a matrix
-(unverified: this kit's interpreter on the PC, not a calculator), so the
+(unverified: the interpreter on the PC, not a calculator), so the
 example is not in the table above: a clean refusal against a stated value is
 a problem for the checker rather than a note.
 

@@ -109,7 +109,7 @@ kind of call is refused.
 re-running the first call would have replaced its answer and lost the
 contrast. Nothing about the values 1, 2, 3 against 2, 4, 6 matters here.
 
-**This is the row that carried the rule from a keypress into a program**
+**This is the row that carried the rule from keys pressed by hand into a program**
 (emulator). The rule itself was found by hand -- see
 [SUM](spreadsheet/SUM.md) -- and this one shows it holds for a batch as well, so the
 harness can measure these names once somebody selects the app first.
@@ -217,8 +217,8 @@ What that 0 reports is not established: it may be the command's own success,
 or the state of a cell that was already empty (unverified).
 
 **It changes the calculator rather than only reporting on it** (HP help),
-which is why it ran on the throwaway `Prime_1` and never on the user's own
-machine. On a sheet reset before the run there was nothing to clear, so
+which is why it ran on a throwaway calculator, reset before the run, and never
+on one anybody uses. On a sheet reset before the run there was nothing to clear, so
 nothing was lost either way.
 
 **The probe is a cell with something in it** (unverified): run
@@ -461,7 +461,7 @@ what makes the finding about the group rather than about argument shapes.
 
 **HP's syntax row is truncated in the inventory** (HP help), ending part way
 through the fourth argument's name, so the full list is not published in the
-data this kit holds. Four were sent because four are visible.
+list of names here. Four were sent because four are visible.
 
 The interpreter does not implement it, so `hpprime run` cannot check a program
 that uses it (unverified).
@@ -815,7 +815,7 @@ its own.
 
 **It is one of the four that would have answered something long** (emulator),
 with [STAT1](spreadsheet/STAT1.md), [STAT2](spreadsheet/STAT2.md) and [AMORT](spreadsheet/AMORT.md). All four
-refused, so nothing in phase 7 has yet tested a long answer against the
+refused, so none of the four tested a long answer against the
 harness's width.
 
 The interpreter does not implement it, so `hpprime run` cannot check a program

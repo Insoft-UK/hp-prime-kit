@@ -20,7 +20,7 @@ It answers 1 (emulator), and that is nearly all this measurement says.
 
 The list that was passed, `{0,9,{9,9}}`, mixes two plain numbers and a pair,
 which is not a shape anybody would write on purpose: it was accepted anyway
-(emulator). So the command tolerates a list this kit does not understand, and
+(emulator). So the command tolerates a list nobody here understands, and
 what it drew from it is unknown. How the points are really written -- pairs,
 or a flat list of alternating coordinates -- has not been measured
 (unverified), and the call above should not be copied.

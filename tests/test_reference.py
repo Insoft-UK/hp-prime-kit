@@ -156,6 +156,12 @@ BREAKS = [
                     '| `COS(1)` | `0.540302305868` | [emulator](../results.tsv) |'
                     '\n| `COS(0)` | `1` | HP help |'),
      'nobody has run'),
+    ('a page that speaks of the phase it was written in',
+     lambda r: append(r, 'docs/commands/strings/LEFT.md',
+                      '\nMeasured in Phase 7 (G2).\n'), 'how it was built'),
+    ('a page that speaks of this kit',
+     lambda r: append(r, 'docs/topics/ppl.md',
+                      '\nThis kit measured it.\n'), 'how it was built'),
     ('the index for models out of date',
      lambda r: append(r, 'docs/llms.txt', '\nedited by hand\n'),
      'out of date'),

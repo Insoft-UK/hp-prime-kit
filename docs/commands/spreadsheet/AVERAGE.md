@@ -28,7 +28,7 @@ kind of call is refused.
 re-running the first call would have replaced its answer and lost the
 contrast. Nothing about the values 1, 2, 3 against 2, 4, 6 matters here.
 
-**This is the row that carried the rule from a keypress into a program**
+**This is the row that carried the rule from keys pressed by hand into a program**
 (emulator). The rule itself was found by hand -- see
 [SUM](SUM.md) -- and this one shows it holds for a batch as well, so the
 harness can measure these names once somebody selects the app first.

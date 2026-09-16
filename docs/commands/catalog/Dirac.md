@@ -19,7 +19,7 @@ The Dirac delta, which is infinite at zero.
 
 `Dirac(0)` is positive infinity, and the calculator writes it `+Inf`
 (emulator). The answer here is the text of it rather than the number,
-because the number is what this kit cannot yet read back.
+because the number is what the tools here cannot yet read back.
 
 **Infinity is stored as an ordinary real** (emulator). `TYPE` answers 0, the
 same code a plain number gets, so nothing in the type says the value is
@@ -39,7 +39,7 @@ lost batch. What the bare call does at the top level of a program is not
 measured here (unverified).
 
 Asking for the text and the type, rather than the value, is also deliberate
-(emulator): this kit's decoder does not know that sign nibble and raises on
+(emulator): the decoder that reads these results does not know that sign nibble and raises on
 it, and one unreadable cell used to lose every row beside it.
 
 The interpreter does not implement it, so `hpprime run` cannot check a program

@@ -32,7 +32,7 @@ a probability. Confusing the two gives a number rather than an error.
 
 What it answers for a probability of 0 or 1, where the point is infinite, was
 not run (unverified); the calculator does have a way to write infinity,
-measured elsewhere in this phase.
+measured in [Dirac](../catalog/Dirac.md).
 
 It answers a plain real, type 0 (emulator),
 [ppl.type-codes](../../topics/ppl.md#ppl.type-codes).

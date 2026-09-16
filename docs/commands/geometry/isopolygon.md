@@ -1,6 +1,6 @@
 # isopolygon
 
-A regular polygon, whose answer is the first in this phase to be cut.
+A regular polygon, whose answer is long enough to be cut.
 
 | | |
 |---|---|
@@ -17,7 +17,7 @@ A regular polygon, whose answer is the first in this phase to be cut.
 ## Behaviour
 
 **The answer was cut at 160 characters, and the row says so** (emulator). It
-is the first answer in Phase 7 long enough to reach the harness's width, and
+is long enough to reach the harness's width, and
 the marker in the stored row is the harness's own, not the calculator's. Only
 the first two vertices and part of the third survive.
 

@@ -21,8 +21,8 @@ so is more honest than an entry that reads as though nobody reached it.
 
 **A random answer is not an example** (emulator). Whatever it returns changes
 between runs, so a stored row would record one draw and the checker would
-hold every later run to it. Phase 6 met this with `RANDOM`, `RANDINT`,
-`RANDNORM`, `RANDMAT` and `RANDSEED` and settled it the same way: the entry
+hold every later run to it. `RANDOM`, `RANDINT`, `RANDNORM`, `RANDMAT` and
+`RANDSEED` met this first and settled it the same way: the entry
 says what the command is for and stores nothing.
 
 HP's list gives the name no syntax string (HP help), so even the call above is

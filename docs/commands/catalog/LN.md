@@ -17,8 +17,8 @@ The natural logarithm.
 
 ## Behaviour
 
-`LN(1)` is 0 (HP help), and the interpreter agrees (unverified: that is this
-kit's interpreter on the PC, not a calculator).
+`LN(1)` is 0 (HP help), and the interpreter agrees (unverified: that is the
+interpreter on the PC, not a calculator).
 
 **This is the natural logarithm and [LOG](LOG.md) is the base-ten one**
 (HP help), which is the opposite of the convention in several languages

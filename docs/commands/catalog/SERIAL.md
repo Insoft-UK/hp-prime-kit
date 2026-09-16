@@ -1,6 +1,6 @@
 # SERIAL
 
-Answers this calculator's serial number, which this kit never keeps.
+Answers this calculator's serial number, which is never stored here.
 
 | | |
 |---|---|

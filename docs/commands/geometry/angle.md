@@ -22,8 +22,8 @@ symbolic object of type 8,
 
 **That is a right angle in radians, and it was known before asking**
 (emulator). The two arms lie along the axes, so the angle is a quarter turn;
-in degrees it would have been 90. The answer agrees with the mode Phase 6
-measured, where `HAngle` answered 0 beside three inverse trigonometric
+in degrees it would have been 90. The answer agrees with the mode recorded in
+[ACOT](../trigonometry/ACOT.md), where `HAngle` answered 0 beside three inverse trigonometric
 answers in radians.
 
 **It is exact rather than decimal** (emulator): half of pi written as such

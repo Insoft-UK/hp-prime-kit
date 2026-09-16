@@ -135,7 +135,7 @@ Colours are 24-bit integers, `0xRRGGBB`.
 variant of each. For nearly all of them there is a PPL equivalent reachable
 through `eval`, which is what the apps read here do.
 
-**Evidence.** The community's list, not run on a calculator by this kit.
+**Evidence.** The community's list, not run on a calculator here.
 
 <a name="micropython.eval"></a>
 ## eval() runs PPL and returns numbers and lists of numbers
@@ -324,7 +324,7 @@ trimmed call, and the raw one last -- so the point where it died identified
 the cause with no further experiments.
 
 <a name="micropython.ppl-calls-python"></a>
-## PPL can call Python, and this kit has not measured it
+## PPL can call Python, and it has not been measured here
 
 | | |
 |---|---|

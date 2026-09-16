@@ -18,7 +18,7 @@ The key waiting to be read, or −1 when there is none.
 
 **No parentheses in PPL**: it is written `zk := GETKEY;` (G2),
 [ppl.getkey-no-parentheses](../../topics/ppl.md#ppl.getkey-no-parentheses).
-From Python, across the bridge, this kit's examples write `GETKEY()`.
+From Python, across the bridge, the examples here write `GETKEY()`.
 
 It does not wait. With nothing pending it answers −1 straight away
 (emulator), which is what makes the measured loop possible: read until it

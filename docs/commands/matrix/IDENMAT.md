@@ -27,7 +27,7 @@ carry, all four measured together (emulator): these commands map over a list
 rather than refusing it.
 
 The interpreter does not cover the list form and stops on it (unverified:
-this kit's interpreter on the PC, not a calculator), so that row is the
+the interpreter on the PC, not a calculator), so that row is the
 calculator's word alone.
 
 It takes a size and not a matrix, which makes it the odd one of the group:

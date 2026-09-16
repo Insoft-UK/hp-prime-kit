@@ -26,8 +26,8 @@ something to plot.
 something other than plain points -- a curve and a point, an expression, an
 expression -- and all three answer nothing while raising nothing.
 
-**An expression reaching a command unevaluated has gone wrong twice already
-in this phase** (emulator): [arcLen](arcLen.md) answered a number a third
+**An expression reaching a command unevaluated has gone wrong twice
+elsewhere** (emulator): [arcLen](arcLen.md) answered a number a third
 short, and [LineTan](../catalog/LineTan.md) collapsed its argument before
 use. Whether `X` and `Y` arrived here as symbols is not measured
 (unverified).

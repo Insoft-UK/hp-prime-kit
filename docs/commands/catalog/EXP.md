@@ -21,7 +21,7 @@ e raised to the value.
 
 **HP prints that rounded.** The interpreter answers 148.41315910258, and the
 checker treats the two as the same number because it compares within a small
-tolerance (unverified: this kit's interpreter on the PC, not a calculator). A
+tolerance (unverified: the interpreter on the PC, not a calculator). A
 test expecting HP's printed digits will not match.
 
 A list is taken element by element, and the zero in it answers 1 (emulator),

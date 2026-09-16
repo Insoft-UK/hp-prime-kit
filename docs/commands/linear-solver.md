@@ -90,8 +90,8 @@ A syntax error even with its own app active, unlike every other app function.
 
 ### Behaviour
 
-**It is the one name that does not follow the rule the rest of this phase
-obeys** (G2). Selecting the Linear Solver and typing the name on Home gives a
+**It is the one name that does not follow the rule the other app functions
+obey** (G2). Selecting the Linear Solver and typing the name on Home gives a
 **syntax error**, where the same treatment made
 [SSS](triangle-solver/SSS.md), [SUM](spreadsheet/SUM.md),
 [ROOT](function/ROOT.md) and [LinSolve](linear-solver/LinSolve.md) answer:
@@ -113,7 +113,7 @@ name at all. So the likeliest reading is that it is not callable by this
 spelling -- a menu item rather than a command a program can type, in the way
 `NTHROOT` turned out to need an operator form and never a call.
 
-**Empty brackets were tried because three commands in this phase take no
+**Empty brackets were tried because three other app commands take no
 arguments** (emulator) -- [DoSolve](triangle-solver/DoSolve.md),
 [DoInference](inference/DoInference.md) and
 [Do1VStats](statistics-1var/Do1VStats.md) all read their app's state
@@ -122,7 +122,7 @@ Solver open should have reached it. It did not, which is the same negative
 [Solve](solve/Solve.md) returned.
 
 **The screen offered no correction** (G2), unlike `translation` and
-`perpendicular` elsewhere in this phase, which replied in words saying what
+`perpendicular` in the geometry group, which replied in words saying what
 they wanted. There is nothing here to follow.
 
 **The middle character is U+00D7, the multiplication sign** (HP help), not
@@ -168,7 +168,7 @@ A syntax error like its pair, in a group whose other name answers.
 ### Behaviour
 
 **The second row was taken with the Linear Solver active** (emulator), in
-the round where [LinSolve](linear-solver/LinSolve.md) answered `{2,1}` from the same batch.
+the same batch where [LinSolve](linear-solver/LinSolve.md) answered `{2,1}`.
 The app was working; this name was refused anyway. The first row is older and
 was measured with the Function app active -- what a reset calculator has,
 [apps.reset-leaves-function-active](../topics/apps.md#apps.reset-leaves-function-active)
@@ -180,7 +180,7 @@ and its entry does not assume the same screen message -- though the two
 differ only in the size of the system and have refused identically at every
 call tried.
 
-**That makes these two the exception of the phase, and no longer the group**
+**That makes these two the exception among app functions, and no longer the group**
 (emulator). Selecting the app made [SSS](triangle-solver/SSS.md),
 [SUM](spreadsheet/SUM.md), [ROOT](function/ROOT.md) and
 [LinSolve](linear-solver/LinSolve.md) answer, and it did not help here:

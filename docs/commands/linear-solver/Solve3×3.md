@@ -18,7 +18,7 @@ A syntax error like its pair, in a group whose other name answers.
 ## Behaviour
 
 **The second row was taken with the Linear Solver active** (emulator), in
-the round where [LinSolve](LinSolve.md) answered `{2,1}` from the same batch.
+the same batch where [LinSolve](LinSolve.md) answered `{2,1}`.
 The app was working; this name was refused anyway. The first row is older and
 was measured with the Function app active -- what a reset calculator has,
 [apps.reset-leaves-function-active](../../topics/apps.md#apps.reset-leaves-function-active)
@@ -30,7 +30,7 @@ and its entry does not assume the same screen message -- though the two
 differ only in the size of the system and have refused identically at every
 call tried.
 
-**That makes these two the exception of the phase, and no longer the group**
+**That makes these two the exception among app functions, and no longer the group**
 (emulator). Selecting the app made [SSS](../triangle-solver/SSS.md),
 [SUM](../spreadsheet/SUM.md), [ROOT](../function/ROOT.md) and
 [LinSolve](LinSolve.md) answer, and it did not help here:

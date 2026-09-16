@@ -18,8 +18,8 @@ A syntax error even with its own app active, unlike every other app function.
 
 ## Behaviour
 
-**It is the one name that does not follow the rule the rest of this phase
-obeys** (G2). Selecting the Linear Solver and typing the name on Home gives a
+**It is the one name that does not follow the rule the other app functions
+obey** (G2). Selecting the Linear Solver and typing the name on Home gives a
 **syntax error**, where the same treatment made
 [SSS](../triangle-solver/SSS.md), [SUM](../spreadsheet/SUM.md),
 [ROOT](../function/ROOT.md) and [LinSolve](LinSolve.md) answer:
@@ -41,7 +41,7 @@ name at all. So the likeliest reading is that it is not callable by this
 spelling -- a menu item rather than a command a program can type, in the way
 `NTHROOT` turned out to need an operator form and never a call.
 
-**Empty brackets were tried because three commands in this phase take no
+**Empty brackets were tried because three other app commands take no
 arguments** (emulator) -- [DoSolve](../triangle-solver/DoSolve.md),
 [DoInference](../inference/DoInference.md) and
 [Do1VStats](../statistics-1var/Do1VStats.md) all read their app's state
@@ -50,7 +50,7 @@ Solver open should have reached it. It did not, which is the same negative
 [Solve](../solve/Solve.md) returned.
 
 **The screen offered no correction** (G2), unlike `translation` and
-`perpendicular` elsewhere in this phase, which replied in words saying what
+`perpendicular` in the geometry group, which replied in words saying what
 they wanted. There is nothing here to follow.
 
 **The middle character is U+00D7, the multiplication sign** (HP help), not

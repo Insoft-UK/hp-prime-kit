@@ -4,7 +4,7 @@ progress:
   total_phases: 10
   completed_phases: 7
   total_plans: 36
-  completed_plans: 33
+  completed_plans: 34
   percent: 70
 ---
 
@@ -21,9 +21,9 @@ See: .planning/PROJECT.md (updated 2026-09-11)
 
 Milestone: 1 of 2 (the documentation)
 Phase: 9 of 10 (guided path, index and README); Phase 8 paused, and Phase 8.1 inserted before 9
-Plan: 1 of 4 done in phase 9, 09-01, the model index; 4 done of phase 8, and phase 7 closed with 7. 598 entries, 117 facts, 847 rows in results.tsv
+Plan: 2 of 4 done in phase 9, 09-01 the model index and 09-02 planning language; 4 done of phase 8, and phase 7 closed with 7. 598 entries, 117 facts, 847 rows in results.tsv
 Status: Phase 8 paused, not closed. 130 of 172 app variables have an entry: the whole `triangle-solver`, `function`, `inference` and `finance` groups. 42 left, in six apps
-Last activity: 2026-09-16 — plan 09-01: `docs/llms.txt` generated at 74,939 bytes of a 100,000 budget, the check for examples nobody ran, and 21 `unverified` examples relabelled, which settled `ppl.locals-initialised-one-line` from a row Phase 5 had stored for it and never written down. Before that, Phase 9 questioned: four decisions from the user, 66 names found that no phase had taken, now Phase 8.1, and eight decisions proposed in `09-CONTEXT.md`. Before that, the Finance round: 50 of 68 variables answer from any app, 9 need Finance selected, 9 refuse either way; with Finance active every number becomes text with two decimals; and `Xlist` turned out not to be alone. Before that, 2026-09-15, the Inference round: 49 of 50 variables answer with the app active, the app ships with a worked example loaded, `DoInference` answers and writes its results where Phase 7 recorded a refusal, and the one name that refused is spelled on HP’s list with a codepoint the calculator does not accept. Before that, the Function app round. `F1:='X^2-4'` stores the expression where `F1:=X^2-4` stored a number, so a batch fills `F1` unaided and the whole group answered with no keypresses; and the function commands turn out **not** to write their own variables, where `DoSolve` did. Before that, the Phase 8 probe, two batches and 48 rows. A reset calculator turns out to have the Function app active, so "no app open" is not a condition the Prime has and seven entries said it was. The app rule reaches variables as well as functions, a program can set one and the value stays, and `DoSolve` answers once something has put a triangle in the app — where Phase 7 recorded a refusal
+Last activity: 2026-09-16 — plan 09-02: planning language and "this kit" out of 100 pages, a check that refuses "phase" and "this kit", and a glossary of batch, harness and probe in `format.md`. Before that, plan 09-01: `docs/llms.txt` generated at 74,939 bytes of a 100,000 budget, the check for examples nobody ran, and 21 `unverified` examples relabelled, which settled `ppl.locals-initialised-one-line` from a row Phase 5 had stored for it and never written down. Before that, Phase 9 questioned: four decisions from the user, 66 names found that no phase had taken, now Phase 8.1, and eight decisions proposed in `09-CONTEXT.md`. Before that, the Finance round: 50 of 68 variables answer from any app, 9 need Finance selected, 9 refuse either way; with Finance active every number becomes text with two decimals; and `Xlist` turned out not to be alone. Before that, 2026-09-15, the Inference round: 49 of 50 variables answer with the app active, the app ships with a worked example loaded, `DoInference` answers and writes its results where Phase 7 recorded a refusal, and the one name that refused is spelled on HP’s list with a codepoint the calculator does not accept. Before that, the Function app round. `F1:='X^2-4'` stores the expression where `F1:=X^2-4` stored a number, so a batch fills `F1` unaided and the whole group answered with no keypresses; and the function commands turn out **not** to write their own variables, where `DoSolve` did. Before that, the Phase 8 probe, two batches and 48 rows. A reset calculator turns out to have the Function app active, so "no app open" is not a condition the Prime has and seven entries said it was. The app rule reaches variables as well as functions, a program can set one and the value stays, and `DoSolve` answers once something has put a triangle in the app — where Phase 7 recorded a refusal
 
 Progress: [███████░░░] 70%
 
@@ -512,5 +512,5 @@ Decisions are logged in the Key Decisions table of PROJECT.md. Recent ones:
 ## Session Continuity
 
 Last session: 2026-09-16
-Stopped at: plan 09-01 complete and committed with Phase 9's context and the inserted Phase 8.1; suite 12,141 passed, 0 failed
-Resume with: plan 09-02, planning language out of the documentation: "phase" refused by the check, the rest of the planning words and "this kit" rewritten by reading, and "harness", "batch" and "probe" explained once in `format.md`. Phase 8 resumes after Phase 9 with its 42 variables, and its statistics groups hold the two Greek pairs the suffix rule does not cover -- ΣX against σX and ΣY against σY, both app variables, where a suffix meaning "the variable" separates nothing
+Stopped at: plan 09-02 complete, committed and pushed with 09-01; suite 12,161 passed, 0 failed
+Resume with: plan 09-03, the guided path: the six steps rewritten to link rather than restate, its three errors corrected, step 6 pointing at `docs/llms.txt`, and `docs/start/` under the same checks as the rest. Phase 8 resumes after Phase 9 with its 42 variables, and its statistics groups hold the two Greek pairs the suffix rule does not cover -- ΣX against σX and ΣY against σY, both app variables, where a suffix meaning "the variable" separates nothing

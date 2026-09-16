@@ -130,7 +130,7 @@ The exponential integral.
 [Ci](special/Ci.md) and [Si](special/Si.md).
 
 Five of the nine names in this group answer that way, one rewrites itself and
-one computes, which makes the group the clearest example in the phase of a
+one computes, which makes the group the clearest example in this documentation of a
 family whose members do not behave alike (emulator).
 
 It has a singularity at zero and its value there is not a number, so what the
@@ -173,7 +173,7 @@ shifted by one, so `Gamma(n)` is the factorial of `n-1` rather than of `n`.
 to get wrong in either direction. A program wanting the factorial of 5
 must call `Gamma(6)`.
 
-It cross-checks against the factorial operator measured in the same phase:
+It cross-checks against the factorial operator `!`, measured the same way:
 `5!` answers 120, and 120 divided by 24 is 5 (emulator). Two commands
 agreeing through arithmetic is worth more than either row alone.
 

@@ -23,7 +23,7 @@ cobweb construction a sequence plot is drawn from.
 
 **The answer was cut at 160 characters** (emulator), the harness's width, so
 the Result cell above holds a beginning and the marker that says so. It is
-the second answer in this phase to overflow, after
+the second answer in this group to overflow, after
 [isopolygon](isopolygon.md), and both overflowed for the same reason: the
 calculator answers with construction rather than with a picture.
 

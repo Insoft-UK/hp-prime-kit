@@ -46,12 +46,12 @@ here (unverified).
 
 **Fourteen items is where HP's syntax stops** (HP help). Past that, or when
 the list has to scroll, the published `CHOOSE_R` is what people reach for,
-and this kit has read it rather than run it (unverified),
+and it has been read here rather than run (unverified),
 [libraries.published](../topics/libraries.md#libraries.published).
 
 `hpprime run` records the call and answers a neutral value, so a program that
-asks questions still runs end to end on the PC (unverified: that is what this
-kit's interpreter does, not something the calculator says)
+asks questions still runs end to end on the PC (unverified: that is what the
+interpreter does, not something the calculator says)
 ([interface.md](../topics/interface.md#what-the-design-of-a-screen-comes-down-to)).
 
 ### Related
@@ -166,7 +166,7 @@ The key waiting to be read, or −1 when there is none.
 
 **No parentheses in PPL**: it is written `zk := GETKEY;` (G2),
 [ppl.getkey-no-parentheses](../topics/ppl.md#ppl.getkey-no-parentheses).
-From Python, across the bridge, this kit's examples write `GETKEY()`.
+From Python, across the bridge, the examples here write `GETKEY()`.
 
 It does not wait. With nothing pending it answers −1 straight away
 (emulator), which is what makes the measured loop possible: read until it
@@ -234,8 +234,8 @@ The variables have to exist already, with the right type (G2).
 
 `hpprime run` records the call rather than drawing it and answers a neutral
 value, so a calculation runs end to end on the PC with no interface, and what
-the form looked like is not something it can check (unverified: that is this
-kit's interpreter, not the calculator)
+the form looked like is not something it can check (unverified: that is the
+interpreter, not the calculator)
 ([interface.md](../topics/interface.md#what-the-design-of-a-screen-comes-down-to)).
 
 ### Related
@@ -374,8 +374,8 @@ That is measured, it is easy to mistake for a bug in your own menu, and the
 fix is a debounce that counts the screen as touched when a dialog closes.
 
 `hpprime run` records the call and answers a neutral value, so a program that
-shows messages still runs end to end on the PC (unverified: that is this
-kit's interpreter, not the calculator)
+shows messages still runs end to end on the PC (unverified: that is the
+interpreter, not the calculator)
 ([interface.md](../topics/interface.md#what-the-design-of-a-screen-comes-down-to)).
 
 ### Related
@@ -410,12 +410,12 @@ value (HP help). Called with no argument it clears that screen, which HP
 documents and nobody here has run (unverified).
 
 It is the one output an app's `Info` hook accepts (G2),
-[apps.hooks](../topics/apps.md#apps.hooks), which is the only place this
-kit has needed it.
+[apps.hooks](../topics/apps.md#apps.hooks), which is the only place it has
+been needed here.
 
 `hpprime run` records the call and answers a neutral value, so a program that
 prints still runs end to end on the PC, and `machine.io` holds what it would
-have written (unverified: that is this kit's interpreter, not the calculator)
+have written (unverified: that is the interpreter, not the calculator)
 ([interface.md](../topics/interface.md#what-the-design-of-a-screen-comes-down-to)).
 
 ### Related

@@ -29,7 +29,7 @@ flows used here go out once and come back three times, so the safe rate has
 nothing to apply to. A list that turns negative again part way through is the
 case the two names are said to treat differently, and it is one row away.
 
-The same happened in Phase 6 with two unit commands that agreed on the pair
+The same happened with two unit commands that agreed on the pair
 they were given (emulator), and the answer then was the same: record the
 agreement, name the probe, and do not invent the difference.
 

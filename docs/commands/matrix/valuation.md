@@ -40,8 +40,7 @@ nibble of 2 where an ordinary negative uses 9 (emulator). `hpprime examples`
 could not decode it, and because a batch is collected all at once, seventeen
 calls were lost with it. The two examples above avoid the number field
 entirely -- one asks for text, the other for a type code -- which is why they
-came home. What the kit does about the format is written down in the project's
-own notes rather than here.
+came home.
 
 The interpreter does not implement it, so `hpprime run` cannot check a program
 that uses it (unverified).

@@ -335,7 +335,7 @@ Every name PPL has, from [the list of names](names.tsv): what kind of name it is
 | [Isect](function/Isect-var.md) | app variable | [function](function.md) | The Function app's stored intersection, 0 while ISECT answered 2.56155281281. | emulator |
 | [ISKEYDOWN](io/ISKEYDOWN.md) | command | [io](io.md) | Whether a given key is being held down right now. | emulator |
 | [ismith](matrix/ismith.md) | function | [matrix](matrix.md) | The Smith normal form of an integer matrix. | emulator |
-| [isopolygon](geometry/isopolygon.md) | app function | [geometry](geometry.md) | A regular polygon, whose answer is the first in this phase to be cut. | emulator |
+| [isopolygon](geometry/isopolygon.md) | app function | [geometry](geometry.md) | A regular polygon, whose answer is long enough to be cut. | emulator |
 | [ITERATE](more/ITERATE.md) | command | [more](more.md) | Applies an expression to itself a number of times. | emulator |
 | [jordan](matrix/jordan.md) | function | [matrix](matrix.md) | The Jordan form of a matrix, with its change of basis. | emulator |
 | [JordanBlock](matrix/JordanBlock.md) | function | [matrix](matrix.md) | A square matrix with one value on the diagonal and ones just above it. | emulator |
@@ -553,7 +553,7 @@ Every name PPL has, from [the list of names](names.tsv): what kind of name it is
 | [segment](geometry/segment.md) | app function | [geometry](geometry.md) | The segment between two points. | emulator |
 | [SemiAnnual](finance/SemiAnnual.md) | app variable | [finance](finance.md) | Whether a bond pays its coupon twice a year. | emulator |
 | `SeqPlot` | app variable | sequence | no entry yet | |
-| [SERIAL](catalog/SERIAL.md) | function | [catalog](catalog.md) | Answers this calculator's serial number, which this kit never keeps. | emulator |
+| [SERIAL](catalog/SERIAL.md) | function | [catalog](catalog.md) | Answers this calculator's serial number, which is never stored here. | emulator |
 | [serrInter](inference/serrInter.md) | app variable | [inference](inference.md) | The standard error of the intercept. | emulator |
 | [serrLine](inference/serrLine.md) | app variable | [inference](inference.md) | The standard error of the fitted line. | emulator |
 | [serrSlope](inference/serrSlope.md) | app variable | [inference](inference.md) | The standard error of the slope. | emulator |

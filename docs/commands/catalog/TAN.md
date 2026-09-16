@@ -29,8 +29,8 @@ groups, all consistent on a single angle.
 
 Unlike a sine or a cosine it has no bound, and near a quarter turn it grows
 without limit. What it answers exactly there was not run (unverified), and the
-calculator does have a way to write infinity, measured elsewhere in this
-phase.
+calculator does have a way to write infinity, measured in
+[Dirac](Dirac.md).
 
 It answers a plain real, type 0 (emulator),
 [ppl.type-codes](../../topics/ppl.md#ppl.type-codes).

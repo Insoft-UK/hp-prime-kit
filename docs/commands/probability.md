@@ -70,7 +70,7 @@ deliberately: a call that fails to compile takes the whole batch with it, and
 this one was already in a batch of two.
 
 The factorial is what makes [COMB](probability/COMB.md) and [PERM](probability/PERM.md) work, and
-those two were measured in the same phase: `PERM(5,2)` is 20, which is 5!
+those two were measured too: `PERM(5,2)` is 20, which is 5!
 divided by 3! (emulator, and the arithmetic between the rows).
 
 What it does with a negative or a fractional argument was not run
@@ -778,7 +778,7 @@ It takes μ and σ before the probability, both optional (emulator), measured on
 
 What it answers for a probability of 0 or 1, where the point is infinite, was
 not run (unverified) -- and the calculator does have a way to write infinity,
-measured elsewhere in this phase.
+measured in [Dirac](catalog/Dirac.md).
 
 It answers a plain real, type 0 (emulator),
 [ppl.type-codes](../topics/ppl.md#ppl.type-codes).
@@ -1302,7 +1302,7 @@ a probability. Confusing the two gives a number rather than an error.
 
 What it answers for a probability of 0 or 1, where the point is infinite, was
 not run (unverified); the calculator does have a way to write infinity,
-measured elsewhere in this phase.
+measured in [Dirac](catalog/Dirac.md).
 
 It answers a plain real, type 0 (emulator),
 [ppl.type-codes](../topics/ppl.md#ppl.type-codes).

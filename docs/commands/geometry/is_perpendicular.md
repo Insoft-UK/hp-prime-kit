@@ -27,7 +27,7 @@ distinction. The account and the probe are in
 [is_orthogonal](is_orthogonal.md).
 
 **The same situation has arisen twice before in this documentation**
-(emulator): two unit commands in Phase 6 agreed on the pair they were given,
+(emulator): two unit commands agreed on the pair they were given,
 and so did `CashFlowMIRR` beside `CashFlowFMRR`. The answer each time was to
 record the agreement, name the probe, and not guess the difference.
 

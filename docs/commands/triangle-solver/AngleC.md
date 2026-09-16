@@ -17,7 +17,7 @@ The angle opposite side C.
 
 ## Behaviour
 
-**It answered 90, which is the one number in this round that needed no
+**It answered 90, which is the one number in this batch that needed no
 calculator** (emulator). Sides of 3, 4 and 5 make a right triangle, and the
 right angle is opposite the longest side. An answer of exactly 90 -- not
 89.9999999 -- also says the app is not returning a rounded numerical solution

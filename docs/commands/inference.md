@@ -773,7 +773,7 @@ entry settles it for this command and does not settle it for that one.
 
 **This entry said the opposite until these rows existed** (emulator). It said
 the command was refused from a batch, that a reset calculator left the app
-holding nothing, and that measuring it would take keypresses. The refusal was
+holding nothing, and that measuring it would take pressing keys by hand. The refusal was
 the wrong app, the app was not empty, and a batch measured it with one
 selection made by hand beforehand.
 
@@ -1139,7 +1139,7 @@ to the same answer, which is why this example cannot separate them. The probe
 is data that does not lie exactly on a line.
 
 **This documentation has met that situation three times now** (emulator),
-with two unit commands in Phase 6, with `CashFlowMIRR` beside
+with two unit commands, with `CashFlowMIRR` beside
 `CashFlowFMRR`, and with `is_orthogonal` beside `is_perpendicular`. The
 answer each time is the same: record the agreement, name the probe, guess
 nothing.
@@ -1722,7 +1722,7 @@ reading and leaves it a reading. A second run on data that rejects would
 separate them, and this documentation does not have one.
 
 **A program should not compare it against 1 on the strength of this entry**
-(emulator). Two geometry tests in Phase 7 answered codes rather than truths --
+(emulator). Two geometry tests answered codes rather than truths --
 `is_isosceles` answered 3 and `is_parallelogram` 4 -- so a code that happens
 to be 1 here is exactly the shape of trap this documentation exists to
 name.
@@ -2628,7 +2628,7 @@ same name. The fact is
 listed** (emulator): π₀, σ₁, σ₂, n₁,
 n₂, s₁, s₂, x₁, x₂, Mean₁ and Mean₂. So
 this is one name's spelling and not a rule about non-ASCII names -- which the
-first batch of this phase could not tell apart, because everything in it
+first batch of this group could not tell apart, because everything in it
 refused for want of the right app.
 
 **0.5 is the null-hypothesis value the app arrived with** (emulator), the

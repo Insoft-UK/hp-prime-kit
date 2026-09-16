@@ -152,7 +152,7 @@ from documentation, which does not say.
 The Python one is much easier to generate: the modules are text files copied
 as they are, with no binary format in the way.
 
-**Evidence.** Measured on apps of both kinds built by this kit and installed
+**Evidence.** Measured on apps of both kinds built by `hpprime build` and installed
 on a G2 with firmware 2.4.15515.
 
 <a name="apps.hooks"></a>
@@ -171,8 +171,8 @@ EXPORT Info()       // [Shift][Apps]. Only accepts PRINT
 EXPORT RESET()      // put the globals back as they started
 ```
 
-**Evidence.** Measured on a G2 with firmware 2.4.15515, in apps built by this
-kit. `Info()` accepting only `PRINT` is what that app showed; what else it
+**Evidence.** Measured on a G2 with firmware 2.4.15515, in apps built by
+`hpprime build`. `Info()` accepting only `PRINT` is what that app showed; what else it
 would accept was not tried.
 
 <a name="apps.blank-app-hooks"></a>
@@ -192,7 +192,7 @@ the keyboard. Either way the hooks do not fire, and the way to build such an
 app is [apps.blank-app-keys](#apps.blank-app-keys).
 
 **Evidence.** Measured on a G2 with firmware 2.4.15515, in an app built end to
-end by this kit.
+end by `hpprime build`.
 
 <a name="apps.blank-app-keys"></a>
 ## The view keys still arrive as keys
@@ -211,7 +211,7 @@ as `key=form  View=menu  Help=help  Esc=exit`, and let the program decide what
 each code does.
 
 **Evidence.** Measured on a G2 with firmware 2.4.15515, in an app built end to
-end by this kit.
+end by `hpprime build`.
 
 <a name="apps.exports-tied"></a>
 ## What an app's program exports is tied to that app
@@ -355,7 +355,7 @@ one from nothing.
 | Known from | G2 |
 
 It has no source block to replace, and the tool says so: *"no source block
-found (empty program?)"*. Use `templates/code.hpprgm`, which the kit ships. An
+found (empty program?)"*. Use `templates/code.hpprgm`, which ships with the tools. An
 app coming back from the calculator can also carry a couple of kilobytes of
 compiled block before its source; it reads fine, and it is no use as a
 template either
@@ -431,7 +431,7 @@ are wrong by a factor of about 57, and nothing raises.
 `{36.8698976458,53.1301023542,90}`. Those are the angles of that triangle in
 degrees to ten figures, and they sum to 180. In radians they would be
 0.6435, 0.9273 and 1.5708, summing to pi. Elsewhere the mode is radians:
-`HAngle` answers 0 beside three inverse trigonometric answers in Phase 6,
+`HAngle` answers 0 beside three inverse trigonometric answers,
 `angle` of two axes answers half of pi, and `rotation` writes a turn of one
 radian as an exponential.
 
@@ -445,7 +445,7 @@ radian as an exponential.
 | Known from | emulator |
 
 There is no state on the Prime in which no app is active, so "with no app
-open" is not a condition a measurement can have. The harness resets `Prime_1`
+open" is not a condition a measurement can have. The harness resets its calculator
 before every run, and what that leaves active is the **Function** app. Every
 batch that nobody has touched first therefore measures the Function-app
 condition, not a neutral one.

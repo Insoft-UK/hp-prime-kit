@@ -25,7 +25,7 @@ which call went wrong without tracking it.
 **The line break arrives as the two characters backslash and n** (emulator),
 not as a break, the same thing [locus](locus.md) and
 [plotode](plotode.md) do and the same thing `STRING` does elsewhere in this
-kit.
+documentation.
 
 **The second argument is wrong and HP says what it should be** (HP help): a
 VectorVar, meaning a pair of variables for a direction field, where a single

@@ -30,7 +30,7 @@ would be, and nothing measured here supports or refutes that (unverified).
 
 **A batch is the wrong place to find out** (emulator). If these names touch
 the app's construction list, they need the app open with a construction in
-it, which is keypresses rather than a batch.
+it, which takes pressing keys rather than a batch.
 
 The interpreter does not implement it, so `hpprime run` cannot check a program
 that uses it (unverified).
