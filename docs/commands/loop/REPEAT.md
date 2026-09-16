@@ -12,14 +12,14 @@ Repeats a block until a test becomes true, checking the test last.
 
 | Call | Result | Known from |
 |---|---|---|
-| `LOCAL z; z := 0; REPEAT z := z + 1; UNTIL z >= 4; RETURN z;` | `4` | unverified |
-| `LOCAL z; z := 0; REPEAT z := z + 1; UNTIL 1 == 1; RETURN z;` | `1` | unverified |
+| `LOCAL z; z := 0; REPEAT z := z + 1; UNTIL z >= 4; RETURN z;` | `4` | [emulator](../results.tsv) |
+| `LOCAL z; z := 0; REPEAT z := z + 1; UNTIL 1 == 1; RETURN z;` | `1` | [emulator](../results.tsv) |
 
 ## Behaviour
 
 The body always runs at least once, because the test comes after it: the
 second example runs the body once even though the test was true from the
-start (unverified). [WHILE](WHILE.md) is the other way round.
+start (emulator). [WHILE](WHILE.md) is the other way round.
 
 `UNTIL` ends the statement with a semicolon rather than an `END;`, which is
 the one loop that closes differently (HP help).

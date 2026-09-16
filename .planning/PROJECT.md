@@ -63,19 +63,21 @@ Inferred from the existing repository, and added phase by phase.
 - ✓ The list of every PPL name as data: 1,173 names from HP's help of 13217, the 2.1.14181 export and the release notes to 2.4.15515, each saying where it came from — Phase 2
 - ✓ An index by name and one by HP's grouping, over every name that gets an entry, generated from the list — Phase 2
 - ✓ `hpprime lint` flags a call to a name that is neither PPL's nor the program's (`unknown-name`): a warning alone, an error with `--set` — Phase 2
+- ✓ The tools find a Connectivity Kit and a Virtual Calculator whose folders are localised, and say which folder they used — Phase 3
+- ✓ The examples of a batch of entries run on the Virtual Calculator in one pass, every kind of answer comes back, and each is stored with its firmware — Phase 3
+- ✓ The container reader's wrong pick between two source records ending at the same offset, reproduced in a test and fixed — Phase 3
+- ✓ The platform topics carried over in the fixed format, none lost: every fact with an identifier, one statement, how it is known and its evidence, the refuted hypotheses and the unverified items included — Phase 4
+- ✓ Every lint message names the fact it comes from, and the deploy page explains the send from the Connectivity Kit by hand, marked as done once — Phase 4
+- ✓ An entry for every statement and program command, every Home function and every app function, each example with a Virtual Calculator result or a reason — Phases 5 to 7
 
 ### Active: Milestone 1, the documentation
 
 Numbered in `REQUIREMENTS.md`.
 
-- [ ] An entry for every PPL statement, command, Home function, app function and app variable: syntax, what it does, its arguments and what it returns, an example, the known edge cases, and its status
+- [ ] An entry for every PPL statement, command, Home function, app function, app variable and variable, and for `GET`: syntax, what it does, its arguments and what it returns, an example, the known edge cases, and its status. Done through the app functions; the app variables are Phase 8, the variables and `GET` Phase 8.1
 - [ ] Every example is run on the Virtual Calculator 2.4.15515, or says why it cannot be
-- [ ] The tools find a Connectivity Kit and a Virtual Calculator whose folders are localised (`Calculadoras` on a Spanish install)
-- [ ] The platform topics there today (limits, false hypotheses, run-time traps, screen, keyboard and touch, libraries, apps, MicroPython, formats, deploy) carried over in the same fixed format, none lost
-- [ ] Every fact has a stable identifier, one statement, how it is known and its firmware, and it is stated once
 - [ ] A person can learn from zero with a guided path and look anything up in the reference
 - [ ] A model can load one entry or one topic without the rest, from an index
-- [ ] The deploy page explains how to send a file to a physical calculator from the Connectivity Kit's content library, by hand, marked as done once
 
 ### Active: Milestone 2, the agent kit, built on the documentation
 
@@ -135,8 +137,8 @@ Deferred in `REQUIREMENTS.md`; planned when milestone 1 is done.
   (`RIGHT` and `MID` say nothing about theirs) and says nothing about the
   limits that break compilation, which is why the kit measures.
 - **This machine.** Connectivity Kit 2.4 with a Spanish interface: its folders
-  are `Calculadoras`, `Contenido` and so on, and `hpprime doctor` looks only
-  for `Calculators`, so it reports the Kit as missing. The Virtual Calculator
+  are `Calculadoras`, `Contenido` and so on, and `hpprime doctor` has found
+  them since Phase 3 taught the tools the localised names. The Virtual Calculator
   2.4 r15515, the same build as the reference G2, has been installed since
   2026-09-11; its calculators folder is `Calculators`, in English, although its
   other folders are Spanish, and the kit finds it. A program copied into that
@@ -170,7 +172,7 @@ Deferred in `REQUIREMENTS.md`; planned when milestone 1 is done.
 - **Language**: English in the repository (code, docs, commits); the agent answers the user in the user's language
 - **Platforms**: Windows first, because that is where the emulator and the Connectivity Kit run; macOS and Linux for everything that does not need them
 - **One fact, one home**: each fact is stated once and cited everywhere else
-- **Git**: the redo happens on the local branch `redo`; `main` stays as it is until the redo is ready, and pushing is asked for separately
+- **Git**: `main` is the published branch, and nothing is pushed to it without asking. The redo was built on a local branch, `redo`, which became `main` on 2026-09-14
 
 ## Key Decisions
 
@@ -194,12 +196,20 @@ Deferred in `REQUIREMENTS.md`; planned when milestone 1 is done.
 | `unknown-name` is a warning for a file alone and an error with `--set` | The user's choice for Phase 2: a file may call another program's export | ✓ Good (Phase 2) |
 | The linter compares the calculator's names without regard to case | Never flag a spelling the calculator might accept; the calculator's own behaviour is not measured | — Pending |
 | Keep the measured facts and the Python tools; redo the structure, the docs and the entry points | They are validated on hardware; the problem is the shape, not the content | ✓ Good so far |
-| The redo happens on a local branch `redo` | The user's choice on 2026-09-11: `main` stays intact until the redo is ready | — Pending |
+| The redo happens on a local branch `redo` | The user's choice on 2026-09-11: `main` stays intact until the redo is ready | ✓ Good: `main` moved to it by fast-forward on 2026-09-14 |
 | The kit targets Claude Code only, with the content kept in one source | The user's choice on 2026-09-11; Claude Code has skills, agents and hooks natively | — Pending |
 | The send to a physical calculator is explained, not automated | The user's choice on 2026-09-11; one run, five attempts | — Pending |
 | Done means: every PPL command documented; then a beginner succeeds end to end and a TermoHP-sized app is built from scratch | The user's choices on 2026-09-11 | — Pending |
 | Learn from GSD, do not depend on it | No Node on this machine, and the kit stays standard-library only | ✓ Good so far |
 | Build the redo with GSD's method: `.planning/` with PROJECT, REQUIREMENTS, ROADMAP and STATE, one phase at a time | The user asked to use GSD to capture what they want | ✓ Good: it surfaced the "documentation first" correction |
+| The 65 variables and `GET` get their own phase, 8.1, inside milestone 1 | The user's choice on 2026-09-16, when Phase 9's questioning found that no phase had taken them | — Pending |
+| Phase 9 runs ahead of Phases 8 and 8.1 | The user's choice on 2026-09-16: what it builds is generated from the entries or links to them | — Pending |
+| The index a model loads first is one file with a link on every line | The user's choice on 2026-09-16, over the same list without links and over a map with an index per group | — Pending |
+| The guided path keeps its six steps, rewritten to link rather than restate | The user's choice on 2026-09-16, over a shorter path and over a new structure | — Pending |
+| Planning language comes out of the documentation, and a check keeps it out | The user's choice on 2026-09-16; harness, batch and probe are explained once instead | — Pending |
+| The model index is `docs/llms.txt`, generated, with a budget of 100,000 bytes the check enforces | Approved with Phase 9's context on 2026-09-16: inside `docs/` so the documentation can still be split out, and loaded whole, so its size is watched | ✓ Good: 74,939 bytes for 598 entries and 117 facts (09-01) |
+| An example nobody has run fails the check | Approved on 2026-09-16 (CHECK-02): no stored answer is allowed only for *no value*, a G2 measurement, or the interpreter | ✓ Good: it reports nothing today, and holds that (09-01) |
+| `--relabel` moves `unverified` to `emulator` too, never `G2` | Approved on 2026-09-16: a label weaker than the measurement understates it as surely as a stronger one overstates it | ✓ Good: 21 examples moved, and a fact measured in Phase 5 and never written down was settled with them (09-01) |
 
 ## Evolution
 
@@ -219,4 +229,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with the current state
 
 ---
-*Last updated: 2026-09-11 after Phase 2, and the decisions for Phase 3*
+*Last updated: 2026-09-16, when Phase 9 was questioned and Phase 8.1 inserted*

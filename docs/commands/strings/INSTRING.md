@@ -14,8 +14,8 @@ Where one string first appears inside another.
 |---|---|---|
 | `INSTRING("banana", "na")` | `3` | [emulator](../results.tsv) |
 | `INSTRING("ab", "abc")` | `0` | [emulator](../results.tsv) |
-| `INSTRING("abcdef", "cd")` | `3` | unverified |
-| `INSTRING("abcdef", "f")` | `6` | unverified |
+| `INSTRING("abcdef", "cd")` | `3` | [emulator](../results.tsv) |
+| `INSTRING("abcdef", "f")` | `6` | [emulator](../results.tsv) |
 | `INSTRING("abcdef", "zz")` | `0` | G2 |
 | `INSTRING("abcdef", "")` | `1` | G2 |
 
@@ -37,9 +37,9 @@ An empty second argument answers **1** (G2). That is the trap: a needle built
 from a field the user left blank reports a match at the start rather than
 nothing, so the guard is on the needle, before the call.
 
-**Evidence.** The two edges come from this kit's table of run-time traps,
-measured on a G2 with firmware 2.4.15515. The two ordinary cases are waiting
-for a batch on the emulator.
+**Evidence.** The two edges were measured on a G2 with firmware 2.4.15515.
+The two ordinary cases ran on the Virtual Calculator 2.4, build 2025-09-15, in
+the batch stored on 2026-09-12, and agree.
 
 ## Related
 

@@ -92,7 +92,7 @@ Every name PPL has, from [the list of names](names.tsv): what kind of name it is
 | [B→R](integer/B→R.md) | command | [integer](integer.md) | A `#` integer as an ordinary number. | emulator |
 | [CallPrice](finance/CallPrice.md) | app variable | [finance](finance.md) | A bond’s call price, 100 as the app arrives. | emulator |
 | [CAS](more/CAS.md) | command | [more](more.md) | Evaluates an expression with the CAS, from a program. | emulator |
-| [CASE](branch/CASE.md) | statement | [branch](branch.md) | Tries each test in turn and runs the first block whose test is true. | unverified |
+| [CASE](branch/CASE.md) | statement | [branch](branch.md) | Tries each test in turn and runs the first block whose test is true. | emulator |
 | [CashFlowFMRR](finance/CashFlowFMRR.md) | app function | [finance](finance.md) | A break-even rate of the same family, which this example cannot tell from MIRR. | emulator |
 | [CashFlowIRR](finance/CashFlowIRR.md) | app function | [finance](finance.md) | The rate at which a list of cash flows breaks even. | emulator |
 | [CashFlowMIRR](finance/CashFlowMIRR.md) | app function | [finance](finance.md) | A break-even rate that separates the borrowing rate from the reinvestment one. | emulator |
@@ -143,7 +143,7 @@ Every name PPL has, from [the list of names](names.tsv): what kind of name it is
 | [ConfZ2prop](spreadsheet/ConfZ2prop.md) | app function | [spreadsheet](spreadsheet.md) | A z confidence interval for two proportions, refused from Home. | emulator |
 | [conic](geometry/conic.md) | app function | [geometry](geometry.md) | The conic of an equation, which answered an empty list. | emulator |
 | [CONJ](arithmetic/CONJ.md) | function | [arithmetic](arithmetic.md) | The complex conjugate: the same number with the imaginary part negated. | emulator |
-| [CONTINUE](loop/CONTINUE.md) | statement | [loop](loop.md) | Skips the rest of the body and goes on to the next turn of the loop. | unverified |
+| [CONTINUE](loop/CONTINUE.md) | statement | [loop](loop.md) | Skips the rest of the body and goes on to the next turn of the loop. | emulator |
 | [ContribList](inference/ContribList.md) | app variable | [inference](inference.md) | Empty, and holds each cell’s contribution to the chi-square statistic. | emulator |
 | [ContribMat](inference/ContribMat.md) | app variable | [inference](inference.md) | A one-by-one zero matrix, and holds each cell’s contribution in a two-way table. | emulator |
 | [CONVERT](units/CONVERT.md) | function | [units](units.md) | Changes a value from one unit into another. | emulator |
@@ -188,7 +188,7 @@ Every name PPL has, from [the list of names](names.tsv): what kind of name it is
 | [DFerr](inference/DFerr.md) | app variable | [inference](inference.md) | The error degrees of freedom of an analysis of variance. | emulator |
 | [diag](matrix/diag.md) | function | [matrix](matrix.md) | Takes the diagonal out of a matrix, or builds a matrix from a diagonal. | emulator |
 | [DIFFERENCE](list/DIFFERENCE.md) | function | [list](list.md) | The elements that are in one list or the other, but not in both. | emulator |
-| [DIM](strings/DIM.md) | command | [strings](strings.md) | How long a string is, or the dimensions of a matrix. | unverified |
+| [DIM](strings/DIM.md) | command | [strings](strings.md) | How long a string is, or the dimensions of a matrix. | emulator |
 | [DIMGROB](drawing/DIMGROB.md) | command | [drawing](drawing.md) | Creates an off-screen picture, sized in the coordinates of the current view. | emulator |
 | [DIMGROB_P](drawing/DIMGROB_P.md) | command | [drawing](drawing.md) | Creates an off-screen picture of a given size, in pixels. | emulator |
 | [Dirac](catalog/Dirac.md) | function | [catalog](catalog.md) | The Dirac delta, which is infinite at zero. | emulator |
@@ -288,8 +288,8 @@ Every name PPL has, from [the list of names](names.tsv): what kind of name it is
 | [HypZ2prop](spreadsheet/HypZ2prop.md) | app function | [spreadsheet](spreadsheet.md) | A z test for two proportions, refused from Home. | emulator |
 | [ICON](catalog/ICON.md) | function | [catalog](catalog.md) | On HP's list of names, and refused as a call. | emulator |
 | [IDENMAT](matrix/IDENMAT.md) | function | [matrix](matrix.md) | An identity matrix of the size given. | emulator |
-| [IF](branch/IF.md) | statement | [branch](branch.md) | Runs a block when a test is true, and another block when it is not. | unverified |
-| [IFERR](branch/IFERR.md) | statement | [branch](branch.md) | Runs a block, and runs a second one instead if the first raises an error. | unverified |
+| [IF](branch/IF.md) | statement | [branch](branch.md) | Runs a block when a test is true, and another block when it is not. | emulator |
+| [IFERR](branch/IFERR.md) | statement | [branch](branch.md) | Runs a block, and runs a second one instead if the first raises an error. | emulator |
 | [IFTE](catalog/IFTE.md) | function | [catalog](catalog.md) | Answers one of two values, depending on a test. | emulator |
 | [ihermite](matrix/ihermite.md) | function | [matrix](matrix.md) | The Hermite normal form of an integer matrix. | emulator |
 | [IM](arithmetic/IM.md) | function | [arithmetic](arithmetic.md) | The imaginary part of a complex number. | emulator |
@@ -304,7 +304,7 @@ Every name PPL has, from [the list of names](names.tsv): what kind of name it is
 | [InfType](inference/InfType.md) | app variable | [inference](inference.md) | Which inference the app is set to perform. | emulator |
 | [INPUT](io/INPUT.md) | command | [io](io.md) | Asks a person for one or more values, in a modal form. | HP help |
 | [INSERT](list/INSERT.md) | function | [list](list.md) | Puts a value into a list at a given position. | emulator |
-| [INSTRING](strings/INSTRING.md) | command | [strings](strings.md) | Where one string first appears inside another. | unverified |
+| [INSTRING](strings/INSTRING.md) | command | [strings](strings.md) | Where one string first appears inside another. | emulator |
 | [Instruction](geometry/Instruction.md) | app function | [geometry](geometry.md) | Refused, and nothing published says what it is for. | emulator |
 | [IntConvCPYR](finance/IntConvCPYR.md) | app function | [finance](finance.md) | How often a rate compounds, from the nominal and effective rates. | emulator |
 | [IntConvEff](finance/IntConvEff.md) | app function | [finance](finance.md) | The effective rate, from a nominal rate and how often it compounds. | emulator |
@@ -364,7 +364,7 @@ Every name PPL has, from [the list of names](names.tsv): what kind of name it is
 | [ListToMat](matrix/ListToMat.md) | function | [matrix](matrix.md) | Turns a list of lists into a matrix. | emulator |
 | [LN](catalog/LN.md) | function | [catalog](catalog.md) | The natural logarithm. | emulator |
 | [LNP1](arithmetic/LNP1.md) | function | [arithmetic](arithmetic.md) | The natural logarithm of one plus the value. | emulator |
-| [LOCAL](variable/LOCAL.md) | statement | [variable](variable.md) | Declares the variables that belong to one function. | unverified |
+| [LOCAL](variable/LOCAL.md) | statement | [variable](variable.md) | Declares the variables that belong to one function. | emulator |
 | [locus](geometry/locus.md) | app function | [geometry](geometry.md) | The path a point traces, refused for the two points given. | emulator |
 | [LOG](catalog/LOG.md) | function | [catalog](catalog.md) | The logarithm, base ten unless another base is given. | emulator |
 | [LOWER](strings/LOWER.md) | command | [strings](strings.md) | The string in lower case. | emulator |
@@ -519,12 +519,12 @@ Every name PPL has, from [the list of names](names.tsv): what kind of name it is
 | [REDIM](matrix/REDIM.md) | command | [matrix](matrix.md) | The matrix resized to the dimensions you give. | emulator |
 | [reflection](geometry/reflection.md) | app function | [geometry](geometry.md) | Reflects an object in a line. | emulator |
 | [REGRS](spreadsheet/REGRS.md) | app function | [spreadsheet](spreadsheet.md) | A regression over a range, refused from Home. | emulator |
-| [REPEAT](loop/REPEAT.md) | statement | [loop](loop.md) | Repeats a block until a test becomes true, checking the test last. | unverified |
+| [REPEAT](loop/REPEAT.md) | statement | [loop](loop.md) | Repeats a block until a test becomes true, checking the test last. | emulator |
 | [REPLACE](matrix/REPLACE.md) | command | [matrix](matrix.md) | Puts one matrix inside another, starting at a position you give. | emulator |
 | [Resid](statistics-2var/Resid.md) | app function | [statistics-2var](statistics-2var.md) | The residuals of a fit, refused on an empty data set. | emulator |
 | [residue](statistics-2var/residue.md) | app function | [statistics-2var](statistics-2var.md) | The residue of a function, which reports its own failure as text. | emulator |
 | [Result](inference/Result.md) | app variable | [inference](inference.md) | A code DoInference wrote 1 into, and nothing says what 1 means. | emulator |
-| [RETURN](block/RETURN.md) | statement | [block](block.md) | Leaves the function, with a value. | unverified |
+| [RETURN](block/RETURN.md) | statement | [block](block.md) | Leaves the function, with a value. | emulator |
 | [REVERSE](list/REVERSE.md) | function | [list](list.md) | The list, back to front. | emulator |
 | [RGB](drawing/RGB.md) | command | [drawing](drawing.md) | A colour, from its red, green and blue parts. | emulator |
 | [rhombus](geometry/rhombus.md) | app function | [geometry](geometry.md) | A rhombus on a side, with the angle given in radians. | emulator |
@@ -669,7 +669,7 @@ Every name PPL has, from [the list of names](names.tsv): what kind of name it is
 | [VIEW](app/VIEW.md) | command | [app](app.md) | Declares one of an app's own views, with the name it shows in the View menu. | HP help |
 | [Volatility](finance/Volatility.md) | app variable | [finance](finance.md) | The volatility in a Black-Scholes calculation. | emulator |
 | [WAIT](io/WAIT.md) | command | [io](io.md) | Pauses for a number of seconds, or until a key is pressed. | HP help |
-| [WHILE](loop/WHILE.md) | statement | [loop](loop.md) | Repeats a block while a test is true, checking the test first. | unverified |
+| [WHILE](loop/WHILE.md) | statement | [loop](loop.md) | Repeats a block while a test is true, checking the test first. | emulator |
 | [Xlist](inference/Xlist.md) | app variable | [inference](inference.md) | The one variable measured that answers with the wrong app active. | emulator |
 | `Xmax` | variable | common-plot-view | no entry yet | |
 | `Xmin` | variable | common-plot-view | no entry yet | |

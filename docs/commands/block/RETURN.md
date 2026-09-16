@@ -13,7 +13,7 @@ Leaves the function, with a value.
 
 | Call | Result | Known from |
 |---|---|---|
-| `LOCAL z; z := 2; RETURN z;` | `2` | unverified |
+| `LOCAL z; z := 2; RETURN z;` | `2` | [emulator](../results.tsv) |
 | `LOCAL zi, zs; zs := 0; FOR zi FROM 1 TO 10 DO IF zi == 3 THEN RETURN zi; END; END; RETURN zs;` | `3` | [G2](../../topics/ppl.md#ppl.return-in-loop) |
 
 ## Behaviour

@@ -15,8 +15,8 @@ How long a string is, or the dimensions of a matrix.
 |---|---|---|
 | `DIM("12345")` | `5` | [emulator](../results.tsv) |
 | `DIM([[1,2],[4,5],[7,8]])` | `{3,2}` | [emulator](../results.tsv) |
-| `DIM("abcdef")` | `6` | unverified |
-| `DIM([[1,2,3],[4,5,6]])` | `{2,3}` | unverified |
+| `DIM("abcdef")` | `6` | [emulator](../results.tsv) |
+| `DIM([[1,2,3],[4,5,6]])` | `{2,3}` | [emulator](../results.tsv) |
 
 ## Behaviour
 

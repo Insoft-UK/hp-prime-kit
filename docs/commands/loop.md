@@ -75,12 +75,12 @@ Skips the rest of the body and goes on to the next turn of the loop.
 
 | Call | Result | Known from |
 |---|---|---|
-| `LOCAL zi, zs; zs := 0; FOR zi FROM 1 TO 5 DO IF zi == 3 THEN CONTINUE; END; zs := zs + zi; END; RETURN zs;` | `12` | unverified |
+| `LOCAL zi, zs; zs := 0; FOR zi FROM 1 TO 5 DO IF zi == 3 THEN CONTINUE; END; zs := zs + zi; END; RETURN zs;` | `12` | [emulator](results.tsv) |
 
 ### Behaviour
 
 The loop carries on: the example adds 1, 2, 4 and 5 and leaves out 3, which is
-12 (unverified). The counter still advances, so `CONTINUE` inside a `FOR` never
+12 (emulator). The counter still advances, so `CONTINUE` inside a `FOR` never
 loops forever on its own; inside a `WHILE` or a `REPEAT` it can, if the
 statement that moves the test is the one being skipped (unverified).
 
@@ -151,14 +151,14 @@ Repeats a block until a test becomes true, checking the test last.
 
 | Call | Result | Known from |
 |---|---|---|
-| `LOCAL z; z := 0; REPEAT z := z + 1; UNTIL z >= 4; RETURN z;` | `4` | unverified |
-| `LOCAL z; z := 0; REPEAT z := z + 1; UNTIL 1 == 1; RETURN z;` | `1` | unverified |
+| `LOCAL z; z := 0; REPEAT z := z + 1; UNTIL z >= 4; RETURN z;` | `4` | [emulator](results.tsv) |
+| `LOCAL z; z := 0; REPEAT z := z + 1; UNTIL 1 == 1; RETURN z;` | `1` | [emulator](results.tsv) |
 
 ### Behaviour
 
 The body always runs at least once, because the test comes after it: the
 second example runs the body once even though the test was true from the
-start (unverified). [WHILE](loop/WHILE.md) is the other way round.
+start (emulator). [WHILE](loop/WHILE.md) is the other way round.
 
 `UNTIL` ends the statement with a semicolon rather than an `END;`, which is
 the one loop that closes differently (HP help).
@@ -192,17 +192,18 @@ Repeats a block while a test is true, checking the test first.
 
 | Call | Result | Known from |
 |---|---|---|
-| `LOCAL z; z := 0; WHILE z < 4 DO z := z + 1; END; RETURN z;` | `4` | unverified |
-| `LOCAL z; z := 9; WHILE z < 4 DO z := z + 1; END; RETURN z;` | `9` | unverified |
+| `LOCAL z; z := 0; WHILE z < 4 DO z := z + 1; END; RETURN z;` | `4` | [emulator](results.tsv) |
+| `LOCAL z; z := 9; WHILE z < 4 DO z := z + 1; END; RETURN z;` | `9` | [emulator](results.tsv) |
 
 ### Behaviour
 
 The test is checked before the first pass, so a body whose test starts false
-never runs at all, which is the second example (unverified).
+never runs at all, which is the second example (emulator).
 [REPEAT](loop/REPEAT.md) is the other way round: its body always runs once.
 
-The test compares with `==`, `<`, `>`, `<=`, `>=` or `<>`, never with a single
-`=` (unverified):
+The test compares with `==`, `<`, `>`, `<=`, `>=` or `<>` (HP help). A single
+`=` was measured in the test of an `IF`, where it compiles and compares the
+same way (emulator):
 [ppl.equality-operators](../topics/ppl.md#ppl.equality-operators). `END;`
 closes the loop, because `ENDWHILE` does not exist (G2):
 [ppl.no-end-keywords](../topics/ppl.md#ppl.no-end-keywords).

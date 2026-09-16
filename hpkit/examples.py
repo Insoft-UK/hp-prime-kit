@@ -6,8 +6,9 @@ it answers.
     hpprime examples --all               every entry's examples
     hpprime examples ... --probe E=CALL  also a call no entry states yet
     hpprime examples --collect           read a batch not waited for
-    hpprime examples --relabel           HP help becomes emulator where the
-                                         stored answer agrees
+    hpprime examples --relabel           HP help and unverified become
+                                         emulator where the stored answer
+                                         agrees
 
 The interpreter is checked against the documentation; this checks the
 documentation against the calculator's own firmware. Each example becomes
@@ -510,8 +511,10 @@ def run(root, batch, calc=CALC, wait=True, spawn=None, timeout=1800,
 
 
 def relabel(root):
-    """HP help -> emulator for every example whose stored answer agrees.
-    -> [(path, line, call)] changed. G2 and unverified are never touched."""
+    """HP help or unverified -> emulator for every example whose stored
+    answer agrees: a label weaker than what was measured understates the
+    evidence as surely as a stronger one overstates it.
+    -> [(path, line, call)] changed. G2 is never touched."""
     from hpkit import docs
     results = read_results(root)
     changed = []
@@ -520,7 +523,7 @@ def relabel(root):
         touched = False
         for ex in e.examples:
             r = results.get((e.name, ex.call))
-            if not r or ex.label != 'HP help':
+            if not r or ex.label not in ('HP help', 'unverified'):
                 continue
             stated = ERROR if ex.result is None else ex.result
             number = None
@@ -532,7 +535,7 @@ def relabel(root):
             if not agrees(stated, r['answer'], number):
                 continue
             i = ex.line - 1
-            new = re.sub(r'\|\s*HP help\s*\|\s*$',
+            new = re.sub(r'\|\s*(HP help|unverified)\s*\|\s*$',
                          '| [emulator](../results.tsv) |', lines[i])
             if new != lines[i]:
                 lines[i] = new
@@ -576,7 +579,7 @@ def cli(argv):
         if '--relabel' in argv:
             changed = relabel(root)
             for path, line, call in changed:
-                print('%s:%d: HP help -> emulator  %s'
+                print('%s:%d: now emulator  %s'
                       % (os.path.relpath(path, root), line, call))
             print('%d label(s) changed. Run hpprime docs to regenerate the '
                   'pages.' % len(changed))

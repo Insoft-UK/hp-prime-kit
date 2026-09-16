@@ -28,16 +28,19 @@ Tries each test in turn and runs the first block whose test is true.
 
 | Call | Result | Known from |
 |---|---|---|
-| `LOCAL z; z := 0; CASE IF 1 == 2 THEN z := 1; END; IF 1 == 1 THEN z := 2; END; DEFAULT z := 3; END; RETURN z;` | `2` | unverified |
-| `LOCAL z; z := 0; CASE IF 1 == 2 THEN z := 1; END; DEFAULT z := 3; END; RETURN z;` | `3` | unverified |
+| `LOCAL z; z := 0; CASE IF 1 == 2 THEN z := 1; END; IF 1 == 1 THEN z := 2; END; DEFAULT z := 3; END; RETURN z;` | `2` | [emulator](results.tsv) |
+| `LOCAL z; z := 0; CASE IF 1 == 2 THEN z := 1; END; DEFAULT z := 3; END; RETURN z;` | `3` | [emulator](results.tsv) |
 
 ### Behaviour
 
 Each branch is written as its own `IF … THEN … END;` inside the `CASE`, which
 is what makes the syntax look heavier than it is (HP help). The first true
-test wins and the rest are not tried (unverified).
+test wins, and `DEFAULT` does not run after it: in the first example the
+second test is true and the answer is 2 (emulator). Whether the tests after a
+true one are still evaluated has not been measured (unverified).
 
-`DEFAULT` runs when no test was true (HP help). Without a `DEFAULT` and with
+`DEFAULT` runs when no test was true (HP help), which is the second example
+(emulator). Without a `DEFAULT` and with
 no test true, nothing in the `CASE` runs, and the function still answers the
 value it had (G2):
 [ppl.function-always-answers](../topics/ppl.md#ppl.function-always-answers).
@@ -68,14 +71,14 @@ Runs a block when a test is true, and another block when it is not.
 
 | Call | Result | Known from |
 |---|---|---|
-| `LOCAL z; z := 0; IF 1 == 1 THEN z := 5; END; RETURN z;` | `5` | unverified |
-| `LOCAL z; z := 0; IF 1 == 2 THEN z := 5; ELSE z := 7; END; RETURN z;` | `7` | unverified |
-| `LOCAL z; z := 3; IF 1 == 2 THEN z := 5; END; RETURN z;` | `3` | unverified |
+| `LOCAL z; z := 0; IF 1 == 1 THEN z := 5; END; RETURN z;` | `5` | [emulator](results.tsv) |
+| `LOCAL z; z := 0; IF 1 == 2 THEN z := 5; ELSE z := 7; END; RETURN z;` | `7` | [emulator](results.tsv) |
+| `LOCAL z; z := 3; IF 1 == 2 THEN z := 5; END; RETURN z;` | `3` | [emulator](results.tsv) |
 
 ### Behaviour
 
-The test compares with `==`; a single `=` is not a comparison in PPL
-(unverified), and the rule is
+The test compares with `==` (HP help). A single `=` in the test compiles and
+compares the same way (emulator), which is
 [ppl.equality-operators](../topics/ppl.md#ppl.equality-operators). One
 `END;` closes the statement, because `ENDIF` does not exist (G2):
 [ppl.no-end-keywords](../topics/ppl.md#ppl.no-end-keywords).
@@ -109,13 +112,14 @@ Runs a block, and runs a second one instead if the first raises an error.
 
 | Call | Result | Known from |
 |---|---|---|
-| `LOCAL z; z := 0; IFERR z := MID("abcdef", 0, 2); THEN z := -1; END; RETURN z;` | `-1` | unverified |
-| `LOCAL z; z := 0; IFERR z := MID("abcdef", 2, 3); THEN z := -1; END; RETURN z;` | `"bcd"` | unverified |
+| `LOCAL z; z := 0; IFERR z := MID("abcdef", 0, 2); THEN z := -1; END; RETURN z;` | `-1` | [emulator](results.tsv) |
+| `LOCAL z; z := 0; IFERR z := MID("abcdef", 2, 3); THEN z := -1; END; RETURN z;` | `"bcd"` | [emulator](results.tsv) |
 
 ### Behaviour
 
 It traps a system error: the calculator's own refusal, such as the start below
-1 that [MID](strings/MID.md) rejects (G2). What it does not give you is a
+1 that [MID](strings/MID.md) rejects (G2), which is what the first example
+catches (emulator). What it does not give you is a
 way to raise an error of your own with a value inside, so a library that has
 to report a reason still needs a convention of its own, such as a region code
 of `-1` (unverified).

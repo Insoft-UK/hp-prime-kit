@@ -35,8 +35,14 @@ examples` writes it; nobody edits it by hand. An example labelled `emulator`
 has its row there. Any example that has a row states the answer the emulator
 gave: when the two differ, the tests fail until a person settles which is
 right, and nothing is replaced on its own. When the emulator confirms an
-example taken from HP's help, `hpprime examples --relabel` changes its label
-to `emulator`; a `G2` label is never changed.
+example labelled `HP help` or `unverified`, `hpprime examples --relabel`
+changes its label to `emulator`; a `G2` label is never changed.
+
+Every example has been run somewhere, or says why it cannot be. One with no
+stored answer is *no value*, with the reason in its entry; or labelled `G2`,
+with the evidence in its entry; or run through `hpprime run`, because its
+command runs on the PC. The tests fail on anything else: an example nobody
+has run is a claim nobody has checked.
 
 ## A command entry
 
@@ -164,7 +170,7 @@ says how to rebuild it.
 
 ## What is generated
 
-Two kinds of page are produced, and nobody edits them by hand:
+These pages are produced, and nobody edits them by hand:
 
 - `docs/commands/<group>.md`: every entry of a group on one page, for reading
   straight through
@@ -173,5 +179,9 @@ Two kinds of page are produced, and nobody edits them by hand:
   examples
 - `docs/commands/groups.md`: the same names under the groups HP files them
   in
+- `docs/llms.txt`: every fact and every entry on one line, with its link and
+  its one-line summary, in the llms.txt layout, for a model to load before
+  anything else. It is loaded whole, so it has a budget of 100,000 bytes, and
+  the tests fail past it
 
 `hpprime docs` regenerates them, and the tests fail when one is out of date.

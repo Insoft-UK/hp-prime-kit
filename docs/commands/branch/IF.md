@@ -13,14 +13,14 @@ Runs a block when a test is true, and another block when it is not.
 
 | Call | Result | Known from |
 |---|---|---|
-| `LOCAL z; z := 0; IF 1 == 1 THEN z := 5; END; RETURN z;` | `5` | unverified |
-| `LOCAL z; z := 0; IF 1 == 2 THEN z := 5; ELSE z := 7; END; RETURN z;` | `7` | unverified |
-| `LOCAL z; z := 3; IF 1 == 2 THEN z := 5; END; RETURN z;` | `3` | unverified |
+| `LOCAL z; z := 0; IF 1 == 1 THEN z := 5; END; RETURN z;` | `5` | [emulator](../results.tsv) |
+| `LOCAL z; z := 0; IF 1 == 2 THEN z := 5; ELSE z := 7; END; RETURN z;` | `7` | [emulator](../results.tsv) |
+| `LOCAL z; z := 3; IF 1 == 2 THEN z := 5; END; RETURN z;` | `3` | [emulator](../results.tsv) |
 
 ## Behaviour
 
-The test compares with `==`; a single `=` is not a comparison in PPL
-(unverified), and the rule is
+The test compares with `==` (HP help). A single `=` in the test compiles and
+compares the same way (emulator), which is
 [ppl.equality-operators](../../topics/ppl.md#ppl.equality-operators). One
 `END;` closes the statement, because `ENDIF` does not exist (G2):
 [ppl.no-end-keywords](../../topics/ppl.md#ppl.no-end-keywords).

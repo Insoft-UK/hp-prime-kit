@@ -12,17 +12,18 @@ Repeats a block while a test is true, checking the test first.
 
 | Call | Result | Known from |
 |---|---|---|
-| `LOCAL z; z := 0; WHILE z < 4 DO z := z + 1; END; RETURN z;` | `4` | unverified |
-| `LOCAL z; z := 9; WHILE z < 4 DO z := z + 1; END; RETURN z;` | `9` | unverified |
+| `LOCAL z; z := 0; WHILE z < 4 DO z := z + 1; END; RETURN z;` | `4` | [emulator](../results.tsv) |
+| `LOCAL z; z := 9; WHILE z < 4 DO z := z + 1; END; RETURN z;` | `9` | [emulator](../results.tsv) |
 
 ## Behaviour
 
 The test is checked before the first pass, so a body whose test starts false
-never runs at all, which is the second example (unverified).
+never runs at all, which is the second example (emulator).
 [REPEAT](REPEAT.md) is the other way round: its body always runs once.
 
-The test compares with `==`, `<`, `>`, `<=`, `>=` or `<>`, never with a single
-`=` (unverified):
+The test compares with `==`, `<`, `>`, `<=`, `>=` or `<>` (HP help). A single
+`=` was measured in the test of an `IF`, where it compiles and compares the
+same way (emulator):
 [ppl.equality-operators](../../topics/ppl.md#ppl.equality-operators). `END;`
 closes the loop, because `ENDWHILE` does not exist (G2):
 [ppl.no-end-keywords](../../topics/ppl.md#ppl.no-end-keywords).

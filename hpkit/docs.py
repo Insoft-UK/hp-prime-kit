@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 """The documentation's format, held as code.
 
-    hpprime docs            check, then regenerate the group pages and the
-                            index from the entries and the list of names
+    hpprime docs            check, then regenerate the group pages, the
+                            indexes and docs/llms.txt from the entries, the
+                            facts and the list of names
     hpprime docs --check    change nothing; exit 1 if anything breaks the
                             format or a generated page is out of date
 
@@ -11,7 +12,8 @@ it: the command entries under docs/commands/<group>/, the facts in
 docs/topics/, the list of every PPL name in docs/commands/names.tsv, and the
 pages generated from them. It also runs the examples of every command the
 interpreter implements, because an entry that says it runs on the PC makes a
-claim a test can check.
+claim a test can check, and it requires every other example to have been run
+somewhere, or to say why it cannot be.
 
 Nothing here judges whether a label is true: that is what the evidence behind
 it is for. It judges that every claim carries one.
@@ -65,6 +67,16 @@ EVIDENCE = '**Evidence.**'
 PLURALS = OrderedDict([('cas', 'CAS names'), ('keyword', 'keywords'),
                        ('operator', 'operators')])
 
+# The index a model loads first: every entry and every fact on one line, with
+# its link and its one-line summary. It is loaded whole, so it has a budget,
+# and the check fails past it rather than letting the file grow unnoticed.
+LLMS = 'llms.txt'
+LLMS_BUDGET = 100000        # bytes
+# The topic pages in the order a program runs into them; a page not named
+# here still gets its section, after these.
+TOPIC_ORDER = ('ppl', 'interface', 'libraries', 'apps', 'micropython',
+               'formats', 'deploy')
+
 
 class Problem(object):
     """One thing wrong, compiler-shaped: `path:line: message`."""
@@ -117,6 +129,7 @@ class Fact(object):
         self.path = path
         self.ident = ident
         self.line = line
+        self.title = ''             # the heading that states it
         self.kind = None
         self.label = None
 
@@ -380,6 +393,7 @@ def read_topic(root, path):
             bad(n + 1, 'the anchor is followed by a "## " heading that '
                 'states the fact')
             continue
+        f.title = block[k][3:].strip()
         k = _skip_blank(block, k + 1)
         rows, k = _table(block, k)
         fields = OrderedDict()
@@ -423,6 +437,14 @@ def load(root=ROOT):
                     e, p = read_entry(root, os.path.join(folder, name))
                     entries.append(e)
                     problems += p
+    facts, p = load_facts(root)
+    problems += p
+    return entries, facts, problems
+
+
+def load_facts(root=ROOT):
+    """-> (facts, problems) for the topic pages alone."""
+    facts, problems = [], []
     topics = os.path.join(root, 'docs', 'topics')
     if os.path.isdir(topics):
         for name in sorted(os.listdir(topics)):
@@ -430,7 +452,7 @@ def load(root=ROOT):
                 f, p = read_topic(root, os.path.join(topics, name))
                 facts += f
                 problems += p
-    return entries, facts, problems
+    return facts, problems
 
 
 # ----------------------------------------------------------------- checking
@@ -444,9 +466,10 @@ def _layer_files(root):
             dirs.sort()
             out += [os.path.join(folder, f) for f in sorted(files)
                     if f.endswith('.md')]
-    fmt = os.path.join(root, 'docs', 'format.md')
-    if os.path.isfile(fmt):
-        out.append(fmt)
+    for name in ('format.md', LLMS):
+        path = os.path.join(root, 'docs', name)
+        if os.path.isfile(path):
+            out.append(path)
     return out
 
 
@@ -636,11 +659,12 @@ def evaluate(call):
         return 'uncovered', '%s: %s' % (type(e).__name__, e)
 
 
-def run_examples(root, entries):
+def run_examples(root, entries, covered=None):
     """-> (problems, notes, how many ran) for every entry that says it runs
     on the PC. A different answer is a problem; an example the interpreter
     does not cover is a note, because the interpreter is a subset and says
-    so rather than guessing."""
+    so rather than guessing. If `covered` is a set, the (entry, call) of
+    every example the interpreter did run is added to it."""
     problems, notes, ran = [], [], 0
     for e in entries:
         if not e.runs:
@@ -655,6 +679,8 @@ def run_examples(root, entries):
                                      % got))
                 continue
             ran += 1
+            if covered is not None:
+                covered.add((e.name, ex.call))
             if ex.result is None:
                 if kind == 'value':
                     problems.append(Problem(
@@ -742,8 +768,12 @@ def _index(root, entries):
     return '\n'.join(lines) + '\n'
 
 
-def generated(root, entries):
-    """-> OrderedDict {path: text}: every page produced from the entries."""
+def generated(root, entries, facts=None):
+    """-> OrderedDict {path: text}: every page produced from the entries,
+    and, for docs/llms.txt, from the facts. Without `facts`, the topic pages
+    are read for them."""
+    if facts is None:
+        facts = load_facts(root)[0]
     commands = os.path.join(root, 'docs', 'commands')
     groups = OrderedDict()
     for e in sorted(entries, key=lambda e: (e.folder, e.name or '')):
@@ -766,7 +796,106 @@ def generated(root, entries):
             '\n'.join(lines).rstrip('\n') + '\n'
     out[os.path.join(commands, 'index.md')] = _index(root, entries)
     out[os.path.join(commands, 'groups.md')] = _groups(root, entries)
+    out[os.path.join(root, 'docs', LLMS)] = _llms(root, entries, facts)
     return out
+
+
+def _first_sentence(path):
+    """-> (the page's title, the first sentence of its first paragraph)."""
+    title, para = '', []
+    for line in io.open(path, encoding='utf-8').read().split('\n'):
+        if not title:
+            if line.startswith('# '):
+                title = line[2:].strip()
+            continue
+        if line.strip():
+            if line.startswith(('#', '|', '>', '```', '<')):
+                if para:
+                    break
+                continue
+            para.append(line.strip())
+        elif para:
+            break
+    text = ' '.join(para)
+    m = re.match(r'^(.+?[.!?])(\s|$)', text)
+    return title, m.group(1) if m else text
+
+
+def _llms(root, entries, facts):
+    """docs/llms.txt: every fact and every entry on one line each, with its
+    link and its one-line summary, for a model to load before anything else.
+    The layout is llms.txt's: a title, a quoted summary, paragraphs, then
+    sections that are lists of links."""
+    rows = namelist.read(_list_path(root))[0]
+    documented = [r for r in rows if r.documented]
+    names = set(e.name for e in entries if e.name)
+    covered = sum(1 for r in documented if r.name in names)
+    lines = [
+        '# HP Prime PPL reference', '',
+        '> One entry per PPL name, and the facts about the HP Prime that no '
+        'single command owns. Every claim says how it is known. The reference '
+        'calculator is an HP Prime G2 on firmware 2.4.15515.', '',
+        'Every claim carries one of four labels, strongest first: `G2`, '
+        'measured on a physical HP Prime G2; `emulator`, run on HP\'s Virtual '
+        'Calculator, with the answer kept in '
+        '[commands/results.tsv](commands/results.tsv); `HP help`, stated in '
+        'the calculator\'s built-in help; `unverified`, none of those. How an '
+        'entry and a fact are written: [format.md](format.md).', '',
+        'Whether a name exists is looked up in '
+        '[commands/names.tsv](commands/names.tsv): every name in HP\'s help, '
+        'command tree and release notes, with its kind and group, the CAS '
+        'names included, which get no entry. %d of the %d names that get an '
+        'entry have one so far, so a name listed there and missing here is on '
+        'HP\'s list but not yet written up.' % (covered, len(documented)), '',
+        'Cite a fact by its identifier, such as `ppl.local-limit`, and a '
+        'command by its name, such as `LEFT`.', '',
+        'Generated by `hpprime docs` from the topic pages and the entries: '
+        '%d facts and %d entries. Edit those, not this file.'
+        % (len(facts), len(entries)), '']
+
+    by_topic = OrderedDict()
+    for f in facts:
+        stem = os.path.splitext(os.path.basename(f.path))[0]
+        by_topic.setdefault(stem, []).append(f)
+    order = [t for t in TOPIC_ORDER if t in by_topic] + \
+        sorted(t for t in by_topic if t not in TOPIC_ORDER)
+    for stem in order:
+        page = 'topics/%s.md' % stem
+        title, first = _first_sentence(os.path.join(root, 'docs', 'topics',
+                                                    stem + '.md'))
+        lines += ['## %s' % title, '', '- [%s](%s): %s' % (page, page, first)]
+        for f in by_topic[stem]:
+            lines.append('- [%s](%s#%s): %s' % (f.ident, page, f.ident,
+                                                 f.title))
+        lines.append('')
+
+    groups = OrderedDict()
+    for e in sorted(entries, key=lambda e: (e.folder, e.name or '')):
+        groups.setdefault(e.folder, []).append(e)
+    for group, members in groups.items():
+        page = 'commands/%s.md' % group
+        lines += ['## Commands: %s' % group, '',
+                  '- [%s](%s): all %d entr%s of the group on one page'
+                  % (page, page, len(members),
+                     'y' if len(members) == 1 else 'ies')]
+        for e in members:
+            lines.append('- [%s](commands/%s/%s.md): %s'
+                         % (e.name, e.folder, e.stem, e.summary))
+        lines.append('')
+    return '\n'.join(lines).rstrip('\n') + '\n'
+
+
+def llms_check(root, entries, facts):
+    """docs/llms.txt within its budget, measured on what would be generated,
+    so a page that has not been regenerated yet cannot hide the growth."""
+    text = _llms(root, entries, facts)
+    size = len(text.encode('utf-8'))
+    if size > LLMS_BUDGET:
+        return [Problem(root, os.path.join(root, 'docs', LLMS), 1,
+                        'the index for models would be %d bytes, over its '
+                        'budget of %d: it is loaded whole, so every line has '
+                        'to earn its place' % (size, LLMS_BUDGET))]
+    return []
 
 
 def _groups(root, entries):
@@ -798,10 +927,10 @@ def _groups(root, entries):
     return '\n'.join(lines).rstrip('\n') + '\n'
 
 
-def stale(root, entries):
+def stale(root, entries, facts=None):
     """Generated pages that are missing, out of date, or no longer made."""
     problems = []
-    want = generated(root, entries)
+    want = generated(root, entries, facts)
     for path, text in want.items():
         if not os.path.exists(path):
             problems.append(Problem(root, path, 1, 'missing: run hpprime '
@@ -820,12 +949,12 @@ def stale(root, entries):
     return problems
 
 
-def build(root=ROOT, entries=None):
+def build(root=ROOT, entries=None, facts=None):
     """Write every generated page that differs. -> the paths written."""
     if entries is None:
         entries = load(root)[0]
     written = []
-    for path, text in generated(root, entries).items():
+    for path, text in generated(root, entries, facts).items():
         old = (io.open(path, encoding='utf-8').read()
                if os.path.exists(path) else None)
         if old != text:
@@ -835,13 +964,20 @@ def build(root=ROOT, entries=None):
     return written
 
 
-def results_check(root, entries):
+def results_check(root, entries, covered=None):
     """The documentation against what the Virtual Calculator answered, in
     docs/commands/results.tsv. An example whose stored answer differs from
     what its entry states is a problem for a person to settle, and so is an
-    example labelled emulator with no stored answer."""
+    example labelled emulator with no stored answer.
+
+    So is an example nobody has run. One with no stored answer has to be
+    *no value*, which says why there is nothing to run; or labelled G2,
+    measured by hand with the evidence in the entry; or among `covered`, the
+    (entry, call) pairs the interpreter ran. An example that is none of
+    those is a claim nobody has checked."""
     from hpkit import examples
     results = examples.read_results(root)
+    covered = covered or set()
     problems = []
     for e in entries:
         for ex in e.examples:
@@ -853,6 +989,13 @@ def results_check(root, entries):
                     problems.append(Problem(
                         root, e.path, ex.line, 'labelled emulator, but '
                         'results.tsv holds no answer for %s' % ex.call))
+                elif ex.label != 'G2' and (e.name, ex.call) not in covered:
+                    problems.append(Problem(
+                        root, e.path, ex.line, 'nobody has run %s: '
+                        'results.tsv holds no answer for it, it is not '
+                        'measured on a G2, and the interpreter does not run '
+                        'it. Run it with hpprime examples, or make it %s and '
+                        'say why' % (ex.call, NO_VALUE)))
                 continue
             stated = examples.ERROR if ex.result is None else ex.result
             number = None
@@ -873,12 +1016,14 @@ def check(root=ROOT):
     """-> (problems, notes): everything wrong with the documentation, and
     the examples the interpreter could not check."""
     entries, facts, problems = load(root)
+    covered = set()
+    p, notes, _ = run_examples(root, entries, covered)
     problems += cross_check(root, entries, facts)
     problems += list_check(root, entries)
-    problems += results_check(root, entries)
-    p, notes, _ = run_examples(root, entries)
+    problems += results_check(root, entries, covered)
     problems += p
-    problems += stale(root, entries)
+    problems += llms_check(root, entries, facts)
+    problems += stale(root, entries, facts)
     return problems, notes
 
 
@@ -888,8 +1033,9 @@ USAGE = """hpprime docs [--check]
 
 Hold the documentation to its format, and regenerate the pages made from it.
 
-  (no option)   check the entries, then regenerate docs/commands/<group>.md
-                and docs/commands/index.md from them and the list of names
+  (no option)   check the entries, then regenerate docs/commands/<group>.md,
+                docs/commands/index.md, docs/commands/groups.md and
+                docs/llms.txt from them, the facts and the list of names
   --check       change nothing; exit 1 if anything breaks the format or a
                 generated page is out of date
 

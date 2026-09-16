@@ -148,6 +148,23 @@ BREAKS = [
     ('a stored answer that differs from the entry',
      lambda r: stored(r, 'LEFT', 'LEFT("abcdef", 3)', '"abd"', '2'),
      'the emulator answers'),
+    # COS does not run on the PC, so an example of it with no stored answer
+    # and no G2 measurement has been run nowhere.
+    ('an example nobody has run',
+     lambda r: edit(r, 'docs/commands/catalog/COS.md',
+                    '| `COS(1)` | `0.540302305868` | [emulator](../results.tsv) |',
+                    '| `COS(1)` | `0.540302305868` | [emulator](../results.tsv) |'
+                    '\n| `COS(0)` | `1` | HP help |'),
+     'nobody has run'),
+    ('the index for models out of date',
+     lambda r: append(r, 'docs/llms.txt', '\nedited by hand\n'),
+     'out of date'),
+    ('the index for models over its budget',
+     lambda r: edit(r, 'docs/commands/strings/LEFT.md',
+                    'The first n characters of a string.',
+                    'The first n characters of a string'
+                    + ', said at length' * 7000 + '.'),
+     'over its budget'),
 ]
 
 
@@ -169,10 +186,12 @@ UNCOVERED = ('| `MID("abcdef", 2, 3)` | `"bcd"` |',
 
 def quiet_when_uncovered():
     """An example the interpreter does not cover is listed, not failed: the
-    interpreter is a subset, and says so instead of guessing."""
+    interpreter is a subset, and says so instead of guessing. It still has to
+    have been run somewhere, so the copy stores the emulator's answer."""
     root = copy()
     try:
         edit(root, 'docs/commands/strings/MID.md', *UNCOVERED)
+        stored(root, 'MID', 'MID("abcdef", 2, 3, 4)', '"bcd"', '2')
         docs.build(root)
         problems, notes = docs.check(root)
         if problems:
@@ -182,6 +201,31 @@ def quiet_when_uncovered():
         return True, ''
     finally:
         shutil.rmtree(root, ignore_errors=True)
+
+
+def index_for_models():
+    """docs/llms.txt has one line for every entry and every fact, each with
+    the link a model follows, and fits its budget."""
+    entries, facts, _ = docs.load(ROOT)
+    text = io.open(os.path.join(ROOT, 'docs', docs.LLMS),
+                   encoding='utf-8').read()
+    lines = set(text.split('\n'))
+    missing = ['%s' % e.name for e in entries
+               if not any(l.startswith('- [%s](commands/%s/%s.md): '
+                                       % (e.name, e.folder, e.stem))
+                          for l in lines)]
+    for f in facts:
+        page = os.path.basename(f.path)
+        if '- [%s](topics/%s#%s): %s' % (f.ident, page, f.ident,
+                                         f.title) not in lines:
+            missing.append(f.ident)
+    size = len(text.encode('utf-8'))
+    if missing:
+        return False, 'no line for %s' % ', '.join(missing[:5])
+    if size > docs.LLMS_BUDGET:
+        return False, '%d bytes, over %d' % (size, docs.LLMS_BUDGET)
+    return True, '%d entries and %d facts in %d bytes of %d' % (
+        len(entries), len(facts), size, docs.LLMS_BUDGET)
 
 
 def main():
@@ -208,6 +252,14 @@ def main():
     else:
         bad += 1
         print('  FAIL  no example ran through the interpreter')
+
+    good, why = index_for_models()
+    if good:
+        ok += 1
+        print('  ok    the index for models lists %s' % why)
+    else:
+        bad += 1
+        print('  FAIL  the index for models: %s' % why)
 
     good, why = quiet_when_uncovered()
     if good:

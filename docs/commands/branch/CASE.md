@@ -12,16 +12,19 @@ Tries each test in turn and runs the first block whose test is true.
 
 | Call | Result | Known from |
 |---|---|---|
-| `LOCAL z; z := 0; CASE IF 1 == 2 THEN z := 1; END; IF 1 == 1 THEN z := 2; END; DEFAULT z := 3; END; RETURN z;` | `2` | unverified |
-| `LOCAL z; z := 0; CASE IF 1 == 2 THEN z := 1; END; DEFAULT z := 3; END; RETURN z;` | `3` | unverified |
+| `LOCAL z; z := 0; CASE IF 1 == 2 THEN z := 1; END; IF 1 == 1 THEN z := 2; END; DEFAULT z := 3; END; RETURN z;` | `2` | [emulator](../results.tsv) |
+| `LOCAL z; z := 0; CASE IF 1 == 2 THEN z := 1; END; DEFAULT z := 3; END; RETURN z;` | `3` | [emulator](../results.tsv) |
 
 ## Behaviour
 
 Each branch is written as its own `IF … THEN … END;` inside the `CASE`, which
 is what makes the syntax look heavier than it is (HP help). The first true
-test wins and the rest are not tried (unverified).
+test wins, and `DEFAULT` does not run after it: in the first example the
+second test is true and the answer is 2 (emulator). Whether the tests after a
+true one are still evaluated has not been measured (unverified).
 
-`DEFAULT` runs when no test was true (HP help). Without a `DEFAULT` and with
+`DEFAULT` runs when no test was true (HP help), which is the second example
+(emulator). Without a `DEFAULT` and with
 no test true, nothing in the `CASE` runs, and the function still answers the
 value it had (G2):
 [ppl.function-always-answers](../../topics/ppl.md#ppl.function-always-answers).

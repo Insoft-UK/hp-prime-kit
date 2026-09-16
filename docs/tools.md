@@ -351,7 +351,7 @@ hpprime examples LEFT RIGHT            # these entries' examples, one batch
 hpprime examples --all                 # every entry's examples
 hpprime examples LEFT --probe 'LEFT=LEFT("abc", -2)'   # and a call no entry states
 hpprime examples --collect             # read a batch you did not wait for
-hpprime examples --relabel             # HP help -> emulator where it agrees
+hpprime examples --relabel             # HP help or unverified -> emulator where it agrees
 ```
 
 Runs the documentation's examples on the Virtual Calculator and keeps what it
@@ -399,11 +399,15 @@ points at the layer built on top of it.
 For a command that `hpprime run` implements, every example goes through the
 interpreter and has to give the result the entry states. An example the
 interpreter does not cover is listed as a note rather than failed, for the
-same reason `run` raises instead of guessing.
+same reason `run` raises instead of guessing. Every example also has to have
+been run somewhere: an answer stored from the Virtual Calculator, a
+measurement on a G2, or the interpreter. One that has none fails.
 
-The group pages, `docs/commands/<group>.md`, and the index are generated
-from the entries. `--check` fails when one of them is out of date, and so
-does `tests/test_reference.py`.
+The group pages, `docs/commands/<group>.md`, the two indexes and
+`docs/llms.txt`, the index a model loads first, are generated from the
+entries and the facts. `--check` fails when one of them is out of date or
+`docs/llms.txt` passes its budget of 100,000 bytes, and so does
+`tests/test_reference.py`.
 
 ## templates
 

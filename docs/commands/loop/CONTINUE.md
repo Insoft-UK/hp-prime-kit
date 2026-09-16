@@ -12,12 +12,12 @@ Skips the rest of the body and goes on to the next turn of the loop.
 
 | Call | Result | Known from |
 |---|---|---|
-| `LOCAL zi, zs; zs := 0; FOR zi FROM 1 TO 5 DO IF zi == 3 THEN CONTINUE; END; zs := zs + zi; END; RETURN zs;` | `12` | unverified |
+| `LOCAL zi, zs; zs := 0; FOR zi FROM 1 TO 5 DO IF zi == 3 THEN CONTINUE; END; zs := zs + zi; END; RETURN zs;` | `12` | [emulator](../results.tsv) |
 
 ## Behaviour
 
 The loop carries on: the example adds 1, 2, 4 and 5 and leaves out 3, which is
-12 (unverified). The counter still advances, so `CONTINUE` inside a `FOR` never
+12 (emulator). The counter still advances, so `CONTINUE` inside a `FOR` never
 loops forever on its own; inside a `WHILE` or a `REPEAT` it can, if the
 statement that moves the test is the one being skipped (unverified).
 

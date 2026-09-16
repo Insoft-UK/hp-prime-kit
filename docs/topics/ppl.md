@@ -370,16 +370,20 @@ with the name unchanged, on a G2 with firmware 2.4.15515.
 |---|---|
 | Identifier | `ppl.locals-initialised-one-line` |
 | Kind | refuted hypothesis |
-| Known from | unverified |
+| Known from | emulator |
 
 The hypothesis was that a `LOCAL` statement cannot give initial values to
-several variables at once. Published tutorial code uses
-`local x1:=160, x2:=299, x3:=21`, so it is at least written and taught that
-way. Exported globals are different: see
-[ppl.export-initialised](#ppl.export-initialised).
+several variables at once, and it is false: `LOCAL za := 2, zb := 3;`
+compiles, and both values are there when the function runs. Published
+tutorial code writes three the same way, `local x1:=160, x2:=299, x3:=21`;
+more than two on one line has not been run. Exported globals are different:
+see [ppl.export-initialised](#ppl.export-initialised).
 
-**Evidence.** A tutorial published by E. Shore, not a measurement here. Three
-initialised locals on one line have not been compiled on a G2 by this kit.
+**Evidence.** Run on the Virtual Calculator 2.4, build 2025-09-15, in the
+batch stored on 2026-09-12: `LOCAL za := 2, zb := 3; RETURN za + zb;`,
+compiled as the body of a function in a program that passed the editor's
+`Check`, answered 5. The three-variable form is from a tutorial published by
+E. Shore, and has not been compiled.
 
 <a name="ppl.i-e-as-locals"></a>
 ## Whether i and e work as local names is not known

@@ -7,7 +7,8 @@ that hold every entry to it. Then three foundations: the list of every PPL
 name, a way to run examples on the Virtual Calculator, and the facts measured
 so far carried over. With those in place the entries are written group by
 group (statements and program commands, Home functions, app functions, app
-variables), every example run on the emulator, and the milestone closes with
+variables, then the variables of Home and the system), every example run on
+the emulator, and the milestone closes with
 the guided path, the index for models and the README. Milestone 2, the agent
 kit, is planned once this one is done.
 
@@ -30,6 +31,7 @@ kit, is planned once this one is done.
 - [x] **Phase 6: Home functions** - Entries for math, lists, matrices, statistics and the rest (completed 2026-09-13)
 - [x] **Phase 7: App functions** - Entries for the functions of HP's apps that a program can call (completed 2026-09-14)
 - [ ] **Phase 8: App variables** - Entries for the app variables a program can read or set
+- [ ] **Phase 8.1: Home and system variables** (INSERTED) - Entries for the 65 variables of Home, the system and the settings every app shares, and `GET`
 - [ ] **Phase 9: Guided path, index and README** - The way in, for a person and for a model
 
 ## Phase Details
@@ -148,23 +150,39 @@ Plans:
 **Success Criteria** (what must be TRUE):
   1. Every app variable on the list has an entry in the fixed format, with its app, what it holds, and whether a program can set it
   2. Every example in those entries has a Virtual Calculator result on file, or says why it cannot have one
-**Plans**: TBD (one batch on the emulator at a time)
+**Plans**: 4 complete so far (08-01 to 08-04), one round on the emulator at a time; 42 variables in six apps remain
+
+### Phase 8.1: Home and system variables (INSERTED)
+**Goal**: Every variable a program reads or sets outside one app has an entry: Home's settings, the system's, and the plot and numeric settings every app shares
+**Depends on**: Phase 8. Inserted on 2026-09-16: Phase 5 deferred these 65 names to Phases 6, 7 and 8, none of those phases took them, and `GET` was never assigned
+**Requirements**: CMD-12
+**Success Criteria** (what must be TRUE):
+  1. Every name the list files as `variable` has an entry in the fixed format, with what it holds and whether a program can set it
+  2. `GET` has an entry, which says what it is, or that the sources do not say
+  3. Every example in those entries has a Virtual Calculator result on file, or says why it cannot have one
+**Plans**: TBD
 
 ### Phase 9: Guided path, index and README
 **Goal**: A person can learn from zero and a model can find any entry, both on the finished reference
-**Depends on**: Phases 5, 6, 7 and 8
+**Depends on**: Phases 5, 6, 7, 8 and 8.1. It runs ahead of 8 and 8.1, at the user's choice on 2026-09-16: what it builds is generated from the entries or links to them, and its verification is counted again when 8.1 closes
 **Requirements**: READ-01, READ-03, READ-04, READ-05, READ-06, CHECK-02
 **Success Criteria** (what must be TRUE):
   1. The guided path takes somebody from an empty folder to a program running on the calculator, linking to entries rather than restating them
   2. One index, within its size budget, lists every entry and topic with its identifier and a one-line summary
   3. The README presents the documentation first, and `AGENTS.md` and `SKILL.md` point at the new documentation until milestone 2 replaces them
   4. The tests confirm that every example in the documentation has been run or says why not
-**Plans**: TBD
+**Plans**: 4, approved on 2026-09-16; 1 complete
+
+Plans:
+- [x] 09-01: The model index, and the check for examples nobody ran
+- [ ] 09-02: Planning language out of the documentation
+- [ ] 09-03: The guided path
+- [ ] 09-04: The README, and the pages above the documentation
 
 ## Progress
 
 **Execution Order:**
-Phases run in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 → 9. Phase 4 depends only on Phase 1, so it can move ahead of Phase 3 if the emulator is not ready.
+Phases run in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 → 8.1 → 9. Phase 4 depended only on Phase 1, so it could move ahead of Phase 3 while the emulator was not ready. Phase 9 runs ahead of 8 and 8.1 at the user's choice, since nothing it builds waits for their entries.
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
@@ -174,6 +192,7 @@ Phases run in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 → 9. 
 | 4. Facts carried over | 3/3 | Complete | 2026-09-12 |
 | 5. Statements and program commands | 5/5 | Complete | 2026-09-12 |
 | 6. Home functions | 6/6 | Complete | 2026-09-13 |
-| 7. App functions | 0/TBD | Not started | - |
-| 8. App variables | 0/TBD | Not started | - |
-| 9. Guided path, index and README | 0/TBD | Not started | - |
+| 7. App functions | 7/7 | Complete | 2026-09-14 |
+| 8. App variables | 4/TBD | In progress: 130 of 172 | - |
+| 8.1. Home and system variables | 0/TBD | Not started (INSERTED) | - |
+| 9. Guided path, index and README | 1/4 | In progress | - |

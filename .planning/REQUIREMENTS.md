@@ -16,8 +16,9 @@
 - [x] **CMD-07**: An entry says whether `hpprime run` implements the command, and where it does, the entry's examples also run through the interpreter in the tests
 - [x] **CMD-08**: Every statement and program command has an entry (blocks, branches, loops, variables, functions, strings, drawing, matrices, input and output, app control)
 - [x] **CMD-09**: Every Home function has an entry (math, lists, matrices, probability, statistics, integers and bits, finance and the rest HP files there)
-- [ ] **CMD-10**: Every app function a program can call has an entry
+- [x] **CMD-10**: Every app function a program can call has an entry
 - [ ] **CMD-11**: Every app variable a program can read or set has an entry, with the app it belongs to
+- [ ] **CMD-12**: Every name the list files as `variable` has an entry, 65 of them: Home's settings, the system's, and the plot and numeric settings every app shares. So does `GET`, whose kind the sources do not give
 
 ### Evidence on the Virtual Calculator (EVID)
 
@@ -47,7 +48,7 @@
 
 - [x] **TOOL-01**: `hpprime lint` flags a call to a name that is neither on the list nor defined in the program, reading the list from the documentation's data rather than a copy. Two tests: a case it catches, and one it must stay quiet on
 - [x] **TOOL-02**: Every lint message names the fact identifier its rule comes from, or says what it comes from instead
-- [ ] **TOOL-03**: The container reader's wrong pick, two candidate source records ending at the same offset, is reproduced in a test and fixed
+- [x] **TOOL-03**: The container reader's wrong pick, two candidate source records ending at the same offset, is reproduced in a test and fixed
 
 ### Checks that keep it honest (CHECK)
 
@@ -116,8 +117,9 @@ Tracked, not in the current roadmap. Planned when milestone 1 is done.
 | CHECK-04 | Phase 4 | Partly: every rule is tied to a fact or says what it comes from; the audit of facts a PC could catch and no rule does is open |
 | CMD-08 | Phase 5 | Complete |
 | CMD-09 | Phase 6 | Complete |
-| CMD-10 | Phase 7 | Pending |
+| CMD-10 | Phase 7 | Complete |
 | CMD-11 | Phase 8 | Pending |
+| CMD-12 | Phase 8.1 | Pending |
 | READ-01 | Phase 9 | Pending |
 | READ-03 | Phase 9 | Pending |
 | READ-04 | Phase 9 | Pending |
@@ -126,11 +128,11 @@ Tracked, not in the current roadmap. Planned when milestone 1 is done.
 | CHECK-02 | Phase 9 | Pending |
 
 **Coverage:**
-- Milestone 1 requirements: 34 total
-- Mapped to phases: 34
-- Complete: 11
+- Milestone 1 requirements: 35 total
+- Mapped to phases: 35
+- Complete: 26, and CHECK-04 in part
 - Unmapped: 0
 
 ---
 *Requirements defined: 2026-09-11*
-*Last updated: 2026-09-11 after Phase 2*
+*Last updated: 2026-09-16, when Phase 9 was questioned: CMD-12 added for the inserted Phase 8.1, and the status of Phases 3 to 7 brought up to date*

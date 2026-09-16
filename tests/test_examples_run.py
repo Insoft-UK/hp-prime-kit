@@ -160,15 +160,25 @@ def the_results_file():
         # in the copy to give --relabel something to change.
         left = os.path.join(tmp, 'docs', 'commands', 'strings', 'LEFT.md')
         text = open(left, encoding='utf-8').read()
+        # An unverified example with an agreeing answer is added too, and
+        # one whose answer disagrees, which must keep its label.
         with open(left, 'w', encoding='utf-8', newline='\n') as f:
             f.write(text.replace(
                 '| `LEFT("MOMOGUMBO", 3)` | `"MOM"` | '
                 '[emulator](../results.tsv) |',
-                '| `LEFT("MOMOGUMBO", 3)` | `"MOM"` | HP help |'))
+                '| `LEFT("MOMOGUMBO", 3)` | `"MOM"` | HP help |\n'
+                '| `LEFT("xyz", 2)` | `"xy"` | unverified |\n'
+                '| `LEFT("uvw", 1)` | `"u"` | unverified |'))
         X.write_results(tmp, [OrderedDict([
             ('entry', 'LEFT'), ('call', 'LEFT("MOMOGUMBO", 3)'),
             ('answer', '"MOM"'), ('type', '2'), ('firmware', VERSION),
-            ('date', '2026-09-11')])])
+            ('date', '2026-09-11')]), OrderedDict([
+            ('entry', 'LEFT'), ('call', 'LEFT("xyz", 2)'),
+            ('answer', '"xy"'), ('type', '2'), ('firmware', VERSION),
+            ('date', '2026-09-16')]), OrderedDict([
+            ('entry', 'LEFT'), ('call', 'LEFT("uvw", 1)'),
+            ('answer', '"w"'), ('type', '2'), ('firmware', VERSION),
+            ('date', '2026-09-16')])])
         got = X.read_results(tmp)
         ok(got[('LEFT', 'LEFT("MOMOGUMBO", 3)')]['answer'] == '"MOM"',
            'a row written reads back')
@@ -181,11 +191,21 @@ def the_results_file():
                                  'LEFT.md'), encoding='utf-8').read()
         ok('| `"MOM"` | [emulator](../results.tsv) |' in text,
            'and its label now points at the stored answer')
+        ok('| `LEFT("xyz", 2)` | `"xy"` | [emulator](../results.tsv) |'
+           in text, 'relabel changes an unverified example the emulator '
+           'confirms')
+        ok('| `LEFT("uvw", 1)` | `"u"` | unverified |' in text,
+           'and leaves one the emulator contradicts as it was')
         ok('| `LEFT("abcdef", 3)` | `"abc"` | G2 |' in text,
            'a G2 label is left as it was')
+        # The contradicted example is a problem for a person to settle, and
+        # the check says so; take it out to see the rest pass.
+        text = text.replace('| `LEFT("uvw", 1)` | `"u"` | unverified |\n', '')
+        with open(left, 'w', encoding='utf-8', newline='\n') as f:
+            f.write(text)
         docs.build(tmp)
         problems, _ = docs.check(tmp)
-        ok(not problems, 'the documentation passes with the new label',
+        ok(not problems, 'the documentation passes with the new labels',
            '; '.join(str(p) for p in problems))
         ok(X.relabel(tmp) == [], 'relabelling twice changes nothing more')
     finally:
