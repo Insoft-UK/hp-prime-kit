@@ -280,6 +280,162 @@ END;
 """),
 ]
 
+# ---------------------------------------------------------------- evidence
+# (what, rule, level, label, source). A rule is an ERROR where it matches
+# what was measured, with its fact's label, and a warning labelled
+# unverified where its pattern reaches further. A level of None means the
+# rule must not fire at all: the case is not what the rule is about.
+EVIDENCE = [
+    ('a call indexed where it is produced', 'index-call', 'ERROR', 'G2', """
+EXPORT F(M)
+BEGIN
+  RETURN SIZE(M)(1);
+END;
+"""),
+    ("the file's own function, indexed", 'index-call', 'ERROR', 'G2', """
+F2(n)
+BEGIN
+  RETURN {n};
+END;
+EXPORT F()
+BEGIN
+  RETURN F2(1)(1);
+END;
+"""),
+    ('a nested list, indexed twice', 'index-call', None, None, """
+EXPORT F()
+BEGIN
+  LOCAL zr;
+  zr := {{1,2,3},{4,5,6}};
+  RETURN zr(2)(3);
+END;
+"""),
+    ("the calculator's own list, indexed twice", 'index-call', None, None, """
+EXPORT F()
+BEGIN
+  RETURN L1(2)(1);
+END;
+"""),
+    ('a name the file does not define, indexed twice', 'index-call', 'WARN',
+     'unverified', """
+EXPORT F()
+BEGIN
+  RETURN ZSTRANGE(1)(2);
+END;
+"""),
+    ('index 0 into a list', 'one-based', 'WARN', 'unverified', """
+EXPORT F()
+BEGIN
+  LOCAL zl;
+  zl := {1,2,3};
+  RETURN zl(0);
+END;
+"""),
+    ("0 passed to the file's own function", 'one-based', None, None, """
+ZHELP(flag, n)
+BEGIN
+  RETURN n;
+END;
+EXPORT F()
+BEGIN
+  RETURN ZHELP(0, 5);
+END;
+"""),
+    ('13 locals in one LOCAL', 'local-limit', 'ERROR', 'G2', """
+EXPORT F()
+BEGIN
+  LOCAL a, b, c, d, e2, f, g, h, i, j, k, l, m;
+  RETURN 1;
+END;
+"""),
+    ('10 locals in one LOCAL', 'local-limit', 'WARN', 'unverified', """
+EXPORT F()
+BEGIN
+  LOCAL a, b, c, d, e2, f, g, h, i, j;
+  RETURN 1;
+END;
+"""),
+    ('8 locals in one LOCAL', 'local-limit', 'WARN', 'G2', """
+EXPORT F()
+BEGIN
+  LOCAL a, b, c, d, e2, f, g, h;
+  RETURN 1;
+END;
+"""),
+    ('7 initialised variables in one EXPORT', 'export-multiple', 'ERROR', 'G2',
+     """
+EXPORT A:=1, B:=2, C:=3, D:=4, E:=5, F:=6, G:=7;
+"""),
+    ('2 initialised variables in one EXPORT', 'export-multiple', 'WARN',
+     'unverified', """
+EXPORT A:=1, B:=2;
+"""),
+    ('a LOCAL half way down a function', 'local-first', 'ERROR', 'G2', """
+EXPORT F(a)
+BEGIN
+  LOCAL x;
+  x := a + 1;
+  LOCAL y;
+  RETURN x;
+END;
+"""),
+    ('a LOCAL inside a nested block', 'local-first', 'WARN', 'unverified', """
+EXPORT F(a)
+BEGIN
+  LOCAL x;
+  x := a;
+  IF x > 0 THEN
+    LOCAL y;
+    x := 1;
+  END;
+  RETURN x;
+END;
+"""),
+    ("a block's END without ;", 'end-semicolon', 'ERROR', 'emulator', """
+EXPORT F(a)
+BEGIN
+  IF a > 0 THEN
+    a := 1;
+  END
+  RETURN a;
+END;
+"""),
+    ("a function's END without ;", 'end-semicolon', 'WARN', 'unverified', """
+EXPORT F(a)
+BEGIN
+  RETURN a;
+END
+"""),
+    ('ENDIF', 'single-end', 'ERROR', 'G2', """
+EXPORT F(a)
+BEGIN
+  IF a > 0 THEN a := 1; ENDIF;
+  RETURN a;
+END;
+"""),
+    ('ENDCASE', 'single-end', 'WARN', 'unverified', """
+EXPORT F(a)
+BEGIN
+  CASE IF a > 0 THEN a := 1; END; ENDCASE;
+  RETURN a;
+END;
+"""),
+]
+
+# What a finding looks like: (source, rule, how its line ends).
+SHAPES = [
+    (EVIDENCE[0][4], 'index-call', '[ppl.index-call, G2]'),
+    (EVIDENCE[5][4], 'one-based', '[ppl.one-based, unverified]'),
+    ("""
+EXPORT F(a)
+BEGIN
+  IF a > 0 THEN
+    a := 1;
+  RETURN a;
+END;
+""", 'unbalanced', '[no fact]'),
+]
+
 # ------------------------------------------------------------ files together
 LIBRARY = """
 EXPORT ZLIB(zx)
@@ -379,6 +535,47 @@ def rules_cite_facts():
     return problems
 
 
+def finding_problem(a):
+    """-> what is wrong with how finding `a` says it is known, or ''.
+
+    Its label is one of docs/format.md's four, or none for a rule with no
+    fact; and an ERROR is only what a calculator was seen to refuse, so a
+    rule with a fact raises one only with a G2 or emulator label."""
+    from hpkit import docs as D
+    if a.rule in L.NO_FACT:
+        return '%s has no fact and says %s' % (a.rule, a.label) if a.label \
+            else ''
+    if a.label not in D.LABELS:
+        return '%s says it is known from %r' % (a.rule, a.label)
+    if a.level == 'ERROR' and a.label not in L.MEASURED:
+        return '%s raises an ERROR known only from %s' % (a.rule, a.label)
+    return ''
+
+
+def errors_have_evidence():
+    """-> the problems with how findings are known, checked two ways: every
+    rule that can raise an ERROR has a measured fact, and every finding on
+    every case in this file passes finding_problem."""
+    import re
+    src = io.open(os.path.join(ROOT, 'hpkit', 'lint.py'),
+                  encoding='utf-8').read()
+    problems = []
+    for rule in sorted(set(re.findall(r"'ERROR',\s*'([a-z-]+)'", src))):
+        label = L.fact_label(L.FACTS[rule]) if rule in L.FACTS else None
+        if label is not None and label not in L.MEASURED:
+            problems.append('%s can raise an ERROR, and %s is known from %s'
+                            % (rule, L.FACTS[rule], label or 'nothing'))
+    sources = ([s for _, s in BAD + GOOD + KNOWN_NAMES]
+               + [e[4] for e in EVIDENCE] + [s[0] for s in SHAPES])
+    found = []
+    for s in sources:
+        found += L.check_source('case.txt', s)[0]
+    found += lint_files([('A.txt', LIBRARY), ('B.txt', LIBRARY),
+                         ('C.txt', STRANGER)], True)
+    problems += [finding_problem(a) for a in found if finding_problem(a)]
+    return sorted(set(problems))
+
+
 def main():
     ok = bad = 0
 
@@ -416,6 +613,51 @@ def main():
             bad += 1
             print('  FAIL  unknown-name on %s: %s'
                   % (name, '; '.join(a.msg.split(' ')[0] for a in strangers)))
+
+    print('')
+    for what, rule, level, label, src in EVIDENCE:
+        found, _ = L.check_source('evidence.txt', src)
+        got = sorted(set((a.level, a.label) for a in found if a.rule == rule))
+        want = [(level, label)] if level else []
+        said = ', '.join('%s %s' % g for g in got) or 'nothing'
+        if got == want:
+            ok += 1
+            print('  ok    %s on %s: %s' % (rule, what, said))
+        else:
+            bad += 1
+            print('  FAIL  %s on %s: %s, and should be %s'
+                  % (rule, what, said,
+                     '%s %s' % (level, label) if level else 'nothing'))
+
+    print('')
+    for src, rule, tail in SHAPES:
+        shown = [str(a) for a in L.check_source('shape.txt', src)[0]
+                 if a.rule == rule]
+        if shown and all(s.endswith(tail) for s in shown):
+            ok += 1
+            print('  ok    %s ends in %s' % (rule, tail))
+        else:
+            bad += 1
+            print('  FAIL  %s should end in %s: %s'
+                  % (rule, tail, '; '.join(shown) or 'nothing'))
+
+    print('')
+    problems = errors_have_evidence()
+    if problems:
+        bad += 1
+        print('  FAIL  findings against their evidence: %s'
+              % '; '.join(problems))
+    else:
+        ok += 1
+        print('  ok    every ERROR is known from a G2 or the emulator, and '
+              'every label is one of four')
+    wrong = L.Finding('x.txt', 1, 'ERROR', 'one-based', '', L.UNVERIFIED)
+    if finding_problem(wrong):
+        ok += 1
+        print('  ok    and the check refuses an ERROR labelled unverified')
+    else:
+        bad += 1
+        print('  FAIL  the check lets an ERROR labelled unverified through')
 
     print('')
     for name, test in SETS:

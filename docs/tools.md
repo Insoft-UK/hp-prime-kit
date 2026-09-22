@@ -52,9 +52,32 @@ hpprime lint A.txt B.txt --set     # also: names that would collide
 ```
 
 Catches, before you compile, what the Prime's compiler will not explain. The
-output is compiler-shaped, `file:line: level: rule: message [fact]`, and it
-exits 1 if there is any error. What is in brackets is the identifier of the
-fact the rule comes from, so a message can be checked rather than believed.
+output is compiler-shaped, `file:line: level: rule: message [fact, label]`,
+and it exits 1 if there is any error. What is in brackets is the identifier
+of the fact the rule comes from, so a message can be checked rather than
+believed, and how that finding is known, in [format.md](format.md)'s words.
+
+```
+prog.txt:5: ERROR: index-call: cannot index the result of a call (SIZE(...)(...)): store it first, d := DIM(M); d(1) [ppl.index-call, G2]
+prog.txt:9: WARN: one-based: index 0 into L: PPL lists and matrices start at 1. What 0 does on a list or a matrix has not been measured [ppl.one-based, unverified]
+```
+
+A rule is an error only as far as its measurement reaches. What was measured
+for `index-call` is `SIZE(M)(1)`, so a call indexed where it is produced is an
+error, labelled `G2`; a name the file does not define, which may be a
+function or a list, is a warning labelled `unverified`; and a list indexed
+twice, `L(2)(1)`, is not flagged at all. The same split runs through the rest.
+`local-limit` is an error from 13 variables, which failed, and a warning from
+9 to 12, which nobody has run. `export-multiple` is an error from 7
+initialised variables. `local-first` is an error for a `LOCAL` half way down a
+function, and a warning for one inside a nested block. `end-semicolon` is an
+error for a block's `END` and a warning for a function's. `single-end` is an
+error for `ENDIF`, `ENDFOR` and `ENDWHILE`. `one-based` is only ever a
+warning: what failed was `MID` with a 0, and an index of 0 into a list or a
+matrix has not been measured. A 0 passed to a function the file defines is an
+argument, and is not flagged. When somebody measures one of these cases, it
+becomes an error with its evidence. `tests/test_lint.py` fails on an error
+whose label is not `G2` or `emulator`.
 
 Twelve rules, and each one says where it comes from. Ten name a fact in
 [docs/topics/](topics/ppl.md), every one of them measured on a G2 or on the
@@ -91,11 +114,13 @@ inventory rather than something measured about the platform.
 `tests/test_lint.py` fails if any rule names a fact no topic page defines, or
 names none and gives no reason.
 
-`local-limit`, `expr-empty` and `textout-width` are warnings: the code compiles
-and runs, and what they flag is a hazard rather than a mistake.
-`unknown-name` is a warning for a file on its own, because the file may be
-calling a function that another program exports, and an error with `--set`.
-Everything else is an error and exits 1.
+Warnings come in two kinds. `local-limit` at 7 and 8 variables, `expr-empty`
+and `textout-width` carry a measured fact: the code compiles and runs, and
+what they flag is a hazard rather than a mistake. The `unverified` ones are
+the cases above, where a rule reaches past its measurement. `unknown-name` is
+a warning for a file on its own, because the file may be calling a function
+that another program exports, and an error with `--set`. Every other finding
+is an error, and only an error exits 1. `--quiet` hides the warnings.
 
 What it does not flag matters as much. `RETURN` inside a `FOR` is legal; locals
 like `L12` or `r2` are legal; several locals with initial values on one line
@@ -317,9 +342,9 @@ What to know:
 - One keypress is yours. Nothing on the Prime starts a program by itself, so
   the wrapper has to be run once by hand. Whether an app's `START` hook fires
   at boot, which would remove even that, is not measured.
-- The generated program goes through the linter before it is sent, with one
-  exception: inside the wrapper, `NAME(0)` is a call and not an index into
-  anything, so `one-based` does not apply there. Everywhere else it still does.
+- The generated program goes through the linter before it is sent, and an
+  error stops it. The wrapper passes: `AREA(0)` in it calls a function your
+  code defines, so the 0 is an argument and not an index.
 - `--mat N` if `M9` is in use, `--tol X` for how close counts as the same
   (default 1e-9, relative), `--keep` to leave the wrapper on the calculator.
 

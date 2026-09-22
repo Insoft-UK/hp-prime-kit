@@ -56,6 +56,11 @@ The second test matters as much as the first. Four hypotheses in this repo's
 history looked reasonable and were false, and a linter that flags legal code is
 worse than no linter, because people learn to ignore it.
 
+A rule is an error only as far as the measurement behind it reaches. Where its
+pattern goes further, to a case nobody has run, it warns, and the finding says
+`unverified`; that case becomes an error when somebody measures it.
+`tests/test_lint.py` fails on an error whose label is not `G2` or `emulator`.
+
 The same shape applies to the interpreter. A new builtin goes into `BUILTINS`
 with its case in `tests/test_interp.py`, and only after you have measured what
 the calculator returns for it. Measuring one is a short program that prints

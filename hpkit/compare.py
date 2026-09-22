@@ -71,38 +71,26 @@ def harness(calls, mat=9, name=NAME):
 
 
 def program_source(files, calls, mat=9, name=NAME):
-    """-> (the whole program, the line the wrapper starts on).
-
-    Your code first, then the wrapper that exercises it. The line number
-    matters because one linter rule has to be read differently inside the
-    wrapper: see `lint_problems`.
-    """
+    """-> the whole program: your code first, then the wrapper that
+    exercises it."""
     parts = []
     for path in files:
         parts.append(io.open(path, encoding='utf-8').read().rstrip('\n'))
-    body = '\n\n'.join(parts)
-    return body + '\n\n' + harness(calls, mat, name), len(body.split('\n')) + 2
+    return '\n\n'.join(parts) + '\n\n' + harness(calls, mat, name)
 
 
-def lint_problems(source, wrapper_from):
-    """-> the errors that mean this must not be sent to a calculator.
+def lint_problems(source):
+    """-> the linter's errors: what means this must not be sent to a
+    calculator.
 
-    All of the linter's rules apply, with one exception inside the generated
-    wrapper. `one-based` flags `NAME(0)` because indexing from 0 is the
-    mistake it is named after, and it cannot tell an index from a call. In
-    the wrapper every `NAME(...)` is a call by construction -- it is built
-    from the calls you asked for -- so `AREA(0)` there is a legal call and
-    not an index into anything.
+    The wrapper needs no exception. A 0 passed to a function your code
+    defines, or to one of the calculator's, is read as an argument, so
+    `AREA(0)` there is a legal call and not an index into anything; and
+    `one-based` only warns wherever it cannot tell.
     """
     from hpkit import lint
-    out = []
-    for f in lint.check_source('<compare>', source)[0]:
-        if f.level != 'ERROR':
-            continue
-        if f.rule == 'one-based' and f.line >= wrapper_from:
-            continue
-        out.append(f)
-    return out
+    return [f for f in lint.check_source('<compare>', source)[0]
+            if f.level == 'ERROR']
 
 
 # ------------------------------------------------------------- the PC side
@@ -306,8 +294,8 @@ def cli(argv):
         return 2
 
     # --------------------------------------------------------- build it
-    source, wrapper_from = program_source(files, calls, mat)
-    problems = lint_problems(source, wrapper_from)
+    source = program_source(files, calls, mat)
+    problems = lint_problems(source)
     if problems:
         for p in problems:
             print('%s' % p)

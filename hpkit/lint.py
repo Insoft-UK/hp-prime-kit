@@ -5,7 +5,10 @@ refuses to explain.
 The Prime's compiler prints `syntax error` and points at a line. It does not
 say what is wrong with it, so a mistake as small as one variable too many in
 a LOCAL statement costs several compile-and-look rounds. Every rule here
-comes from an error measured on a real calculator, not from reading a manual.
+comes from an error measured on a real calculator, not from reading a manual,
+and it is an ERROR only as far as that measurement reaches. Where a rule's
+pattern goes further, to cases nobody has run, it is a warning, and the
+finding says so.
 
     hpprime lint FILE.hpprgm [more files or folders...]
     hpprime lint ppl/ --quiet      # errors only, no warnings
@@ -13,7 +16,10 @@ comes from an error measured on a real calculator, not from reading a manual.
                                    # together: exported names that would
                                    # clash, and calls none of them defines
 
-Output is compiler-shaped:  file:line: level: rule: message
+Output is compiler-shaped:  file:line: level: rule: message [fact, label]
+The label is how the finding is known, in docs/format.md's words: G2 or
+emulator where the case was measured, unverified where the rule reaches past
+the measurement. A rule that comes from no fact ends in [no fact].
 Exit code 1 if there is any ERROR.
 
 A call to a name that is not a PPL name, from the documentation's list in
@@ -37,12 +43,20 @@ import io, os, re, sys
 # Variables per LOCAL statement. Measured on a G2, firmware 2.4.15515,
 # against programs that compile on that same calculator: 8 declared in one
 # statement compiles; the functions that failed declared 13, 16 and 18.
-# Above 8 is an error; 7-8 is the risky band.
+# 13 and more is an error; 9 to 12 has not been measured either way, and 7-8
+# is the risky band.
 LOCAL_SAFE = 6
-LOCAL_MAX = 8
+LOCAL_MAX = 8                   # the most seen to compile
+LOCAL_FAILS = 13                # the fewest seen to fail
 
-BAD_BLOCK_ENDS = ('ENDIF', 'ENDFOR', 'ENDWHILE', 'ENDCASE', 'ENDPROC',
-                  'ENDFUNC')
+# Initialised variables in one EXPORT: seven on one line failed on a G2.
+# Where the limit lies between two and seven has not been measured.
+EXPORT_FAILS = 7
+
+# ENDIF, ENDFOR and ENDWHILE were measured to fail. The others are not PPL
+# names either, but nobody has compiled them.
+BAD_BLOCK_ENDS = ('ENDIF', 'ENDFOR', 'ENDWHILE')
+UNMEASURED_BLOCK_ENDS = ('ENDCASE', 'ENDPROC', 'ENDFUNC')
 KEYWORDS = set("""IF THEN ELSE END FOR FROM TO DOWNTO STEP DO WHILE REPEAT
 UNTIL CASE DEFAULT BREAK CONTINUE RETURN LOCAL EXPORT BEGIN AND OR NOT
 IFTE""".split())
@@ -59,7 +73,22 @@ CALC_VARIABLE = re.compile(r'^([A-Z]|θ|[LMGZ][0-9])$')
 NAME = r'[A-Za-z_→][\w→]*'
 NOT_NAME = r'(?<![\w→])'
 
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# The kinds of listed name that are read rather than called.
+VARIABLE_KINDS = ('variable', 'app variable')
+
 _KNOWN = None
+_KINDS = None
+
+
+def _kit(module):
+    """hpkit.<module>, whether this runs inside the kit or as hpkit/lint.py."""
+    try:
+        return __import__('hpkit.' + module, fromlist=[module])
+    except ImportError:
+        sys.path.insert(0, ROOT)
+        return __import__('hpkit.' + module, fromlist=[module])
 
 
 def known_names():
@@ -69,14 +98,20 @@ def known_names():
     itself ignores case in its names has not been measured."""
     global _KNOWN
     if _KNOWN is None:
-        try:
-            from hpkit import names
-        except ImportError:                      # run as hpkit/lint.py
-            sys.path.insert(0, os.path.dirname(os.path.dirname(
-                os.path.abspath(__file__))))
-            from hpkit import names
-        _KNOWN = names.known()
+        _KNOWN = _kit('names').known()
     return _KNOWN
+
+
+def _listed_kinds():
+    """-> {name in lower case: the set of kinds the list gives it}."""
+    global _KINDS
+    if _KINDS is None:
+        _KINDS = {}
+        if known_names():
+            names = _kit('names')
+            for n in names.read(names.PATH)[0]:
+                _KINDS.setdefault(n.name.lower(), set()).add(n.kind)
+    return _KINDS
 
 
 def is_known(name, defined):
@@ -85,6 +120,21 @@ def is_known(name, defined):
     return (name in defined or name.upper() in KEYWORDS
             or CALC_VARIABLE.match(name) is not None
             or name.lower() in known_names())
+
+
+def name_kind(name, functions, variables):
+    """-> 'function' if `name(...)` is a call, 'variable' if it indexes, or
+    '' when neither the file nor the list says which."""
+    if name in functions:
+        return 'function'
+    if name in variables or CALC_VARIABLE.match(name):
+        return 'variable'
+    kinds = _listed_kinds().get(name.lower(), set())
+    if kinds - set(VARIABLE_KINDS) - {'unknown'}:
+        return 'function'
+    if kinds & set(VARIABLE_KINDS):
+        return 'variable'
+    return ''
 
 
 # Every rule says which fact in docs/topics/ it comes from, so that a message
@@ -111,11 +161,34 @@ NO_FACT = {
                     'an inventory and not a fact about the platform',
 }
 
+# How a finding is known, in docs/format.md's words. Where a rule matches
+# what was measured, its finding carries the label of the rule's fact. Where
+# the rule's pattern reaches past the measurement, the finding is a warning
+# and says `unverified`, so an ERROR is only ever something a calculator was
+# seen to refuse. tests/test_lint.py holds every rule to that.
+MEASURED = ('G2', 'emulator')
+UNVERIFIED = 'unverified'
+
+_LABELS = {}
+
+
+def fact_label(fact):
+    """The `Known from` label of a fact in docs/topics/, or '' if its page is
+    not there to say. Read with the parser the documentation's tests use."""
+    if fact not in _LABELS:
+        path = os.path.join(ROOT, 'docs', 'topics', fact.split('.')[0] + '.md')
+        if os.path.isfile(path):
+            for f in _kit('docs').read_topic(ROOT, path)[0]:
+                _LABELS[f.ident] = f.label or ''
+        _LABELS.setdefault(fact, '')
+    return _LABELS[fact]
+
 
 class Finding(object):
-    def __init__(self, path, line, level, rule, msg):
+    def __init__(self, path, line, level, rule, msg, label=None):
         self.path, self.line = path, line
         self.level, self.rule, self.msg = level, rule, msg
+        self._label = label
 
     @property
     def fact(self):
@@ -123,10 +196,23 @@ class Finding(object):
         rule comes from something else: NO_FACT says what."""
         return FACTS.get(self.rule, '')
 
+    @property
+    def label(self):
+        """How this finding is known: its fact's label, `unverified` where
+        the rule reaches past what was measured, '' for a rule with no fact."""
+        if self._label is not None:
+            return self._label
+        return fact_label(self.fact) if self.fact else ''
+
     def __str__(self):
-        fact = ' [%s]' % self.fact if self.fact else ''
+        if self.fact:
+            where = ' [%s]' % ', '.join(x for x in (self.fact, self.label) if x)
+        elif self.rule in NO_FACT:
+            where = ' [no fact]'
+        else:
+            where = ''
         return '%s:%d: %s: %s: %s%s' % (self.path, self.line, self.level,
-                                        self.rule, self.msg, fact)
+                                        self.rule, self.msg, where)
 
 
 def _strip_noise(line):
@@ -228,9 +314,19 @@ def scan_names(text):
     Defined: its functions, exported or not, with their parameters; its
     LOCAL and EXPORT variables; any other global it declares at the top.
     A call is NAME( in code, outside strings, comments and #pragma lines."""
+    functions, variables, calls = _scan(text)
+    return functions | variables, calls
+
+
+def _scan(text):
+    """-> (its functions, its variables, [(name, line) for every call]).
+
+    The variables are the functions' parameters, the LOCAL and EXPORT
+    variables and any other global declared at the top: scan_names says the
+    rest."""
     text = text.replace('\r\n', '\n').replace('\r', '\n')
     lines = [_strip_noise(l) for l in _strip_block_comments(text).split('\n')]
-    defined, calls, depth = set(), [], 0
+    functions, variables, calls, depth = set(), set(), [], 0
     for k, raw in enumerate(lines):
         s = raw.strip()
         if not s or s.startswith('#'):
@@ -242,28 +338,28 @@ def scan_names(text):
                          s, re.I)
             if m and m.group(1).upper() not in KEYWORDS:
                 header = m.group(1)
-                defined.add(header)
+                functions.add(header)
                 for p in _split_top_level(m.group(2)):
                     pm = re.match(r'^([A-Za-z_]\w*)', p)
                     if pm:
-                        defined.add(pm.group(1))
+                        variables.add(pm.group(1))
             elif not re.match(r'^(BEGIN|LOCAL)\b', up):
                 body = re.sub(r'^EXPORT\s+', '', s, flags=re.I).split(';')[0]
                 for part in _split_top_level(body):
                     pm = re.match(r'^([A-Za-z_]\w*)\s*(:=|$)', part)
                     if pm:
-                        defined.add(pm.group(1))
+                        variables.add(pm.group(1))
         if re.match(r'^LOCAL\b', up):
             for part in _split_top_level(s[5:].split(';')[0]):
                 pm = re.match(r'^([A-Za-z_]\w*)', part)
                 if pm:
-                    defined.add(pm.group(1))
+                    variables.add(pm.group(1))
         for m in re.finditer(NOT_NAME + r'(%s)\s*\(' % NAME, raw):
             if m.group(1) == header and m.start() == raw.find(header):
                 continue                     # the definition, not a call
             calls.append((m.group(1), k + 1))
         depth += _block_delta(up)
-    return defined, calls
+    return functions, variables, calls
 
 
 def check_source(path, text):
@@ -271,9 +367,11 @@ def check_source(path, text):
     found = []
     lines = text.replace('\r\n', '\n').replace('\r', '\n').split('\n')
     clean = [_strip_noise(l) for l in lines]
+    functions, variables, calls = _scan(text)
 
     exports = []
     in_body = False         # inside a function's BEGIN ... END
+    body_depth = 0          # the depth of that body, below any nested block
     seen_code = False
     depth = 0
 
@@ -290,48 +388,97 @@ def check_source(path, text):
                 found.append(Finding(path, num, 'ERROR', 'single-end',
                                      '%s does not exist in PPL: every block '
                                      'closes with END' % bad))
+        for bad in UNMEASURED_BLOCK_ENDS:
+            if re.search(r'\b%s\b' % bad, up):
+                found.append(Finding(path, num, 'WARN', 'single-end',
+                                     '%s is not a PPL name: every block '
+                                     'closes with END. ENDIF, ENDFOR and '
+                                     'ENDWHILE were measured to fail; %s '
+                                     'has not been' % (bad, bad),
+                                     UNVERIFIED))
 
         # ---- indexing the result of a call --------------------------------
+        # What was measured is a call: SIZE(M)(1) does not compile. A
+        # variable indexed twice, L(2)(1), is a nested list and another
+        # thing, which the interpreter runs. So the rule has to know which
+        # the name is, and says so when the file does not tell it.
         for m in re.finditer(NOT_NAME + r'(%s)\s*\([^()]*\)\s*\(' % NAME, raw):
-            if m.group(1).upper() not in KEYWORDS:
+            name = m.group(1)
+            if name.upper() in KEYWORDS:
+                continue
+            kind = name_kind(name, functions, variables)
+            if kind == 'function':
                 found.append(Finding(path, num, 'ERROR', 'index-call',
                                      'cannot index the result of a call '
                                      '(%s(...)(...)): store it first, '
-                                     'd := DIM(M); d(1)' % m.group(1)))
+                                     'd := DIM(M); d(1)' % name))
+            elif not kind:
+                found.append(Finding(path, num, 'WARN', 'index-call',
+                                     '%s(...)(...): if %s is a function, its '
+                                     'result cannot be indexed here, so store '
+                                     'it first; if it is a list, this is '
+                                     'nested indexing. This file does not say '
+                                     'which' % (name, name), UNVERIFIED))
 
         # ---- index 0 into a list or matrix --------------------------------
-        # A 0 passed to one of the calculator's own names (RGB(0, ...)) is
-        # an argument, not an index: those names come from the list. That is
-        # also why the name has to be read with the arrow in it (NAME): a
-        # screen point is counted from 0, and C→PX(0,0) is correct code.
+        # A 0 passed to a function is an argument, not an index: to one of
+        # the calculator's own names (RGB(0, ...)), which come from the list,
+        # or to one this file defines. That is also why the name has to be
+        # read with the arrow in it (NAME): a screen point is counted from 0,
+        # and C→PX(0,0) is correct code.
+        #
+        # What was measured to fail is MID("abcdef", 0, 2), a 0 where a
+        # position was expected (ppl.one-based). An index of 0 into a list or
+        # a matrix has not been measured, so this is a warning.
         for m in re.finditer(NOT_NAME + r'(%s)\s*\(\s*0\s*[,)]' % NAME, raw):
             name = m.group(1)
-            if name.upper() not in KEYWORDS \
+            if name.upper() not in KEYWORDS and name not in functions \
                     and name.lower() not in known_names():
-                found.append(Finding(path, num, 'ERROR', 'one-based',
+                found.append(Finding(path, num, 'WARN', 'one-based',
                                      'index 0 into %s: PPL lists and matrices '
-                                     'start at 1' % name))
+                                     'start at 1. What 0 does on a list or a '
+                                     'matrix has not been measured' % name,
+                                     UNVERIFIED))
 
         # ---- LOCAL: how many variables, and where -------------------------
         if re.match(r'^LOCAL\b', up):
             body = s[5:].split(';')[0]
             nv = len(_split_top_level(body))
-            if nv > LOCAL_MAX:
+            if nv >= LOCAL_FAILS:
                 found.append(Finding(path, num, 'ERROR', 'local-limit',
-                                     '%d variables in one LOCAL; the most '
+                                     '%d variables in one LOCAL; %d and more '
+                                     'have failed to compile, and the most '
                                      'seen to compile is %d. Split it into '
                                      'several LOCAL statements of %d'
-                                     % (nv, LOCAL_MAX, LOCAL_SAFE)))
+                                     % (nv, LOCAL_FAILS, LOCAL_MAX,
+                                        LOCAL_SAFE)))
+            elif nv > LOCAL_MAX:
+                found.append(Finding(path, num, 'WARN', 'local-limit',
+                                     '%d variables in one LOCAL: the most '
+                                     'seen to compile is %d and the fewest '
+                                     'seen to fail is %d, and nothing between '
+                                     'has been measured. Split it into '
+                                     'several LOCAL statements of %d'
+                                     % (nv, LOCAL_MAX, LOCAL_FAILS,
+                                        LOCAL_SAFE), UNVERIFIED))
             elif nv > LOCAL_SAFE:
                 found.append(Finding(path, num, 'WARN', 'local-limit',
                                      '%d variables in one LOCAL: this is the '
                                      'limit (7-8 depending on firmware). '
                                      'Groups of %d are safe'
                                      % (nv, LOCAL_SAFE)))
-            if in_body and seen_code:
+            # What was measured is a LOCAL half way down a function. One at
+            # the top of a block nested inside it has not been.
+            if in_body and seen_code and depth <= body_depth:
                 found.append(Finding(path, num, 'ERROR', 'local-first',
                                      'LOCAL after code: every local goes '
                                      'together at the top of the BEGIN'))
+            elif in_body and seen_code:
+                found.append(Finding(path, num, 'WARN', 'local-first',
+                                     'LOCAL after code, inside a block: one '
+                                     'half way down a function does not '
+                                     'compile, and one inside a nested block '
+                                     'has not been measured', UNVERIFIED))
         elif in_body and not up.startswith('BEGIN'):
             seen_code = True
 
@@ -340,11 +487,20 @@ def check_source(path, text):
                 and '(' not in s.split(':=')[0]:
             chunks = _split_top_level(s[6:].split(';')[0])
             valued = [t for t in chunks if ':=' in t]
-            if len(chunks) > 1 and valued:
+            if len(valued) >= EXPORT_FAILS:
                 found.append(Finding(path, num, 'ERROR', 'export-multiple',
                                      'several variables with initial values '
                                      'in one EXPORT: one declaration per '
                                      'line'))
+            elif len(chunks) > 1 and valued:
+                found.append(Finding(path, num, 'WARN', 'export-multiple',
+                                     '%d variables in one EXPORT, %d with '
+                                     'initial values: %d on one line failed '
+                                     'to compile, and fewer has not been '
+                                     'measured. One declaration per line '
+                                     'avoids the question'
+                                     % (len(chunks), len(valued),
+                                        EXPORT_FAILS), UNVERIFIED))
 
         # ---- exported names, to cross-check between files -----------------
         m = re.match(r'^EXPORT\s+([A-Za-z_]\w*)', s, re.I)
@@ -394,13 +550,23 @@ def check_source(path, text):
                                      'the next column, and raises no error'))
 
         # ---- block balance -------------------------------------------------
+        was_in_body = in_body
+        opens_body = re.match(r'^BEGIN\b', up) and not in_body
         if re.match(r'^BEGIN\b', up):
             in_body, seen_code = True, False
         depth += _block_delta(up)
+        if opens_body:
+            body_depth = depth
         if in_body and depth <= 0:
             in_body = False
-        # a function's END without its semicolon
-        if re.match(r'^END\s*$', s):
+        # END without its semicolon. What was measured is a block's END,
+        # inside a function; a function's own last END has not been.
+        if re.match(r'^END\s*$', s) and was_in_body and not in_body:
+            found.append(Finding(path, num, 'WARN', 'end-semicolon',
+                                 'END without ; closing a function: a '
+                                 'block\'s END was measured to need it, a '
+                                 'function\'s has not been', UNVERIFIED))
+        elif re.match(r'^END\s*$', s):
             found.append(Finding(path, num, 'ERROR', 'end-semicolon',
                                  'END without ; at the end: in PPL it is '
                                  'END;'))
@@ -413,7 +579,7 @@ def check_source(path, text):
     # ---- names that are neither PPL's nor this file's ----------------------
     # Only when the list is there to say what PPL's names are.
     if known_names():
-        defined, calls = scan_names(text)
+        defined = functions | variables
         for name, num in calls:
             if not is_known(name, defined):
                 found.append(Finding(path, num, 'WARN', 'unknown-name',

@@ -69,27 +69,32 @@ def main():
         ok('M9 := MAKEMAT(0,3,2);' in text,
            'the matrix is made the size of the run')
 
-        whole, wrapper_from = C.program_source([lib], calls, 9)
-        errors = C.lint_problems(whole, wrapper_from)
+        whole = C.program_source([lib], calls, 9)
+        errors = C.lint_problems(whole)
         ok(not errors, 'the generated program passes the linter',
            '; '.join(str(e) for e in errors))
 
-        # ZAREA(0) is a call, not an index, and the linter cannot tell. Inside
-        # the wrapper it has to be read as a call, or a legal call with a
-        # zero argument could never be compared.
+        # ZAREA(0) is a call, not an index: the program defines ZAREA, so
+        # the linter reads the 0 as an argument, and a legal call with a
+        # zero argument can be compared like any other.
         raw = [f for f in lint.check_source('<t>', whole)[0]
                if f.rule == 'one-based']
-        ok(raw, 'the linter does flag NAME(0) on its own', str(raw))
-        ok(all(f.line >= wrapper_from for f in raw),
-           'and every one of them is inside the generated wrapper')
+        ok(not raw, 'the linter reads ZAREA(0) as a call', str(raw))
 
-        # Outside the wrapper the rule still bites.
+        # Index 0 in your own code is still flagged, as a warning: what it
+        # does on a list has not been measured, so it does not stop the run
+        # that would measure it.
         bad_body = ('EXPORT F()\n'
                     'BEGIN\n'
                     '  RETURN L1(0);\n'
                     'END;\n')
-        ok(C.lint_problems(bad_body + C.harness(['F()']), 99),
-           'index 0 in your own code is still an error')
+        flagged = [f for f in lint.check_source('<t>', bad_body)[0]
+                   if f.rule == 'one-based']
+        ok([f.level for f in flagged] == ['WARN'],
+           'index 0 in your own code is still flagged, as a warning',
+           str([str(f) for f in flagged]))
+        ok(not C.lint_problems(bad_body + C.harness(['F()'])),
+           'and it does not stop the program being sent')
 
         # And it is PPL the kit's own interpreter can run, which is a
         # stronger statement than "it parses".
