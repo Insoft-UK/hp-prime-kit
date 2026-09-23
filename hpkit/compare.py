@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Run the same calls here and on the calculator, and compare the numbers.
 
-    hpprime compare lib.txt --call "AREA(2)" --call "F(3,350)"
+    hpprime compare lib.txt --call "CIRCAREA(2)" --call "F(3,350)"
 
 `hpprime run` executes PPL on the PC. It is the same file the calculator
 gets, but it is not the calculator's interpreter, and the only way to know
@@ -12,7 +12,7 @@ This does it with a file. A generated wrapper stores each result into a
 global matrix; the emulator writes `M9.hpmat` into its calculator folder;
 `hpkit.numbers` decodes it. Nothing is read off the screen.
 
-    hpprime compare lib.txt --call "AREA(2)"     # installs and waits
+    hpprime compare lib.txt --call "CIRCAREA(2)"     # installs and waits
       -> on the calculator: compile HPKCMP once, run it, close the emulator
     ... and the table appears.
 
@@ -85,7 +85,7 @@ def lint_problems(source):
 
     The wrapper needs no exception. A 0 passed to a function your code
     defines, or to one of the calculator's, is read as an argument, so
-    `AREA(0)` there is a legal call and not an index into anything; and
+    `CIRCAREA(0)` there is a legal call and not an index into anything; and
     `one-based` only warns wherever it cannot tell.
     """
     from hpkit import lint

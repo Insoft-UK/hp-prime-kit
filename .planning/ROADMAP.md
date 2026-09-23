@@ -171,12 +171,12 @@ Plans:
   2. One index, within its size budget, lists every entry and topic with its identifier and a one-line summary
   3. The README presents the documentation first, and `AGENTS.md` and `SKILL.md` point at the new documentation until milestone 2 replaces them
   4. The tests confirm that every example in the documentation has been run or says why not
-**Plans**: 4, approved on 2026-09-16; 2 complete
+**Plans**: 4, approved on 2026-09-16; 3 complete
 
 Plans:
 - [x] 09-01: The model index, and the check for examples nobody ran
 - [x] 09-02: Planning language out of the documentation
-- [ ] 09-03: The guided path
+- [x] 09-03: The guided path
 - [ ] 09-04: The README, and the pages above the documentation
 
 ## Progress
@@ -195,4 +195,4 @@ Phases run in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 → 8.1
 | 7. App functions | 7/7 | Complete | 2026-09-14 |
 | 8. App variables | 4/TBD | In progress: 130 of 172 | - |
 | 8.1. Home and system variables | 0/TBD | Not started (INSERTED) | - |
-| 9. Guided path, index and README | 2/4 | In progress | - |
+| 9. Guided path, index and README | 3/4 | In progress | - |

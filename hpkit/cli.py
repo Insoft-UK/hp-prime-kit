@@ -207,7 +207,7 @@ def _new(argv):
     print('')
     print('Next:')
     print('  hpprime lint %s' % dest)
-    print('  hpprime run %s --call "AREA(2)"' % dest)
+    print('  hpprime run %s --call "CIRCAREA(2)"' % dest)
     print('  hpprime write %s -o %s.hpprgm' % (dest, name))
     print('  then drag %s.hpprgm onto the calculator in the CK window' % name)
     return 0

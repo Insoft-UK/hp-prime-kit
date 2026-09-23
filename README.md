@@ -34,7 +34,7 @@ the short way: `.\hpprime` in PowerShell, `./hpprime` on macOS and Linux, or
 ```bash
 hpprime new CIRCLE                     # a starter that already runs
 hpprime lint CIRCLE.txt                # what the compiler will not explain
-hpprime run  CIRCLE.txt --call "AREA(2)"   # run the real file, here
+hpprime run  CIRCLE.txt --call "CIRCAREA(2)"  # run the real file, here
 hpprime write CIRCLE.txt -o CIRCLE.hpprgm  # build the binary
 hpprime install CIRCLE.hpprgm --restart    # into the emulator, and open it
 ```

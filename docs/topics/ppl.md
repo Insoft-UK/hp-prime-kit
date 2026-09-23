@@ -201,9 +201,12 @@ one whose codepoints are `0x2212 0x31`, stored in
 | Kind | rule |
 | Known from | G2 |
 
-Lists, strings and matrices start at 1. An index of 0 is not the first
-element: it is an error. This is the most common mistake coming from Python,
-and it is silent in the cases where the index is computed.
+Lists, strings and matrices start at 1: the first element is element 1. A 0
+where a position in a string is expected is an error, not the first
+character. **What a 0 does as an index into a list or a matrix has not been
+measured**, so count on neither the first element nor an error. This is the
+most common mistake coming from Python, and it is silent in the cases where
+the index is computed.
 
 **Screen coordinates are the exception: they count from 0.** A point of the
 screen or of a grob starts at `(0,0)`, and a drawing command takes it without
@@ -215,8 +218,10 @@ name is not one of the calculator's own, which is what keeps
 **Evidence.** `MID("abcdef", 0, 2)` is an error on a G2 with firmware
 2.4.15515 and on the Virtual Calculator 2.4, build 2025-09-15
 ([results.tsv](../commands/results.tsv)), while every measured example that
-indexes from 1 answers. HP's help says the same. `hpprime lint` catches a
-literal index of 0 as `one-based`.
+indexes from 1 answers. HP's help says the same. No list or matrix has been
+indexed with 0 in a measurement, so `hpprime lint` warns on a literal 0
+passed to a name the file does not define, which may be a list, as
+`one-based`, labelled `unverified`.
 
 The exception is measured on the same build: `C→PX(0,0)` answers `{160,109}`,
 `GETPIX(G1,0,0)` answers a colour, and `LINE`, `RECT` and `TRIANGLE` all draw
@@ -563,10 +568,10 @@ ending, with no `RETURN` in any of them except the last.
 | Known from | G2 |
 
 `MYFUNC` runs it; `MYFUNC()` answers *syntax error*. Inside PPL source the
-parentheses are correct and required. With arguments the two agree: `AREA(2)`
-everywhere. It is the same convention the built-in `GETKEY` follows in PPL,
-generalised to your own functions: an empty pair of parentheses is not how the
-Home parser reads a call.
+parentheses are correct and required. With arguments the two agree:
+`CIRCAREA(2)` everywhere. It is the same convention the built-in `GETKEY`
+follows in PPL, generalised to your own functions: an empty pair of
+parentheses is not how the Home parser reads a call.
 
 **Evidence.** Measured on a G2 with firmware 2.4.15515: typing `SELF3()` on
 Home answers *syntax error*, and `SELF3` returns 1. That same program's source

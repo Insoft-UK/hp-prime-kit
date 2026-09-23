@@ -66,9 +66,9 @@ def main():
         ok('0 error(s)' in q.text, 'with no errors reported', q.text.strip())
 
         with quiet() as q:
-            rc = cli.main(['run', 'DEMO.txt', '--call', 'AREA(2)'])
+            rc = cli.main(['run', 'DEMO.txt', '--call', 'CIRCAREA(2)'])
         ok(rc == 0 and '12.56' in q.text,
-           'the starter runs on the PC and AREA(2) is right', q.text.strip())
+           'the starter runs on the PC and CIRCAREA(2) is right', q.text.strip())
 
         with quiet():
             rc = cli.main(['write', 'DEMO.txt', '-o', 'DEMO.hpprgm'])

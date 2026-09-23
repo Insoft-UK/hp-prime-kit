@@ -464,9 +464,10 @@ def load_facts(root=ROOT):
 # ----------------------------------------------------------------- checking
 
 def _layer_files(root):
-    """Every page of the documentation this module is responsible for."""
+    """Every page of the documentation this module is responsible for: the
+    entries, the facts, and the guided path that links to them."""
     out = []
-    for sub in ('commands', 'topics'):
+    for sub in ('commands', 'topics', 'start'):
         base = os.path.join(root, 'docs', sub)
         for folder, dirs, files in os.walk(base):
             dirs.sort()

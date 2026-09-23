@@ -8,10 +8,17 @@ about fifteen minutes, and then you write a program.
 
 ## The machine
 
-The HP Prime is a graphing calculator with a 320 × 240 touch screen, and a
-small computer you can program. There are two generations, G1 and G2. They
-share firmware; the G2 is faster and has more memory. Everything measured in
-this kit was measured on a G2.
+The HP Prime is a graphing calculator with a 320 × 240 touch screen
+([interface.geometry](../topics/interface.md#interface.geometry)), and a small
+computer you can program. There are two generations, G1 and G2, which share
+firmware.
+
+Every claim in this documentation says how it is known: measured on a G2, run
+on HP's Virtual Calculator, stated in HP's built-in help, or unverified. The
+four labels are explained in
+[How each claim is known](../format.md#how-each-claim-is-known). The
+calculator everything was measured on is a G2 with firmware 2.4.15515, so a
+G1, or another firmware, is a case nobody has checked.
 
 It is programmed in two languages, and the choice is worth making deliberately:
 
@@ -21,25 +28,30 @@ It is programmed in two languages, and the choice is worth making deliberately:
 | Since when | always | firmware from 2021 on |
 | Looks like | Pascal / BASIC | Python, with less library |
 | Good for | calculation, libraries other programs use | interfaces, long logic, reusing PC code |
-| Official documentation | thin | none |
+| Official documentation | HP's built-in help | none |
 
 You do not have to pick one. From Python you can run PPL and get the result
-back, so the usual arrangement is heavy calculation or data in PPL and the
-interface in Python, or everything in PPL if it is small.
+back ([micropython.eval](../topics/micropython.md#micropython.eval)), so the
+usual arrangement is heavy calculation or data in PPL and the interface in
+Python, or everything in PPL if it is small.
 
-This path starts with PPL, because it is the native language and because half
-of what is measured here is about it. Python comes in [step 5](05-python.md).
+This path starts with PPL, because it is the native language and because most
+of what is known here is about it. Python comes in [step 5](05-python.md).
 
 If you come from programming on a PC, one difference matters more than the
-rest:
+rest: the calculator explains very little.
 
-> There is no debugger, no useful error message and no console. The PPL
-> compiler says `syntax error` and points at a line without saying what is
-> wrong with it. A Python app that does something it dislikes closes by itself,
-> silently.
+- When the compiler refuses a program it answers *syntax error* and a line
+  number, without saying what is wrong, and the line it names is often not
+  the one to fix
+  ([ppl.end-semicolon](../topics/ppl.md#ppl.end-semicolon),
+  [ppl.check-last-error](../topics/ppl.md#ppl.check-last-error)).
+- A Python app that meets something it cannot handle closes, with no message
+  ([micropython.list-with-string-closes-the-app](../topics/micropython.md#micropython.list-with-string-closes-the-app)).
 
-That is the problem this kit exists to solve: checking things without the
-calculator, so that you do not depend on the paste-compile-look-repeat loop.
+That is what the tools on the PC are for: checking a program before the
+calculator sees it, so that you do not depend on a paste, compile, look and
+repeat loop.
 
 ## Program or app: what each one is
 
@@ -52,21 +64,22 @@ calculator, so that you do not depend on the paste-compile-look-repeat loop.
 
 An app does not compute better. It opens faster and has somewhere to keep its
 things. Start as a program and wrap it as an app at the end, once it works:
-iterating on a program is much faster, and converting it afterwards is
-packaging rather than rewriting.
+iterating on a program is faster, and converting it afterwards is packaging
+rather than rewriting ([step 4](04-first-app.md)).
 
 ## What to install
 
 | | |
 |---|---|
 | HP Connectivity Kit (CK) | the PC program that talks to the calculator: <https://hpcalcs.com/download/> |
-| HP Virtual Calculator | a Prime inside your PC, to try things without the physical one. It comes with the CK |
-| Python 3.7 or newer | for this kit's tools. Nothing else: no pip, no libraries |
+| HP Prime Virtual Calculator | a Prime inside your PC, to try things without the physical one. A separate download, from the same page |
+| Python 3.7 or newer | for the tools. Nothing else: no pip, no libraries |
 
-A physical calculator is not required to start. The Virtual Calculator behaves
-the same for almost everything.
+A physical calculator is not required to start. The Virtual Calculator runs
+HP's own firmware, so it is close to a G2, but it is not one: where something
+was measured on only one of the two, the claim says which.
 
-Then clone this repository and check the setup:
+Then clone the repository and check the setup:
 
 ```bash
 git clone https://github.com/JordiRigau/hp-prime-kit
@@ -74,8 +87,9 @@ cd hp-prime-kit
 python hpprime.py doctor
 ```
 
-`doctor` reports what works on your machine and what to do about anything that
-does not. It should end with "Everything the kit needs is in place."
+[`doctor`](../tools.md#doctor) reports what works on your machine, where it
+found the Connectivity Kit and the Virtual Calculator, and what to do about
+anything missing. Its last line says whether everything is in place.
 
 Run these in a terminal, with the repository folder as the current directory,
 which is what the `cd` above does. Every command in these pages is written the
@@ -92,21 +106,20 @@ If in doubt, use the last one. It is the same program either way.
 
 ## The vocabulary you need
 
-The reference pages use these seven words without explaining them:
+The reference pages use these words without explaining them:
 
 | Word | What it means |
 |---|---|
 | PPL | the Prime's own language (*Prime Programming Language*) |
 | CK | the Connectivity Kit, the PC program |
-| `.hpprgm` | a program's file. It is binary, with the code as text inside |
-| `.hpappdir` | an app's folder |
-| template | an existing `.hpprgm` whose header is reused to make another. It is needed because the format cannot be generated from nothing. The kit ships one |
-| compiled block | a chunk the calculator adds before the code, with numbers already in its internal format. It makes the file bigger and the program open instantly |
-| the mirror | the folder `Documents\HP Connectivity Kit\Calculators\<your calculator>\`. It is not a drop box: it is a copy the CK writes *from* the calculator |
-
-Two more appear in the interface pages: a grob is an image in memory that you
-draw onto (`G0` is the screen), and a soft key is one of the six buttons in the
-bottom row, whose labels your program sets.
+| `.hpprgm` | a program's file. It is binary, with the code as text inside ([formats.container](../topics/formats.md#formats.container)) |
+| `.hpappdir` | an app's folder ([apps.hpappdir-contents](../topics/apps.md#apps.hpappdir-contents)) |
+| template | an existing `.hpprgm` whose header is reused to make another, because the format is not generated from nothing. One ships with the tools ([deploy.template-from-the-ck](../topics/deploy.md#deploy.template-from-the-ck)) |
+| compiled block | a chunk the calculator adds to a program when it loads it, and rebuilds when it is missing ([formats.block-is-a-cache](../topics/formats.md#formats.block-is-a-cache)) |
+| the mirror | the CK's folder of copies, `Documents\HP Connectivity Kit\Calculators\<your calculator>\`. It is not a drop box: the CK writes it *from* the calculator ([deploy.ck-mirror](../topics/deploy.md#deploy.ck-mirror)). `hpprime doctor` prints where it is on your machine |
+| grob | an image in memory that you draw onto; `G0` is the screen |
+| the labels along the bottom | the six touch targets your program draws with `DRAWMENU`. They are not keys: touching one reports nothing through `GETKEY` ([interface.soft-labels-not-keys](../topics/interface.md#interface.soft-labels-not-keys)) |
+| an identifier | the name of a fact, such as `ppl.local-limit`: the page it is on and a slug. These pages link to facts by it, and it is how you cite one |
 
 ---
 

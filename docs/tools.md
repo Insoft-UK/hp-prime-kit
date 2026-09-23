@@ -134,7 +134,7 @@ error, because with every file in view nothing else could supply the name.
 ## run
 
 ```bash
-hpprime run FILE.txt --call "AREA(2)"
+hpprime run FILE.txt --call "CIRCAREA(2)"
 hpprime run lib.txt data.txt --call "LOAD(1)" --call "F(3,350)"
 ```
 
@@ -310,7 +310,7 @@ the emulator does open.
 ## compare
 
 ```bash
-hpprime compare lib.txt --call "AREA(2)" --call "F(3,350)"
+hpprime compare lib.txt --call "CIRCAREA(2)" --call "F(3,350)"
 hpprime compare --collect          # if you did not wait the first time
 ```
 
@@ -326,10 +326,10 @@ is: it installs, you type `HPKCMP` on the calculator and close the emulator,
 and the table appears.
 
 ```
-call       here               calculator
----------  -----------------  -----------------  ------------
-AREA(2)    12.56636           12.56636           same
-F(3,350)   1050.0             1050.0             same
+call         here               calculator
+-----------  -----------------  -----------------  ------------
+CIRCAREA(2)  12.56636           12.56636           same
+F(3,350)     1050.0             1050.0             same
 ```
 
 It exits 1 if any row disagrees, so it works as a gate.
@@ -343,7 +343,7 @@ What to know:
   the wrapper has to be run once by hand. Whether an app's `START` hook fires
   at boot, which would remove even that, is not measured.
 - The generated program goes through the linter before it is sent, and an
-  error stops it. The wrapper passes: `AREA(0)` in it calls a function your
+  error stops it. The wrapper passes: `CIRCAREA(0)` in it calls a function your
   code defines, so the 0 is an argument and not an index.
 - `--mat N` if `M9` is in use, `--tol X` for how close counts as the same
   (default 1e-9, relative), `--keep` to leave the wrapper on the calculator.

@@ -9,7 +9,7 @@ rot, because it is the first thing anybody runs.
     python tests/test_examples.py
 """
 from __future__ import unicode_literals
-import io, os, sys
+import io, os, re, sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
@@ -65,7 +65,7 @@ def main():
         f.write(text)
     try:
         lints_clean(tmp, 'the PPL starter')
-        calls(tmp, 'starter', {'AREA(2)': 12.566370614359172})
+        calls(tmp, 'starter', {'CIRCAREA(2)': 12.566370614359172})
     finally:
         os.remove(tmp)
 
@@ -111,8 +111,60 @@ def main():
     ok(os.path.basename(probe) == 'main.py',
        'the probe is called main.py, which is the entry point')
 
+    guided_path(io.open(starter, encoding='utf-8').read()
+                .replace('__NAME__', 'CIRCLE'))
+
     print('\nPASS: %d   FAIL: %d' % (PASS[0], FAIL[0]))
     return 1 if FAIL[0] else 0
+
+
+PPL_BLOCK = re.compile(r'^```ppl\n(.*?)^```', re.M | re.S)
+
+
+def _code(text):
+    """A program without its comment lines, to compare what a page shows
+    with what the starter is."""
+    lines = [l.rstrip() for l in text.replace('\r\n', '\n').split('\n')
+             if not l.lstrip().startswith('//')]
+    return '\n'.join(lines).strip()
+
+
+def guided_path(starter):
+    """Every program on the guided path lints with no error and no warning,
+    and loads: the starter together with every block of a step that exports
+    something, and a fragment inside a function of its own. The program step 2
+    shows is the one `hpprime new` writes."""
+    print('\n-- the guided path, docs/start/')
+    folder = os.path.join(ROOT, 'docs', 'start')
+    for name in sorted(os.listdir(folder)):
+        if not name.endswith('.md'):
+            continue
+        page = io.open(os.path.join(folder, name), encoding='utf-8').read()
+        blocks = PPL_BLOCK.findall(page.replace('\r\n', '\n'))
+        if name == '02-first-program.md':
+            ok(any(_code(b) == _code(starter) for b in blocks),
+               '%s shows the program `hpprime new` writes' % name)
+        if not blocks:
+            continue
+        parts = [starter]
+        for n, b in enumerate(blocks, 1):
+            if _code(b) == _code(starter):
+                continue
+            if 'EXPORT' in b:
+                parts.append(b)
+            else:
+                parts.append('EXPORT ZFRAG%d()\nBEGIN\n%s\nEND;\n' % (n, b))
+        source = '\n'.join(parts)
+        found, _ = lint.check_source(name, source)
+        ok(not found, '%s: its programs lint with no error and no warning'
+           % name, '; '.join('%d %s %s' % (f.line, f.level, f.rule)
+                             for f in found))
+        try:
+            interp.Machine().load(source, name)
+            ok(True, '%s: its programs load in the interpreter' % name)
+        except Exception as e:
+            ok(False, '%s: its programs load in the interpreter' % name,
+               str(e))
 
 
 if __name__ == '__main__':
