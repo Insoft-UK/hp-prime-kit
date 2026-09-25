@@ -428,7 +428,7 @@ BEGIN
   RETURN a;
 END;
 """),
-    ('ENDPROC', 'single-end', 'WARN', 'unverified', """
+    ('ENDPROC', 'single-end', 'ERROR', 'emulator', """
 EXPORT F(a)
 BEGIN
   RETURN a;
@@ -452,7 +452,362 @@ BEGIN
   RETURN a == 3;
 END;
 """),
+    ('6 locals in one LOCAL', 'local-limit', None, None, """
+EXPORT F()
+BEGIN
+  LOCAL za, zb, zc, zd, zf, zg;
+  RETURN 1;
+END;
+"""),
+    ("a block's END and a function's, each with its ;", 'end-semicolon', None,
+     None, """
+EXPORT F(a)
+BEGIN
+  IF a > 0 THEN
+    a := 1;
+  END;
+  RETURN a;
+END;
+"""),
+    ('END closing an IF and a FOR', 'single-end', None, None, """
+EXPORT F(a)
+BEGIN
+  LOCAL zi;
+  FOR zi FROM 1 TO 3 DO
+    IF a > zi THEN a := zi; END;
+  END;
+  RETURN a;
+END;
+"""),
+    ('EXPR behind a size guard', 'expr-empty', None, None, """
+EXPORT F(zs)
+BEGIN
+  IF SIZE(zs) > 0 THEN
+    RETURN EXPR(zs);
+  END;
+  RETURN 0;
+END;
+"""),
+    ('TEXTOUT_P with its width argument', 'textout-width', None, None, """
+EXPORT F()
+BEGIN
+  TEXTOUT_P("a label", G0, 4, 24, 2, RGB(0,0,0), 70);
+  RETURN 1;
+END;
+"""),
 ]
+
+EVIDENCE += [
+    ('the null-hypothesis mean with the Greek mu', 'mu-zero', 'ERROR',
+     'emulator', """
+EXPORT F()
+BEGIN
+  RETURN Inference.\u03bc\u2080;
+END;
+"""),
+    ('the same with the micro sign, and the Greek one in a message', 'mu-zero',
+     None, None, """
+EXPORT F()
+BEGIN
+  MSGBOX("\u03bc\u2080");
+  RETURN Inference.\u00b5\u2080;
+END;
+"""),
+    ("a key's code compared with 65", 'getkey-code', 'WARN', 'G2', """
+EXPORT F()
+BEGIN
+  LOCAL zk;
+  REPEAT zk := GETKEY; UNTIL zk < 0;
+  REPEAT zk := GETKEY; UNTIL zk >= 0;
+  IF zk == 65 THEN RETURN 1; END;
+  RETURN 0;
+END;
+"""),
+    ("a key's code compared with codes a key has", 'getkey-code', None, None,
+     """
+EXPORT F()
+BEGIN
+  LOCAL zk;
+  REPEAT zk := GETKEY; UNTIL zk < 0;
+  REPEAT zk := GETKEY; UNTIL zk >= 0;
+  IF zk == 30 THEN RETURN 1; END;
+  IF zk <> 4 AND zk <> -1 THEN RETURN 2; END;
+  RETURN 0;
+END;
+"""),
+    ("a string's element compared with a string", 'string-index', 'WARN',
+     'emulator', """
+EXPORT F()
+BEGIN
+  LOCAL zs;
+  zs := "abc";
+  IF zs(2) == "b" THEN RETURN 1; END;
+  RETURN 0;
+END;
+"""),
+    ("a list of strings' element compared with a string", 'string-index', None,
+     None, """
+EXPORT F()
+BEGIN
+  LOCAL zl;
+  zl := {"a", "b"};
+  IF zl(2) == "b" THEN RETURN 1; END;
+  RETURN 0;
+END;
+"""),
+    ('LINE and DIMGROB given pixels', 'draw-units', 'WARN', 'emulator', """
+EXPORT F()
+BEGIN
+  DIMGROB(G1, 320, 240);
+  LINE(0, 0, 320, 240);
+  RETURN 1;
+END;
+"""),
+    ('the _P forms given pixels, and LINE given units', 'draw-units', None,
+     None, """
+EXPORT F()
+BEGIN
+  DIMGROB_P(G1, 320, 240);
+  LINE_P(0, 0, 319, 239);
+  LINE(-5, -5, 5, 5);
+  RETURN 1;
+END;
+"""),
+    ('a program that draws and returns', 'draw-then-return', 'WARN', 'G2',
+     """
+EXPORT SHOW()
+BEGIN
+  TEXTOUT_P("done", G0, 10, 10, 2, RGB(0,0,0), 100);
+  RETURN 1;
+END;
+"""),
+    ('a program that draws and waits, through a function of its own',
+     'draw-then-return', None, None, """
+ZPAUSE()
+BEGIN
+  LOCAL zk;
+  REPEAT zk := GETKEY; UNTIL zk < 0;
+  REPEAT zk := GETKEY; UNTIL zk >= 0;
+  RETURN zk;
+END;
+
+EXPORT SHOW()
+BEGIN
+  TEXTOUT_P("done", G0, 10, 10, 2, RGB(0,0,0), 100);
+  ZPAUSE();
+  RETURN 1;
+END;
+"""),
+    ('a loop that waits for a key, nothing drained', 'wait-undrained', 'WARN',
+     'G2', """
+EXPORT F()
+BEGIN
+  LOCAL zk;
+  REPEAT zk := GETKEY; UNTIL zk >= 0;
+  RETURN zk;
+END;
+"""),
+    ('drained, then waited for', 'wait-undrained', None, None, """
+EXPORT TPAUSE()
+BEGIN
+  LOCAL zk;
+  REPEAT zk := GETKEY; UNTIL zk < 0;
+  REPEAT zk := GETKEY; UNTIL zk >= 0;
+  RETURN zk;
+END;
+"""),
+    ('EXPR inside a FOR', 'expr-in-loop', 'WARN', 'G2', """
+EXPORT F(zn)
+BEGIN
+  LOCAL zi, zs;
+  zs := 0;
+  FOR zi FROM 1 TO zn DO
+    zs := zs + EXPR("ZDATA(" + zi + ")");
+  END;
+  RETURN zs;
+END;
+"""),
+    ('EXPR once, before the loop', 'expr-in-loop', None, None, """
+EXPORT F(zn)
+BEGIN
+  LOCAL zi, zs, zv;
+  zs := 0;
+  zv := EXPR("ZDATA");
+  FOR zi FROM 1 TO zn DO
+    zs := zs + zv(zi);
+  END;
+  RETURN zs;
+END;
+"""),
+    ('a program exporting AREA', 'export-clash', 'WARN', 'emulator', """
+EXPORT AREA(zr)
+BEGIN
+  RETURN 3.14159265359 * zr * zr;
+END;
+"""),
+    ('a prefixed export, and an app hook', 'export-clash', None, None, """
+EXPORT CIRCAREA(zr)
+BEGIN
+  RETURN 3.14159265359 * zr * zr;
+END;
+
+EXPORT View()
+BEGIN
+  RETURN 1;
+END;
+"""),
+]
+
+# Rules that need several files in view: (what, rule, level, label, files).
+MULTI = [
+    ('two files exporting one name', 'export-clash', 'ERROR', 'G2',
+     [('A.txt', 'EXPORT ZSAME(zx)\nBEGIN\n  RETURN zx;\nEND;\n'),
+      ('B.txt', 'EXPORT ZSAME(zx)\nBEGIN\n  RETURN 2 * zx;\nEND;\n')]),
+    ('two files exporting a name each', 'export-clash', None, None,
+     [('A.txt', 'EXPORT ZONE(zx)\nBEGIN\n  RETURN zx;\nEND;\n'),
+      ('B.txt', 'EXPORT ZTWO(zx)\nBEGIN\n  RETURN 2 * zx;\nEND;\n')]),
+]
+
+# The facts with nothing to catch, where the mistake would be to flag them:
+# each program here compiles and does what its fact says, so no rule may say
+# anything about it, not even a warning. A list of files is linted together.
+QUIET = {
+    'ppl.return-in-loop': """
+EXPORT F(n)
+BEGIN
+  LOCAL zi;
+  FOR zi FROM 1 TO n DO
+    IF zi > 3 THEN RETURN zi; END;
+  END;
+  REPEAT
+    RETURN n;
+  UNTIL 1;
+END;
+""",
+    'ppl.letter-digit-names': """
+EXPORT F()
+BEGIN
+  LOCAL L12, L13, r2, y1;
+  L12 := 1;
+  RETURN L12;
+END;
+""",
+    'ppl.local-m-matrices': """
+EXPORT F()
+BEGIN
+  LOCAL m;
+  m := 2;
+  RETURN m;
+END;
+""",
+    'ppl.locals-initialised-one-line': """
+EXPORT F()
+BEGIN
+  LOCAL za := 1, zb := 2, zc := 3;
+  RETURN za + zb + zc;
+END;
+""",
+    'ppl.i-e-as-locals': """
+EXPORT F()
+BEGIN
+  LOCAL i, e;
+  i := 2;
+  e := 1;
+  RETURN i * 3 + e;
+END;
+""",
+    'ppl.names-ignore-case': """
+EXPORT F(zx)
+BEGIN
+  RETURN sin(zx) + alog(2) + xpon(1000);
+END;
+""",
+    'ppl.getkey-no-parentheses': """
+EXPORT F()
+BEGIN
+  LOCAL zk, zj;
+  zk := GETKEY;
+  zj := GETKEY();
+  RETURN zk + zj;
+END;
+""",
+    'apps.qualified-names': """
+EXPORT F()
+BEGIN
+  Statistics_1Var.D1 := {1,2,2,3,7};
+  Statistics_1Var.Do1VStats(Statistics_1Var.H1);
+  RETURN Statistics_1Var.MeanX + Spreadsheet.SUM({1,2,3});
+END;
+""",
+    'ppl.global-index-other-program': [
+        ('DATA.txt', 'EXPORT ZNAMES:={"a","b","c"};\n'),
+        ('USE.txt', 'EXPORT F()\nBEGIN\n  RETURN ZNAMES(1);\nEND;\n')],
+}
+
+
+def quiet_findings(case):
+    """Every finding on a QUIET case: one source, or files linted as a
+    set."""
+    if isinstance(case, list):
+        return lint_files(case, True)
+    return L.check_source('quiet.txt', case)[0]
+
+
+def caught_list():
+    """CAUGHT against the facts, the rules and the tests it names. -> the
+    problems, and how many checks are decided and not written."""
+    from hpkit import docs
+    facts = set(f.ident for f in docs.load(ROOT)[1])
+    problems, to_write = [], 0
+    for ident in sorted(facts - set(L.CAUGHT)):
+        problems.append('%s has no line' % ident)
+    for ident in sorted(set(L.CAUGHT) - facts):
+        problems.append('%s is not a fact' % ident)
+    for ident, answers in L.CAUGHT.items():
+        if not answers:
+            problems.append('%s has no answer' % ident)
+        for a in answers:
+            kind = a[0]
+            if kind == 'rule' and a[1] not in L.FACTS:
+                problems.append('%s: %s is not a rule tied to a fact'
+                                % (ident, a[1]))
+            elif kind == 'command':
+                path = os.path.join(ROOT, a[2])
+                text = (io.open(path, encoding='utf-8').read()
+                        if os.path.isfile(path) else '')
+                if a[3] not in text:
+                    problems.append('%s: %s has no test "%s"'
+                                    % (ident, a[2], a[3]))
+            elif kind == 'quiet' and ident not in QUIET:
+                problems.append('%s: no QUIET case' % ident)
+            elif kind == 'no' and not a[1].strip():
+                problems.append('%s: no reason' % ident)
+            elif kind == 'write':
+                to_write += 1
+                problems.append('%s: %s is decided on and not written'
+                                % (ident, a[1]))
+            elif kind not in ('rule', 'command', 'quiet', 'no', 'write'):
+                problems.append('%s: unknown answer %r' % (ident, kind))
+    for rule, fact in sorted(L.FACTS.items()):
+        if ('rule', rule) not in L.CAUGHT.get(fact, []):
+            problems.append('%s is tied to %s, whose line does not name it'
+                            % (rule, fact))
+    for ident in sorted(QUIET):
+        if ('quiet',) not in L.CAUGHT.get(ident, []):
+            problems.append('QUIET has %s, whose line is not quiet' % ident)
+    return problems, to_write
+
+
+def rules_have_both_cases():
+    """Every rule tied to a fact has a case it catches and one it must
+    stay quiet on. -> the rules missing one."""
+    catches, quiet = set(r for r, _ in BAD), set()
+    for case in EVIDENCE + MULTI:
+        (catches if case[2] else quiet).add(case[1])
+    return ['%s has no case it %s' % (r, what)
+            for r in sorted(L.FACTS)
+            for what, seen in (('catches', catches), ('stays quiet on', quiet))
+            if r not in seen]
 
 # What a finding looks like: (source, rule, how its line ends).
 SHAPES = [
@@ -715,6 +1070,49 @@ def main():
     else:
         ok += 1
         print('  ok    no unknown-name in the PPL this repository ships')
+
+    print('')
+    for what, rule, level, label, files in MULTI:
+        found = lint_files(files, True)
+        got = sorted(set((a.level, a.label) for a in found if a.rule == rule))
+        want = [(level, label)] if level else []
+        if got == want:
+            ok += 1
+            print('  ok    %s on %s' % (rule, what))
+        else:
+            bad += 1
+            print('  FAIL  %s on %s: %s, and should be %s'
+                  % (rule, what, got or 'nothing', want or 'nothing'))
+
+    print('')
+    for ident in sorted(QUIET):
+        found = quiet_findings(QUIET[ident])
+        if not found:
+            ok += 1
+            print('  ok    nothing flagged on %s' % ident)
+        else:
+            bad += 1
+            print('  FAIL  %s is flagged: %s'
+                  % (ident, '; '.join('%s %s' % (a.rule, a.level)
+                                      for a in found)))
+
+    print('')
+    problems, to_write = caught_list()
+    if problems:
+        bad += 1
+        print('  FAIL  the list of what catches each fact: %s'
+              % '; '.join(problems))
+    else:
+        ok += 1
+        print('  ok    every fact has a line, and every line holds')
+    missing = rules_have_both_cases()
+    if missing:
+        bad += 1
+        print('  FAIL  %s' % '; '.join(missing))
+    else:
+        ok += 1
+        print('  ok    every rule tied to a fact has a case it catches and '
+              'one it stays quiet on')
 
     print('')
     problems = rules_cite_facts()

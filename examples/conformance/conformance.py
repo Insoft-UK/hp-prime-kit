@@ -30,7 +30,7 @@ TOL = 1e-6
 def load_ppl():
     """Load the PPL that runs on the calculator."""
     m = interp.Machine()
-    m.load_file(os.path.join(HERE, 'ROOT.txt'))
+    m.load_file(os.path.join(HERE, 'BISROOT.txt'))
     return m
 
 
@@ -63,7 +63,7 @@ def main(argv):
     worst = (0.0, None)
     examples = []
     for c in cases():
-        got = m.call('ROOT', c)
+        got = m.call('BISROOT', c)
         want = reference(c, broken)
         checked += 1
         if want == 0:

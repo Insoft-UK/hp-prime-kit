@@ -39,6 +39,7 @@ They are listed so nobody "fixes" them back in.
 """
 from __future__ import unicode_literals
 import io, os, re, sys
+from collections import OrderedDict
 
 # Variables per LOCAL statement. Measured on a G2, firmware 2.4.15515,
 # against programs that compile on that same calculator: 8 declared in one
@@ -53,16 +54,39 @@ LOCAL_FAILS = 9                 # the fewest seen to fail
 LOCAL_FAILS_G2 = 13             # the fewest seen to fail on the G2
 
 # Initialised variables in one EXPORT: seven on one line failed on a G2.
-# Two, four and six compiled on the Virtual Calculator on 2026-09-24, so
-# fewer than seven is not flagged; three and five were not tried.
+# Two to six compiled on the Virtual Calculator, on 2026-09-24 and
+# 2026-09-25, so fewer than seven is not flagged.
 EXPORT_FAILS = 7
 
 # ENDIF, ENDFOR and ENDWHILE were measured to fail on a G2, ENDCASE and
-# ENDFUNC on the Virtual Calculator on 2026-09-24. ENDPROC is not a PPL name
-# either, but nobody has compiled it.
+# ENDFUNC on the Virtual Calculator on 2026-09-24, and ENDPROC on 2026-09-25.
 BAD_BLOCK_ENDS = ('ENDIF', 'ENDFOR', 'ENDWHILE')
-BAD_BLOCK_ENDS_EMULATOR = ('ENDCASE', 'ENDFUNC')
-UNMEASURED_BLOCK_ENDS = ('ENDPROC',)
+BAD_BLOCK_ENDS_EMULATOR = ('ENDCASE', 'ENDFUNC', 'ENDPROC')
+
+# The null-hypothesis mean as HP's list spells it, with the Greek mu, which
+# does not compile; with the micro sign it answers (emulator, 2026-09-25).
+MU_ZERO = '\u03bc\u2080'
+
+# The drawing commands without _P count the plot window's units, from the
+# middle of the screen: -15.9 to 15.9 across and -10.9 to 10.9 up on a reset
+# calculator (interface.draw-units). A literal coordinate beyond 16, or a
+# grob size beyond 32, reads as pixels written in units.
+UNITS_LIMIT = 16
+UNITS_SIZE_LIMIT = 32
+
+# What draws on the screen, and what makes a program stay until somebody has
+# seen it. FREEZE is among the second: what it does after a drawing has not
+# been measured, and a rule leaves alone what it cannot judge.
+DRAWS = ('TEXTOUT_P', 'TEXTOUT', 'RECT_P', 'RECT', 'LINE_P', 'LINE',
+         'ARC_P', 'ARC', 'BLIT_P', 'BLIT', 'FILLPOLY_P', 'FILLPOLY',
+         'PIXON_P', 'PIXON', 'INVERT_P', 'INVERT', 'DRAWMENU')
+WAITS = ('WAIT', 'GETKEY', 'MOUSE', 'ISKEYDOWN', 'FREEZE', 'MSGBOX', 'INPUT',
+         'CHOOSE')
+
+# An app's program exports these for the app to call (apps.hooks): they
+# return to the app, not to Home, and are exported on purpose.
+HOOKS = ('START', 'NUM', 'PLOT', 'SYMB', 'VIEW', 'INFO', 'RESET', 'NUMSETUP',
+         'PLOTSETUP', 'SYMBSETUP')
 KEYWORDS = set("""IF THEN ELSE END FOR FROM TO DOWNTO STEP DO WHILE REPEAT
 UNTIL CASE DEFAULT BREAK CONTINUE RETURN LOCAL EXPORT BEGIN AND OR NOT
 IFTE""".split())
@@ -159,6 +183,13 @@ FACTS = {
     'end-semicolon': 'ppl.end-semicolon',
     'export-clash': 'ppl.global-namespace',
     'equality-statement': 'ppl.equality-operators',
+    'mu-zero': 'ppl.mu-zero-spelling',
+    'getkey-code': 'interface.getkey-position',
+    'string-index': 'ppl.string-index-code',
+    'draw-units': 'interface.draw-units',
+    'draw-then-return': 'interface.draw-then-return',
+    'wait-undrained': 'interface.drain-then-wait',
+    'expr-in-loop': 'ppl.expr-dynamic-access',
 }
 
 NO_FACT = {
@@ -167,6 +198,307 @@ NO_FACT = {
     'unknown-name': 'the list of names in docs/commands/names.tsv, which is '
                     'an inventory and not a fact about the platform',
 }
+
+# What catches each fact of docs/topics/ from a PC, or why nothing can: one
+# line per fact, and `hpprime docs` writes it as a table into docs/tools.md.
+# tests/test_lint.py fails if a fact has no line, a line names no fact, a
+# rule is not a rule, or a test named is not where the line says. An answer
+# is one of:
+#   ('rule', name)                          a rule of this linter
+#   ('write', name)                         a check decided on and not
+#                                           written: the tests fail while
+#                                           one is left
+#   ('command', command, test file, words)  another hpprime command does it,
+#                                           and that test holds it
+#   ('quiet',)                              nothing to catch: the mistake
+#                                           would be to flag it, and QUIET in
+#                                           tests/test_lint.py holds that
+#   ('no', why)                             nothing on a PC can see it
+_ACTIVE = "which app is active is the calculator's state, not the file's"
+_ANSWER = 'it is about what the calculator answers, which the source does not show'
+_HANDS = "it is a person's action in the Connectivity Kit or on the calculator"
+_SCREEN = 'it is about what a person sees on the screen'
+_TIMING = 'it is a time, which only the calculator can take'
+_OTHERS = "it is about somebody else's code, not run here"
+_T_APP = 'tests/test_appdir.py'
+_T_EMU = 'tests/test_emulator.py'
+_T_PRG = 'tests/test_program.py'
+_T_NUM = 'tests/test_numbers.py'
+_T_RUN = 'tests/test_interp.py'
+CAUGHT = OrderedDict([
+    # apps
+    ('apps.hpappdir-contents',
+     [('command', 'build', _T_APP, 'creates the .hpappdir folder')]),
+    ('apps.startup-view-byte',
+     [('command', 'verify', _T_APP,
+       'sees the rewritten .hpapp (the Python-console failure)')]),
+    ('apps.icon',
+     [('no', 'what another size does was not measured, so none can be '
+             'called wrong')]),
+    ('apps.two-kinds',
+     [('command', 'verify', _T_APP, 'a PPL app is recognised by its program')]),
+    ('apps.hooks',
+     [('no', 'a hook is an exported function like any other, so a file '
+             'cannot say which ones were meant as hooks')]),
+    ('apps.blank-app-hooks',
+     [('no', "it is what the calculator does with an app's views while "
+             'its program runs')]),
+    ('apps.blank-app-keys',
+     [('no', 'which keys arrive is known only while the program runs')]),
+    ('apps.exports-tied',
+     [('no', 'where a program is installed, in an app or in the catalogue, '
+             'is not in its file')]),
+    ('apps.wrappers-are-portable',
+     [('command', 'build', _T_APP,
+       'the wrapper comes out byte for byte like the template')]),
+    ('apps.main-py',
+     [('command', 'build', _T_APP, 'warns when a Python app has no main.py')]),
+    ('apps.install',
+     [('command', 'install', _T_EMU, 'the app lands as a folder'),
+      ('no', 'on a physical calculator it is a person dragging the folder '
+             'in the Connectivity Kit')]),
+    ('apps.generated-and-verified',
+     [('command', 'verify', _T_APP,
+       'the generated .hpappprgm gives back the same source')]),
+    ('apps.hpapp-not-generated',
+     [('command', 'build', _T_APP,
+       'the wrapper comes out byte for byte like the template')]),
+    ('apps.empty-hpappprgm-not-a-template',
+     [('command', 'build', _T_APP,
+       'rejects the empty .hpappprgm as a template')]),
+    ('apps.function-needs-active-app', [('no', _ACTIVE)]),
+    ('apps.qualified-names',
+     [('quiet',),
+      ('command', 'run', _T_RUN, 'not_covered_is_not_an_error')]),
+    ('apps.triangle-solver-degrees', [('no', _ACTIVE)]),
+    ('apps.reset-leaves-function-active',
+     [('no', 'it is the state a reset leaves on the calculator')]),
+    ('apps.app-mode-overrides-home', [('no', _ACTIVE)]),
+    ('apps.finance-shows-two-decimals', [('no', _ACTIVE)]),
+    # deploy
+    ('deploy.emulator-folder',
+     [('command', 'install', _T_EMU,
+       'the program lands in the calculator folder')]),
+    ('deploy.compile-once-after-a-file-copy',
+     [('no', 'Check is a key pressed on the calculator: the tools say when '
+             'to press it and cannot press it')]),
+    ('deploy.results-come-back-on-exit',
+     [('command', 'compare', 'tests/test_compare.py',
+       'a missing matrix is an error that says what to do')]),
+    ('deploy.which-window-opens',
+     [('command', 'examples', 'tests/test_examples_run.py',
+       'with Prime held, the next one opens Prime_1')]),
+    ('deploy.calc-hpsettings-moves',
+     [('command', 'examples', 'tests/test_examples_run.py',
+       'an emulator that did not have %s is caught')]),
+    ('deploy.ck-mirror',
+     [('no', 'installing on a physical calculator is a person dragging the '
+             'file in the Connectivity Kit')]),
+    ('deploy.content-library-send', [('no', _HANDS)]),
+    ('deploy.usb-without-the-ck',
+     [('no', 'it is a route nobody has, so there is nothing to check')]),
+    ('deploy.drag-refused-when-elevated',
+     [('no', "it is Windows' settings for the Connectivity Kit")]),
+    ('deploy.no-manual-compile',
+     [('no', 'it is what a physical calculator does with a file it '
+             'receives')]),
+    ('deploy.read-it-back',
+     [('command', 'pull', _T_EMU,
+       'pull --diff exits 1 when the calculator has something')]),
+    ('deploy.writer-on-hardware',
+     [('command', 'write', 'tests/test_cli.py',
+       'write builds the binary with no -t (it finds the template)'),
+      ('no', 'that it runs on a G2 is for the hardware to say')]),
+    ('deploy.template-from-the-ck',
+     [('command', 'write', _T_PRG,
+       'the shipped template has no compiled block')]),
+    ('deploy.which-calculator-is-which',
+     [('command', 'emu', _T_EMU,
+       'a clone does not claim to be the calculator it came from')]),
+    # formats
+    ('formats.container',
+     [('command', 'write', _T_PRG,
+       'the shipped template round-trips identical')]),
+    ('formats.source-record',
+     [('command', 'read', _T_PRG,
+       'survives being written into the template')]),
+    ('formats.wrapper-trap',
+     [('command', 'read', _T_PRG,
+       'sizes that used to come back as the wrapper')]),
+    ('formats.trailer-varies',
+     [('command', 'write', _T_PRG,
+       'what was written can serve as a template in turn')]),
+    ('formats.header-words',
+     [('no', 'what the two words mean is not known, so no value can be '
+             'called wrong')]),
+    ('formats.line-endings',
+     [('command', 'write', 'tests/test_cli.py',
+       'read gives back the source that was written')]),
+    ('formats.source-offset-152',
+     [('command', 'write', _T_PRG,
+       'the shipped template has no compiled block')]),
+    ('formats.two-producers',
+     [('command', 'write', _T_PRG,
+       'the shipped template has no compiled block')]),
+    ('formats.block-is-a-cache',
+     [('no', 'the calculator builds the block, and nothing on the PC '
+             'writes one')]),
+    ('formats.block-not-byte-stable',
+     [('no', 'it is about two compiles on the calculator, and no tool '
+             'compares blocks')]),
+    ('formats.number',
+     [('command', 'matrix', _T_NUM, 'round trip of %r')]),
+    ('formats.number-infinity',
+     [('command', 'matrix', _T_NUM,
+       'decodes the positive infinity the emulator wrote')]),
+    ('formats.hpmat',
+     [('command', 'matrix', _T_NUM, 'a 2x3 .hpmat is 16 + 6*8 bytes')]),
+    ('formats.hpmat-vector',
+     [('command', 'matrix', _T_NUM, 'rank %d, the numbers survive')]),
+    ('formats.symbol-table',
+     [('command', 'matrix', _T_NUM,
+       'all %d matrices in the source are in the block')]),
+    ('formats.matrix-type-byte',
+     [('command', 'matrix', _T_NUM,
+       'all %d matrices in the source are in the block')]),
+    ('formats.value-types-undecoded',
+     [('no', 'they are not decoded, so there is nothing to check a value '
+             'against')]),
+    ('formats.matrix-flag',
+     [('no', 'what the flag means is not known')]),
+    ('formats.entry-splice',
+     [('no', 'nothing on the PC writes a symbol entry into a program')]),
+    ('formats.other-files',
+     [('command', 'install', _T_EMU, 'a .hpprgm that is not one is refused')]),
+    # interface
+    ('interface.geometry',
+     [('no', 'a coordinate past the edge is clipped, not refused, and a '
+             'file cannot say it was meant to be seen')]),
+    ('interface.draw-units', [('rule', 'draw-units')]),
+    ('interface.offscreen-grob',
+     [('no', 'drawing straight onto the screen is correct; the flicker is '
+             'what a person sees')]),
+    ('interface.two-themes', [('no', _SCREEN)]),
+    ('interface.textout-width', [('rule', 'textout-width')]),
+    ('interface.text-measure', [('no', _ANSWER)]),
+    ('interface.input-fields',
+     [('no', 'it is how a form looks on the screen, and only two label '
+             'positions were measured')]),
+    ('interface.input-modal',
+     [('no', 'it is what a form does while it is open')]),
+    ('interface.getkey-position', [('rule', 'getkey-code')]),
+    ('interface.key-codes', [('rule', 'getkey-code')]),
+    ('interface.soft-labels-not-keys',
+     [('no', 'which keys a program gives its labels is a choice, and no '
+             'code is wrong in itself')]),
+    ('interface.draw-then-return', [('rule', 'draw-then-return')]),
+    ('interface.drain-then-wait', [('rule', 'wait-undrained')]),
+    ('interface.wait-minus-one',
+     [('no', 'it waited on the emulator and once did not on a G2, for a '
+             'reason not known, so there is no form to flag')]),
+    ('interface.mouse-lists',
+     [('command', 'build', _T_APP, 'warns about MOUSE handed to Python raw')]),
+    ('interface.touch-readings',
+     [('no', "it is a finger's movement, which only a running app sees")]),
+    ('interface.dialog-touch-twice',
+     [('no', 'it is a touch that outlives a dialog, while the app runs')]),
+    ('interface.screen-capacity', [('no', _SCREEN)]),
+    # libraries
+    ('libraries.published', [('no', _OTHERS)]),
+    ('libraries.skeletonapp-container',
+     [('command', 'install', _T_EMU, 'a .hpprgm that is not one is refused')]),
+    ('libraries.usb-keyboard', [('no', _OTHERS)]),
+    # micropython
+    ('micropython.modules',
+     [('command', 'build', _T_APP,
+       'warns about "import time": MicroPython on the Prime has no time')]),
+    ('micropython.community-modules',
+     [('no', 'nobody here has run them, so none can be called missing')]),
+    ('micropython.hpprime-module',
+     [('no', 'it lists calls that work, and there is nothing in it to get '
+             'wrong')]),
+    ('micropython.hpprime-undocumented',
+     [('no', 'none of it has been run here')]),
+    ('micropython.eval',
+     [('no', 'it says what works across the bridge, and there is nothing '
+             'in it to get wrong')]),
+    ('micropython.eval-parentheses',
+     [('no', 'which form is required is not known')]),
+    ('micropython.list-with-string-closes-the-app',
+     [('command', 'build', _T_APP, 'warns about MOUSE handed to Python raw'),
+      ('no', 'for any other call, what it returns is known only when it '
+             'runs')]),
+    ('micropython.string-quotes',
+     [('no', 'the quote comes from data at run time')]),
+    ('micropython.number-notation',
+     [('no', 'the number is written at run time, and the failure has not '
+             'been reproduced here')]),
+    ('micropython.bridge-cost', [('no', _TIMING)]),
+    ('micropython.imports',
+     [('command', 'build', _T_APP,
+       'does not look at imports inside a function')]),
+    ('micropython.mark-debugging',
+     [('no', 'it is a way of finding a failure, not a mistake')]),
+    ('micropython.ppl-calls-python',
+     [('no', 'it has not been measured here')]),
+    ('micropython.not-measured',
+     [('no', 'it is a list of what has not been measured')]),
+    # ppl
+    ('ppl.local-limit',
+     [('rule', 'local-limit'),
+      ('command', 'run', _T_RUN,
+       '9 variables in one LOCAL, which does not compile')]),
+    ('ppl.locals-at-top', [('rule', 'local-first')]),
+    ('ppl.index-call', [('rule', 'index-call')]),
+    ('ppl.export-initialised',
+     [('rule', 'export-multiple'),
+      ('command', 'run', _T_RUN, '7 initialised variables in one EXPORT')]),
+    ('ppl.no-end-keywords', [('rule', 'single-end')]),
+    ('ppl.minus-sign', [('no', _ANSWER)]),
+    ('ppl.one-based',
+     [('rule', 'one-based'),
+      ('command', 'run', _T_RUN, 'a list read at 0 answers its last element')]),
+    ('ppl.string-index-code',
+     [('rule', 'string-index'),
+      ('command', 'run', _T_RUN, 'a string indexed answers the character code')]),
+    ('ppl.names-ignore-case', [('quiet',)]),
+    ('ppl.equality-operators', [('rule', 'equality-statement')]),
+    ('ppl.end-semicolon',
+     [('rule', 'end-semicolon'),
+      ('command', 'run', _T_RUN, 'a function whose END has no semicolon')]),
+    ('ppl.global-index-other-program', [('quiet',)]),
+    ('ppl.return-in-loop', [('quiet',)]),
+    ('ppl.letter-digit-names', [('quiet',)]),
+    ('ppl.local-m-matrices', [('quiet',)]),
+    ('ppl.locals-initialised-one-line', [('quiet',)]),
+    ('ppl.i-e-as-locals',
+     [('quiet',),
+      ('command', 'run', _T_RUN, 'i and e can be local names')]),
+    ('ppl.imaginary-unit', [('no', _ANSWER)]),
+    ('ppl.exponent-glyph', [('no', _ANSWER)]),
+    ('ppl.exact-answers', [('no', _ANSWER)]),
+    ('ppl.type-codes', [('no', _ANSWER)]),
+    ('ppl.function-always-answers',
+     [('command', 'run', _T_RUN, 'no RETURN, ending in a call')]),
+    ('ppl.home-no-parentheses',
+     [('no', 'it is what a person types on Home, which is not in a file')]),
+    ('ppl.getkey-no-parentheses', [('quiet',)]),
+    ('ppl.matrices-by-value',
+     [('command', 'run', _T_RUN, 'matrices are passed BY VALUE')]),
+    ('ppl.expr-empty', [('rule', 'expr-empty')]),
+    ('ppl.expr-dynamic-access', [('rule', 'expr-in-loop')]),
+    ('ppl.global-namespace',
+     [('rule', 'export-clash')]),
+    ('ppl.decimal-point',
+     [('no', 'a comma is also the argument separator, so F(3,5) reads the '
+             'same either way')]),
+    ('ppl.compilation-order',
+     [('no', "which program was compiled first is the calculator's state")]),
+    ('ppl.check-last-error',
+     [('no', "it is what the calculator's editor shows")]),
+    ('ppl.speed-anchor', [('no', _TIMING)]),
+    ('ppl.mu-zero-spelling', [('rule', 'mu-zero')]),
+])
 
 # How a finding is known, in docs/format.md's words. Where a rule matches
 # what was measured, its finding carries the label of the rule's fact. Where
@@ -401,14 +733,31 @@ def check_source(path, text):
                 found.append(Finding(path, num, 'ERROR', 'single-end',
                                      '%s does not exist in PPL: every block '
                                      'closes with END' % bad, EMULATOR))
-        for bad in UNMEASURED_BLOCK_ENDS:
-            if re.search(r'\b%s\b' % bad, up):
-                found.append(Finding(path, num, 'WARN', 'single-end',
-                                     '%s is not a PPL name: every block '
-                                     'closes with END. ENDIF, ENDFOR, '
-                                     'ENDWHILE, ENDCASE and ENDFUNC were '
-                                     'measured to fail; %s has not been'
-                                     % (bad, bad), UNVERIFIED))
+
+        # ---- the null-hypothesis mean with the Greek mu -------------------
+        if MU_ZERO in raw:
+            found.append(Finding(path, num, 'ERROR', 'mu-zero',
+                                 '\u03bc\u2080 is spelled with the Greek mu, '
+                                 'U+03BC, as HP\'s list spells it, and the '
+                                 'calculator refuses that name: write it with '
+                                 'the micro sign, U+00B5'))
+
+        # ---- drawing in units, with numbers that are pixels ----------------
+        for m in re.finditer(NOT_NAME + r'(LINE|RECT|TEXTOUT|ARC|PIXON|PIXOFF|'
+                             r'GETPIX|INVERT|DIMGROB)\s*\(', raw):
+            args = _call_args(raw, m.end() - 1)
+            if args is None:
+                continue
+            for text, limit in _unit_args(m.group(1), _split_top_level(args)):
+                if re.match(r'^-?\d+(\.\d+)?$', text) and \
+                        abs(float(text)) > limit:
+                    found.append(Finding(
+                        path, num, 'WARN', 'draw-units',
+                        '%s counts the plot window\'s units, from the middle '
+                        'of the screen, not pixels: %s is beyond what a reset '
+                        'calculator shows, ten pixels to the unit. For '
+                        'pixels, %s_P' % (m.group(1), text, m.group(1))))
+                    break
 
         # ---- a single = as a statement ------------------------------------
         # `a = 2;` compiles and assigns nothing: it compares and throws the
@@ -515,6 +864,18 @@ def check_source(path, text):
         m = re.match(r'^EXPORT\s+([A-Za-z_]\w*)', s, re.I)
         if m:
             exports.append((m.group(1), num))
+            # One of HP's names, exported: a program exporting AREA compiled,
+            # and AREA(2) on Home then answered the program's, hiding the
+            # Function app's (emulator, 2026-09-24). CAS names were not tried;
+            # an app's hooks are exported on purpose.
+            kinds = _listed_kinds().get(m.group(1).lower(), set())
+            if kinds - set(['cas']) and m.group(1).upper() not in HOOKS:
+                found.append(Finding(path, num, 'WARN', 'export-clash',
+                                     '%s is one of HP\'s names: exporting it '
+                                     'hides the calculator\'s own for as long '
+                                     'as this program is installed, and '
+                                     'nothing says so. Prefix it'
+                                     % m.group(1), EMULATOR))
 
         # A rule called `equality` used to sit here, flagging a single = in
         # an IF, WHILE or UNTIL condition as an error. It was measured on
@@ -581,6 +942,12 @@ def check_source(path, text):
                                  'END without ; at the end: in PPL it is '
                                  'END;'))
 
+    found += _function_findings(path, clean, functions, calls)
+    found += [Finding(path, n, 'WARN', 'expr-in-loop',
+                      'EXPR inside a loop resolves a name on every pass: '
+                      'resolve it once, before the loop')
+              for n in _exprs_in_loops(clean)]
+
     if depth != 0:
         found.append(Finding(path, len(lines), 'ERROR', 'unbalanced',
                              'unclosed blocks: %d openings too many '
@@ -599,6 +966,210 @@ def check_source(path, text):
                                      '--set' % name))
 
     return found, exports
+
+
+def _unit_args(name, parts):
+    """-> [(argument, limit)]: the arguments of a drawing command without _P
+    that are positions or sizes, read from HP's syntax for it. A form this
+    cannot place gives nothing, rather than a guess."""
+    def grob(p):
+        return bool(re.match(r'^G\d$', p.strip(), re.I))
+    if name == 'TEXTOUT':
+        rest = parts[1:]
+        rest = rest[1:] if rest and grob(rest[0]) else rest
+        return [(p, UNITS_LIMIT) for p in rest[:2]]
+    has_g = bool(parts) and grob(parts[0])
+    rest = parts[1:] if has_g else parts
+    if name in ('ARC', 'DIMGROB') and not has_g:
+        return []
+    if name == 'DIMGROB':
+        return [(p, UNITS_SIZE_LIMIT) for p in rest[:2]]
+    if name == 'ARC':
+        return [(p, UNITS_LIMIT) for p in rest[:3]]
+    if name in ('LINE', 'INVERT'):
+        return [(p, UNITS_LIMIT) for p in rest[:4]]
+    if name == 'RECT':
+        return [(p, UNITS_LIMIT) for p in rest[:4 if len(rest) >= 4 else 2]]
+    return [(p, UNITS_LIMIT) for p in rest[:2]]      # PIXON, PIXOFF, GETPIX
+
+
+def _functions(clean):
+    """-> [(name, exported, first line index, last line index)] for every
+    function the file defines with a body. A forward declaration has none."""
+    out, depth, cur, opened = [], 0, None, False
+    for k, raw in enumerate(clean):
+        s = raw.strip()
+        if not s or s.startswith('#'):
+            continue
+        up = s.upper()
+        if depth <= 0 and cur is None:
+            m = re.match(r'^(EXPORT\s+)?([A-Za-z_]\w*)\s*\(([^()]*)\)', s,
+                         re.I)
+            if m and m.group(2).upper() not in KEYWORDS and \
+                    not re.match(r'^[^;]*\)\s*;', s):
+                cur, opened = [m.group(2), bool(m.group(1)), k], False
+        depth += _block_delta(up)
+        if cur is not None and re.search(r'\bBEGIN\b', up):
+            opened = True
+        if cur is not None and opened and depth <= 0:
+            out.append((cur[0], cur[1], cur[2], k))
+            cur = None
+    return out
+
+
+def _key_loops(text):
+    """-> [(offset, 'wait' or 'drain')]: the loops in `text` that read
+    GETKEY until a key comes, or until none is left."""
+    out = []
+    getkey = r'GETKEY(\s*\(\s*\))?'
+    for m in re.finditer(r'\bREPEAT\b(.*?)\bUNTIL\b([^;]*)', text,
+                         re.I | re.S):
+        body, cond = m.group(1), m.group(2)
+        v = re.search(r'([A-Za-z_]\w*)\s*:=\s*' + getkey, body, re.I)
+        names = [getkey] + ([re.escape(v.group(1))] if v else [])
+        for n in names:
+            if re.search(n + r'\s*(>=|\u2265)\s*0\b|' + n + r'\s*>\s*-\s*1\b|'
+                         + n + r'\s*(<>|!=|\u2260)\s*-\s*1\b', cond, re.I):
+                out.append((m.start(), 'wait'))
+                break
+            if re.search(n + r'\s*<\s*0\b|' + n + r'\s*(==|=)\s*-\s*1\b|'
+                         + n + r'\s*(<=|\u2264)\s*-\s*1\b', cond, re.I):
+                out.append((m.start(), 'drain'))
+                break
+    for m in re.finditer(r'\bWHILE\b([^;]*?)\bDO\b', text, re.I | re.S):
+        cond = m.group(1)
+        if re.search(getkey + r'\s*<\s*0\b|' + getkey + r'\s*(==|=)\s*-\s*1\b',
+                     cond, re.I):
+            out.append((m.start(), 'wait'))
+        elif re.search(getkey + r'\s*(>=|\u2265)\s*0\b|' + getkey +
+                       r'\s*(<>|!=|\u2260)\s*-\s*1\b', cond, re.I):
+            out.append((m.start(), 'drain'))
+    return sorted(out)
+
+
+def _function_findings(path, clean, functions, calls):
+    """The rules that have to read a whole function: what it draws and
+    whether it waits, how it waits for a key, and what it compares a key's
+    code or a string's element with."""
+    found = []
+    spans = _functions(clean)
+    body = dict((f[0], '\n'.join(clean[f[2]:f[3] + 1])) for f in spans)
+    called = dict((f[0], set(n for n, line in calls
+                             if f[2] <= line - 1 <= f[3] and n != f[0]))
+                  for f in spans)
+    known = known_names()
+
+    def closure(name, seen=None):
+        """The file's own functions `name` reaches, itself included."""
+        seen = set() if seen is None else seen
+        if name in seen or name not in body:
+            return seen
+        seen.add(name)
+        for n in called[name]:
+            closure(n, seen)
+        return seen
+
+    def uses(names, words):
+        return any(re.search(NOT_NAME + r'(%s)\b(?!_)' % '|'.join(words),
+                             body[n]) for n in names)
+
+    drains = set(n for n in body if any(k == 'drain'
+                                        for _, k in _key_loops(body[n])))
+    for name, exported, first, last in spans:
+        text = body[name]
+        reach = closure(name)
+        strangers = set(c for n in reach for c in called[n]
+                        if c not in body and c.lower() not in known)
+
+        # ---- draws and returns, and nothing waits ---------------------------
+        if exported and name.upper() not in HOOKS and not strangers and \
+                uses(reach, DRAWS) and not uses(reach, WAITS):
+            found.append(Finding(path, first + 1, 'WARN', 'draw-then-return',
+                                 '%s draws and returns without waiting: run '
+                                 'from Home, the drawing is gone when it '
+                                 'returns, and Home shows the value it '
+                                 'answered. Wait for a key first' % name))
+
+        # ---- waits for a key without draining the buffer --------------------
+        loops = _key_loops(text)
+        waits = [o for o, k in loops if k == 'wait']
+        if waits:
+            before = text[:waits[0]]
+            drained = any(k == 'drain' and o < waits[0] for o, k in loops) or \
+                any(re.search(NOT_NAME + re.escape(n) + r'\s*\(', before)
+                    for n in drains)
+            if not drained:
+                found.append(Finding(path, first + 1 + before.count('\n'),
+                                     'WARN', 'wait-undrained',
+                                     'this loop waits for a key without '
+                                     'draining the ones already pending: the '
+                                     '[Enter] that started the program can '
+                                     'end it at once. Read GETKEY until it '
+                                     'answers -1 first'))
+
+        # ---- a key's code compared with what it cannot be -------------------
+        for v in set(re.findall(NOT_NAME + r'([A-Za-z_]\w*)\s*:=\s*GETKEY\b',
+                                text)):
+            values = re.findall(NOT_NAME + re.escape(v) + r'\s*:=\s*([^\s;]+)',
+                                text)
+            if any(not x.startswith('GETKEY') for x in values):
+                continue
+            for m in re.finditer(NOT_NAME + re.escape(v) +
+                                 r'\s*(==|<>|!=|\u2260|=(?!=))\s*'
+                                 r'(""|-?\d+(\.\d+)?)|(""|-?\d+(\.\d+)?)\s*'
+                                 r'(==|<>|!=|\u2260|=(?!=))\s*' + re.escape(v) +
+                                 r'(?![\w\u2192])', text):
+                lit = m.group(2) or m.group(4)
+                if lit == '""' or float(lit) != int(float(lit)) or \
+                        not -1 <= float(lit) <= 50:
+                    found.append(Finding(
+                        path, first + 1 + text[:m.start()].count('\n'),
+                        'WARN', 'getkey-code',
+                        '%s holds what GETKEY answered, the position of a key '
+                        'from 0 to 50, or -1 for none: it is never %s. '
+                        '[Enter] is 30, not 13' % (v, 'text' if lit == '""'
+                                                   else lit)))
+
+        # ---- a string's element compared with a string ----------------------
+        assigned = re.findall(r'([A-Za-z_]\w*)\s*:=\s*(\S)', text)
+        texts = set(v for v, c in assigned if c == '"') - \
+            set(v for v, c in assigned if c != '"')
+        for v in texts:
+            for m in re.finditer(NOT_NAME + re.escape(v) +
+                                 r'\s*\([^()]*\)\s*(==|<>|!=|\u2260|=(?!=))'
+                                 r'\s*""|""\s*(==|<>|!=|\u2260|=(?!=))\s*' +
+                                 re.escape(v) + r'\s*\(', text):
+                found.append(Finding(
+                    path, first + 1 + text[:m.start()].count('\n'), 'WARN',
+                    'string-index',
+                    '%s holds text, and %s(...) is the code of a character, '
+                    'a number: compared with a string it is never equal. '
+                    'MID(%s, i, 1) gives the character' % (v, v, v)))
+    return found
+
+
+def _exprs_in_loops(clean):
+    """-> the line numbers of every EXPR inside a FOR, WHILE or REPEAT."""
+    out, stack, loop_next = [], [], False
+    for k, raw in enumerate(clean):
+        for m in re.finditer(r'\b(FOR|WHILE|REPEAT|UNTIL|BEGIN|THEN|DO|CASE|'
+                             r'END|EXPR)\b', raw.upper()):
+            t = m.group(1)
+            if t in ('FOR', 'WHILE'):
+                loop_next = True
+            elif t == 'DO':
+                stack.append('loop' if loop_next else 'block')
+                loop_next = False
+            elif t in ('BEGIN', 'THEN', 'CASE'):
+                stack.append('block')
+            elif t == 'REPEAT':
+                stack.append('loop')
+            elif t in ('END', 'UNTIL') and stack:
+                stack.pop()
+            elif t == 'EXPR' and 'loop' in stack and \
+                    (not out or out[-1] != k + 1):
+                out.append(k + 1)
+    return out
 
 
 def lint_files(paths, as_set=False):

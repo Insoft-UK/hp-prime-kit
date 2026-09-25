@@ -58,7 +58,7 @@
 - [x] **CHECK-01**: Every identifier is unique, and every reference to one resolves
 - [x] **CHECK-02**: Every example has been run, with a Virtual Calculator result on file or through the interpreter, or says why it cannot be
 - [x] **CHECK-03**: The documentation never refers to the kit layer
-- [ ] **CHECK-04**: Every lint rule is tied to a fact, and every fact that can be caught from a PC has a rule or says why not
+- [x] **CHECK-04**: Every lint rule is tied to a fact, and every fact that can be caught from a PC has a rule or says why not
 - [x] **CHECK-05**: Every relative link resolves
 
 ## Milestone 2 requirements: the agent kit (deferred)
@@ -117,13 +117,13 @@ Tracked, not in the current roadmap. Planned when milestone 1 is done.
 | FACT-05 | Phase 4 | Complete |
 | CMD-06 | Phase 4 | Complete |
 | TOOL-02 | Phase 4 | Complete |
-| CHECK-04 | Phases 4 and 10 | Partly: every rule is tied to a fact or says what it comes from (Phase 4); the audit of facts a PC could catch and no rule does is Phase 10's, assigned 2026-09-24 |
+| CHECK-04 | Phases 4 and 10 | Complete: every rule is tied to a fact or says what it comes from (Phase 4); every fact names what catches it or why nothing on a PC can, and the nine checks that list decided on are written (10-01, 10-02) |
 | CMD-08 | Phase 5 | Complete |
 | CMD-09 | Phase 6 | Complete |
 | CMD-10 | Phase 7 | Complete |
 | CMD-11 | Phase 8 | Complete |
 | CMD-12 | Phase 8.1 | Complete |
-| FACT-06 | Phase 8.1 | Complete; ENDPROC, EXPORT with 3 and 5 and another app's settings left open and saying so |
+| FACT-06 | Phase 8.1 | Complete; ENDPROC and EXPORT with 3 and 5 measured in Phase 10, another app's settings left open and saying so |
 | TOOL-04 | Phase 9.1 | Complete |
 | TOOL-05 | Phase 9.1 | Complete |
 | READ-01 | Phase 9 | Complete |
@@ -136,7 +136,7 @@ Tracked, not in the current roadmap. Planned when milestone 1 is done.
 **Coverage:**
 - Milestone 1 requirements: 38 total
 - Mapped to phases: 38
-- Complete: 37, and CHECK-04 in part
+- Complete: 38
 - Unmapped: 0
 
 ---

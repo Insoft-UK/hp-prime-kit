@@ -46,8 +46,11 @@ What was measured about `INPUT` decides designs, and two facts hold it:
 ```ppl
 EXPORT TDRAW()
 BEGIN
+  LOCAL zk;
   RECT();                                                  // clear the screen
   TEXTOUT_P("area = 12.57", 4, 40, 3, RGB(0,0,0), 312);    // x 4, y 40, font 3
+  REPEAT zk := GETKEY; UNTIL zk < 0;       // then wait for a key: without it
+  REPEAT zk := GETKEY; UNTIL zk >= 0;      // the drawing is gone at once
   RETURN 0;
 END;
 ```
@@ -68,7 +71,7 @@ in its column
 ## Reading keys
 
 ```ppl
-zk := GETKEY;      // no parentheses in PPL
+zk := GETKEY;      // the usual form; GETKEY() works too
 ```
 
 > [GETKEY](../commands/io/GETKEY.md) returns a key's position, not a
@@ -154,7 +157,8 @@ A program that draws and then returns leaves you looking at Home and its
 return value, not at the drawing
 ([interface.draw-then-return](../topics/interface.md#interface.draw-then-return)).
 Anything meant to be read has to wait for a key before it returns, which is
-what `TKEY` does with its second `TPAUSE`.
+what `TDRAW`'s two loops and `TKEY`'s second `TPAUSE` do. `hpprime lint` warns
+on an exported program that draws and nowhere waits.
 
 ## Before you build something big
 

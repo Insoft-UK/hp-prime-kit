@@ -17,7 +17,7 @@ facts. Milestone 2, the agent kit, is planned once this one is done.
 
 ## Milestones
 
-- 🚧 **Milestone 1: the documentation** — Phases 1-10 (in progress)
+- ✅ **Milestone 1: the documentation** — Phases 1-10 (completed 2026-09-25)
 - 📋 **Milestone 2: the agent kit** — planned after milestone 1 (KIT-01 to KIT-11 in `REQUIREMENTS.md`)
 
 ## Phases
@@ -37,7 +37,7 @@ facts. Milestone 2, the agent kit, is planned once this one is done.
 - [x] **Phase 8.1: Home and system variables, and the open questions** (INSERTED) - Entries for the 65 variables of Home, the system and the settings every app shares, and `GET`; and the open questions every program runs into, measured
 - [x] **Phase 9: Guided path, index and README** - The way in, for a person and for a model (completed 2026-09-24; counted again in Phase 10)
 - [x] **Phase 9.1: Tools that keep their promise** (INSERTED) - The interpreter never answers wrong in silence, and a batch never loses evidence in silence (completed 2026-09-24)
-- [ ] **Phase 10: What a PC can catch** - Every fact a PC could catch has a lint rule or says why not, and milestone 1 closes
+- [x] **Phase 10: What a PC can catch** - Every fact a PC could catch has a lint rule or says why not, and milestone 1 closes (completed 2026-09-25)
 
 ## Phase Details
 
@@ -215,7 +215,12 @@ Plans:
   1. A list covers every fact in `docs/topics/`: the lint rule that catches it, or why a PC cannot, such as a fact about the screen or the Connectivity Kit
   2. Every fact on that list that a PC can catch has a rule, with a test for a case it catches and one it must stay quiet on
   3. Phase 9's counts are taken again on the finished reference: the index within its budget, every example run or saying why not, the README's numbers current
-**Plans**: TBD
+**Plans**: 3, questioned and approved on 2026-09-25; all complete and verified on 2026-09-25
+
+Plans:
+- [x] 10-01: The compile session, and the list of every fact
+- [x] 10-02: The checks the list decided on
+- [x] 10-03: Phase 9's counts again, and milestone 1 closed
 
 ## Progress
 
@@ -233,6 +238,6 @@ Plans:
 | 7. App functions | 7/7 | Complete | 2026-09-14 |
 | 8. App variables | 5/5 | Complete: 172 of 172 | 2026-09-25 |
 | 8.1. Home and system variables, and the open questions | 4/4 | Complete (INSERTED) | 2026-09-24 |
-| 9. Guided path, index and README | 4/4 | Complete, counted again in Phase 10 | 2026-09-24 |
+| 9. Guided path, index and README | 4/4 | Complete, counted again in Phase 10 on 2026-09-25 | 2026-09-24 |
 | 9.1. Tools that keep their promise | 2/2 | Complete (INSERTED) | 2026-09-24 |
-| 10. What a PC can catch | 0/TBD | Not started | - |
+| 10. What a PC can catch | 3/3 | Complete: milestone 1 closed | 2026-09-25 |

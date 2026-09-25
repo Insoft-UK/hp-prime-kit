@@ -103,6 +103,21 @@ def top_level_imports(text):
     return out
 
 
+def check_mouse(modules):
+    """-> list of (file, line) where a PPL string that is MOUSE itself goes
+    to Python: MOUSE answers lists inside lists, and a list that is not all
+    numbers closes the app without a word (interface.mouse-lists). A PPL
+    wrapper that flattens it first is not flagged."""
+    bad = []
+    for m in modules:
+        for k, line in enumerate(_read(m, binary=False).split('\n'), 1):
+            code = line.split('#')[0]
+            if re.search(r'\(\s*([\'"])\s*MOUSE\s*(\(\s*\d*\s*\))?\s*\1\s*\)',
+                         code, re.I):
+                bad.append((m, k))
+    return bad
+
+
 def check_imports(modules, allowed):
     """-> list of (file, module) that MicroPython would not have."""
     known = set(allowed) | MICROPYTHON
@@ -372,6 +387,11 @@ def cli(argv):
         print('WARNING: %s imports "%s", which MicroPython on the Prime does '
               'not have.\n         The app would close on startup, silently.'
               % (os.path.basename(path), mod))
+    for path, line in check_mouse(modules):
+        print('WARNING: %s:%d hands MOUSE to Python as it is: it answers lists '
+              'inside\n         lists, and a list that is not all numbers '
+              'closes the app, silently.\n         Flatten it in PPL first.'
+              % (os.path.basename(path), line))
 
     if not quiet:
         print('\n%s is ready. Drag it ONTO the calculator in the Connectivity '

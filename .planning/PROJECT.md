@@ -49,6 +49,7 @@ Inferred from the existing repository, and added phase by phase.
 - ✓ `hpprime lint`: thirteen rules, each naming the fact it comes from and that fact's label, and an error only as far as the measurement reaches — existing, narrowed on 2026-09-22 (9704074) after a report of false alarms in issue #1, and its unverified cases measured in Phase 8.1
 - ✓ An entry for every variable of Home and the system, and for `GET`; the open questions a program runs into measured, and `hpprime examples --compile` to ask whether a program compiles — Phase 8.1
 - ✓ An entry for every name the list documents, 706 of 706: every statement, command, Home function, app function, app variable and variable, and `GET` — Phases 5 to 8.1, closed with Phase 8 on 2026-09-25
+- ✓ Every fact names what catches it from a PC -- a lint rule, another command and its test -- or why nothing can; `hpprime lint` has twenty rules, eighteen tied to a fact — Phase 10
 - ✓ A program reaches another app's variables and functions with the app's name in front, `Statistics_1Var.MeanX`, measured in source and through `EXPR`, and `hpprime run` calls it not covered rather than an error — Phase 8
 - ✓ `hpprime run`: runs the real PPL file on the PC, and raises instead of inventing a result — existing
 - ✓ `hpprime write` / `read` / `verify`: the `.hpprgm` container in both directions — existing
@@ -83,7 +84,6 @@ Numbered in `REQUIREMENTS.md`.
 - [ ] Every example is run on the Virtual Calculator 2.4.15515, or says why it cannot be
 - [ ] A person can learn from zero with a guided path and look anything up in the reference
 - [ ] A model can load one entry or one topic without the rest, from an index
-- [ ] Every fact a PC could catch has a lint rule, or says why not — Phase 10
 
 ### Active: Milestone 2, the agent kit, built on the documentation
 
@@ -224,7 +224,8 @@ Deferred in `REQUIREMENTS.md`; planned when milestone 1 is done.
 | Statistics measured with data and their `Do` command, not only read on a reset calculator | The user's choice on 2026-09-25 | ✓ Good: every value matched the hand computation, and the quartiles showed their method (08-05) |
 | The open questions a program runs into are measured in Phase 8.1's sessions | The user's choice on 2026-09-24: each one measured turns a lint warning into an error, or removes it | ✓ Good: `L(0)` is the last element, `x = 2;` assigns nothing, 9 locals do not compile, `Check` can name the first bad line (08.1) |
 | Compile questions answered by small programs, two controls and `Check` | The user's choice for Phase 8.1 on 2026-09-24, over the person reading out each `Check` | ✓ Good: both controls right on the first complete run; `hpprime examples --compile` (08.1-04) |
-| CHECK-04's open half gets Phase 10, which closes milestone 1 | The user's choice on 2026-09-24: no phase owned it, so the milestone could not close | — Pending |
+| CHECK-04's open half gets Phase 10, which closes milestone 1 | The user's choice on 2026-09-24: no phase owned it, so the milestone could not close | ✓ Good: 122 facts each with a line, 9 checks written, and they found the guided path teaching a drawing that vanishes (10-02) |
+| Any `hpprime` command counts as catching a fact, and the list lives with the linter | The user's choices for Phase 10 on 2026-09-25 | ✓ Good: 45 answers are commands, each with its test; the fact format and `docs/llms.txt` did not change |
 | `--relabel` moves `unverified` to `emulator` too, never `G2` | Approved on 2026-09-16: a label weaker than the measurement understates it as surely as a stronger one overstates it | ✓ Good: 21 examples moved, and a fact measured in Phase 5 and never written down was settled with them (09-01) |
 
 ## Evolution
@@ -245,4 +246,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with the current state
 
 ---
-*Last updated: 2026-09-25, when Phase 8 closed: every name the list documents has an entry*
+*Last updated: 2026-09-25, when milestone 1 closed with Phase 10*

@@ -70,12 +70,11 @@ warning, since the file cannot say which; and a list indexed twice,
 `L(2)(1)`, is not flagged at all. The same split runs through the rest.
 `local-limit` is an error from 9 variables and a warning at 7 and 8, which
 compile. `export-multiple` is an error from 7 initialised variables, and 2 to
-6 are not flagged, since 2, 4 and 6 compiled. `local-first` is an error for a
+6 are not flagged, since all five compiled. `local-first` is an error for a
 `LOCAL` half way down a function; one inside a nested block compiles and is
 not flagged. `end-semicolon` is an error for a block's `END` and for a
 function's own. `single-end` is an error for `ENDIF`, `ENDFOR`, `ENDWHILE`,
-`ENDCASE` and `ENDFUNC`, and a warning labelled `unverified` for `ENDPROC`,
-which nobody has compiled. `one-based` is a warning,
+`ENDCASE`, `ENDFUNC` and `ENDPROC`, none of which compiled. `one-based` is a warning,
 labelled `emulator`: a list read at 0 does not fail, it answers its last
 element, which is the hazard for anybody expecting the first, and a matrix
 read at 0 does fail. The linter cannot tell a list from a matrix by its
@@ -84,7 +83,7 @@ argument, and is not flagged. When somebody measures one of these cases, it
 becomes an error with its evidence. `tests/test_lint.py` fails on an error
 whose label is not `G2` or `emulator`.
 
-Thirteen rules, and each one says where it comes from. Eleven name a fact in
+Twenty rules, and each one says where it comes from. Eighteen name a fact in
 [docs/topics/](topics/ppl.md), every one of them measured on a G2 or on the
 emulator: too many variables in one `LOCAL` (`local-limit`), indexing the
 result of a call (`index-call`), `ENDIF` and friends (`single-end`), index 0
@@ -92,7 +91,8 @@ result of a call (`index-call`), `ENDIF` and friends (`single-end`), index 0
 variables in one `EXPORT` (`export-multiple`), an `END` without its semicolon
 (`end-semicolon`), `EXPR` without a guard (`expr-empty`), duplicate exported
 names (`export-clash`, with `--set`), `TEXTOUT_P` without its width
-(`textout-width`), and a single `=` as a statement (`equality-statement`).
+(`textout-width`), a single `=` as a statement (`equality-statement`), and
+the seven below.
 
 A rule called `equality` once flagged a single `=` in a condition as an
 error, and on 2026-09-12 the calculator settled it: `IF a = 2 THEN` compiles
@@ -103,10 +103,26 @@ compiles and assigns nothing. `equality-statement` warns on that, and only
 on a line that starts with the name, so a condition is never flagged.
 `ppl.equality-operators` holds both measurements.
 
+Seven came from the table below, of what catches each fact, and one rule
+grew. `mu-zero` is an error: `μ₀` spelled as HP's list spells it, with the
+Greek mu, does not compile, and with the micro sign it does. The rest warn on
+code that runs and does something other than what it looks like: a key's
+code from `GETKEY` compared with text or with a number no key has
+(`getkey-code`); a string's element compared with a string, when it is a
+character's code and never equal (`string-index`); a drawing command without
+`_P` given coordinates in pixels (`draw-units`); an exported program that
+draws and nowhere waits, whose drawing is gone when it returns
+(`draw-then-return`); a loop waiting for a key with nothing drained first
+(`wait-undrained`); and `EXPR` inside a loop (`expr-in-loop`).
+`export-clash` also warns, without `--set`, on an export named like one of
+HP's own, which hides it: a program exporting `AREA` hides the Function
+app's. The rules that read a whole function follow the file's own calls,
+and leave alone a function that calls a name no file in view defines.
+
 `unbalanced` names no fact, because an unclosed block is something the
 compiler reports itself and no fact about the platform is involved.
 
-The thirteenth, `unknown-name`, knows every PPL name. A call to a name that is
+The last, `unknown-name`, knows every PPL name. A call to a name that is
 not on the documentation's [list of names](commands/names.tsv), and that the
 program does not define, is flagged: the command a model invents, `STRLEN(s)`
 for `SIZE(s)`, caught before the calculator answers *syntax error*. It knows
@@ -120,11 +136,9 @@ inventory rather than something measured about the platform.
 `tests/test_lint.py` fails if any rule names a fact no topic page defines, or
 names none and gives no reason.
 
-Warnings come in two kinds. `local-limit` at 7 and 8 variables, `expr-empty`
-and `textout-width` carry a measured fact: the code compiles and runs, and
-what they flag is a hazard rather than a mistake. The `unverified` ones are
-the cases above, where a rule reaches past its measurement. `unknown-name` is
-a warning for a file on its own, because the file may be calling a function
+Every warning carries a measured fact: the code compiles and runs, and what
+it flags is a hazard rather than a mistake. `unknown-name` is a warning for a
+file on its own, because the file may be calling a function
 that another program exports, and an error with `--set`. Every other finding
 is an error, and only an error exits 1. `--quiet` hides the warnings.
 
@@ -136,6 +150,141 @@ that nobody puts the false rule back.
 `--set` is for files that go to the calculator together: it adds a check for
 exported names that would collide as globals, and it makes `unknown-name` an
 error, because with every file in view nothing else could supply the name.
+
+### What catches each fact
+
+Every fact in the topic pages has a line here: the lint rule that catches it,
+another command and the test that holds it, nothing to catch where the
+mistake would be to flag it, or why nothing on a PC can see it.
+`tests/test_lint.py` fails if a fact has no line, or a line names a rule or a
+test that is not there.
+
+<!-- Written by `hpprime docs` from CAUGHT in hpkit/lint.py, which is where it is edited. -->
+| Fact | Known from | Caught by |
+|---|---|---|
+| [apps.hpappdir-contents](topics/apps.md#apps.hpappdir-contents) | G2 | `hpprime build`, held by `test_appdir.py` |
+| [apps.startup-view-byte](topics/apps.md#apps.startup-view-byte) | G2 | `hpprime verify`, held by `test_appdir.py` |
+| [apps.icon](topics/apps.md#apps.icon) | G2 | not from a PC: what another size does was not measured, so none can be called wrong |
+| [apps.two-kinds](topics/apps.md#apps.two-kinds) | G2 | `hpprime verify`, held by `test_appdir.py` |
+| [apps.hooks](topics/apps.md#apps.hooks) | G2 | not from a PC: a hook is an exported function like any other, so a file cannot say which ones were meant as hooks |
+| [apps.blank-app-hooks](topics/apps.md#apps.blank-app-hooks) | G2 | not from a PC: it is what the calculator does with an app's views while its program runs |
+| [apps.blank-app-keys](topics/apps.md#apps.blank-app-keys) | G2 | not from a PC: which keys arrive is known only while the program runs |
+| [apps.exports-tied](topics/apps.md#apps.exports-tied) | G2 | not from a PC: where a program is installed, in an app or in the catalogue, is not in its file |
+| [apps.wrappers-are-portable](topics/apps.md#apps.wrappers-are-portable) | G2 | `hpprime build`, held by `test_appdir.py` |
+| [apps.main-py](topics/apps.md#apps.main-py) | unverified | `hpprime build`, held by `test_appdir.py` |
+| [apps.install](topics/apps.md#apps.install) | G2 | `hpprime install`, held by `test_emulator.py`; not from a PC: on a physical calculator it is a person dragging the folder in the Connectivity Kit |
+| [apps.generated-and-verified](topics/apps.md#apps.generated-and-verified) | G2 | `hpprime verify`, held by `test_appdir.py` |
+| [apps.hpapp-not-generated](topics/apps.md#apps.hpapp-not-generated) | unverified | `hpprime build`, held by `test_appdir.py` |
+| [apps.empty-hpappprgm-not-a-template](topics/apps.md#apps.empty-hpappprgm-not-a-template) | G2 | `hpprime build`, held by `test_appdir.py` |
+| [apps.function-needs-active-app](topics/apps.md#apps.function-needs-active-app) | G2 | not from a PC: which app is active is the calculator's state, not the file's |
+| [apps.qualified-names](topics/apps.md#apps.qualified-names) | emulator | nothing to catch, and `lint` stays quiet; `hpprime run`, held by `test_interp.py` |
+| [apps.triangle-solver-degrees](topics/apps.md#apps.triangle-solver-degrees) | G2 | not from a PC: which app is active is the calculator's state, not the file's |
+| [apps.reset-leaves-function-active](topics/apps.md#apps.reset-leaves-function-active) | emulator | not from a PC: it is the state a reset leaves on the calculator |
+| [apps.app-mode-overrides-home](topics/apps.md#apps.app-mode-overrides-home) | emulator | not from a PC: which app is active is the calculator's state, not the file's |
+| [apps.finance-shows-two-decimals](topics/apps.md#apps.finance-shows-two-decimals) | emulator | not from a PC: which app is active is the calculator's state, not the file's |
+| [deploy.emulator-folder](topics/deploy.md#deploy.emulator-folder) | emulator | `hpprime install`, held by `test_emulator.py` |
+| [deploy.compile-once-after-a-file-copy](topics/deploy.md#deploy.compile-once-after-a-file-copy) | emulator | not from a PC: Check is a key pressed on the calculator: the tools say when to press it and cannot press it |
+| [deploy.results-come-back-on-exit](topics/deploy.md#deploy.results-come-back-on-exit) | emulator | `hpprime compare`, held by `test_compare.py` |
+| [deploy.which-window-opens](topics/deploy.md#deploy.which-window-opens) | emulator | `hpprime examples`, held by `test_examples_run.py` |
+| [deploy.calc-hpsettings-moves](topics/deploy.md#deploy.calc-hpsettings-moves) | emulator | `hpprime examples`, held by `test_examples_run.py` |
+| [deploy.ck-mirror](topics/deploy.md#deploy.ck-mirror) | G2 | not from a PC: installing on a physical calculator is a person dragging the file in the Connectivity Kit |
+| [deploy.content-library-send](topics/deploy.md#deploy.content-library-send) | G2 | not from a PC: it is a person's action in the Connectivity Kit or on the calculator |
+| [deploy.usb-without-the-ck](topics/deploy.md#deploy.usb-without-the-ck) | unverified | not from a PC: it is a route nobody has, so there is nothing to check |
+| [deploy.drag-refused-when-elevated](topics/deploy.md#deploy.drag-refused-when-elevated) | G2 | not from a PC: it is Windows' settings for the Connectivity Kit |
+| [deploy.no-manual-compile](topics/deploy.md#deploy.no-manual-compile) | G2 | not from a PC: it is what a physical calculator does with a file it receives |
+| [deploy.read-it-back](topics/deploy.md#deploy.read-it-back) | G2 | `hpprime pull`, held by `test_emulator.py` |
+| [deploy.writer-on-hardware](topics/deploy.md#deploy.writer-on-hardware) | G2 | `hpprime write`, held by `test_cli.py`; not from a PC: that it runs on a G2 is for the hardware to say |
+| [deploy.template-from-the-ck](topics/deploy.md#deploy.template-from-the-ck) | G2 | `hpprime write`, held by `test_program.py` |
+| [deploy.which-calculator-is-which](topics/deploy.md#deploy.which-calculator-is-which) | G2 | `hpprime emu`, held by `test_emulator.py` |
+| [formats.container](topics/formats.md#formats.container) | G2 | `hpprime write`, held by `test_program.py` |
+| [formats.source-record](topics/formats.md#formats.source-record) | G2 | `hpprime read`, held by `test_program.py` |
+| [formats.wrapper-trap](topics/formats.md#formats.wrapper-trap) | G2 | `hpprime read`, held by `test_program.py` |
+| [formats.trailer-varies](topics/formats.md#formats.trailer-varies) | G2 | `hpprime write`, held by `test_program.py` |
+| [formats.header-words](topics/formats.md#formats.header-words) | unverified | not from a PC: what the two words mean is not known, so no value can be called wrong |
+| [formats.line-endings](topics/formats.md#formats.line-endings) | G2 | `hpprime write`, held by `test_cli.py` |
+| [formats.source-offset-152](topics/formats.md#formats.source-offset-152) | G2 | `hpprime write`, held by `test_program.py` |
+| [formats.two-producers](topics/formats.md#formats.two-producers) | G2 | `hpprime write`, held by `test_program.py` |
+| [formats.block-is-a-cache](topics/formats.md#formats.block-is-a-cache) | G2 | not from a PC: the calculator builds the block, and nothing on the PC writes one |
+| [formats.block-not-byte-stable](topics/formats.md#formats.block-not-byte-stable) | G2 | not from a PC: it is about two compiles on the calculator, and no tool compares blocks |
+| [formats.number](topics/formats.md#formats.number) | G2 | `hpprime matrix`, held by `test_numbers.py` |
+| [formats.number-infinity](topics/formats.md#formats.number-infinity) | emulator | `hpprime matrix`, held by `test_numbers.py` |
+| [formats.hpmat](topics/formats.md#formats.hpmat) | G2 | `hpprime matrix`, held by `test_numbers.py` |
+| [formats.hpmat-vector](topics/formats.md#formats.hpmat-vector) | emulator | `hpprime matrix`, held by `test_numbers.py` |
+| [formats.symbol-table](topics/formats.md#formats.symbol-table) | G2 | `hpprime matrix`, held by `test_numbers.py` |
+| [formats.matrix-type-byte](topics/formats.md#formats.matrix-type-byte) | G2 | `hpprime matrix`, held by `test_numbers.py` |
+| [formats.value-types-undecoded](topics/formats.md#formats.value-types-undecoded) | unverified | not from a PC: they are not decoded, so there is nothing to check a value against |
+| [formats.matrix-flag](topics/formats.md#formats.matrix-flag) | unverified | not from a PC: what the flag means is not known |
+| [formats.entry-splice](topics/formats.md#formats.entry-splice) | unverified | not from a PC: nothing on the PC writes a symbol entry into a program |
+| [formats.other-files](topics/formats.md#formats.other-files) | G2 | `hpprime install`, held by `test_emulator.py` |
+| [interface.geometry](topics/interface.md#interface.geometry) | G2 | not from a PC: a coordinate past the edge is clipped, not refused, and a file cannot say it was meant to be seen |
+| [interface.draw-units](topics/interface.md#interface.draw-units) | emulator | lint rule `draw-units` |
+| [interface.offscreen-grob](topics/interface.md#interface.offscreen-grob) | G2 | not from a PC: drawing straight onto the screen is correct; the flicker is what a person sees |
+| [interface.two-themes](topics/interface.md#interface.two-themes) | unverified | not from a PC: it is about what a person sees on the screen |
+| [interface.textout-width](topics/interface.md#interface.textout-width) | G2 | lint rule `textout-width` |
+| [interface.text-measure](topics/interface.md#interface.text-measure) | unverified | not from a PC: it is about what the calculator answers, which the source does not show |
+| [interface.input-fields](topics/interface.md#interface.input-fields) | G2 | not from a PC: it is how a form looks on the screen, and only two label positions were measured |
+| [interface.input-modal](topics/interface.md#interface.input-modal) | G2 | not from a PC: it is what a form does while it is open |
+| [interface.getkey-position](topics/interface.md#interface.getkey-position) | G2 | lint rule `getkey-code` |
+| [interface.key-codes](topics/interface.md#interface.key-codes) | G2 | lint rule `getkey-code` |
+| [interface.soft-labels-not-keys](topics/interface.md#interface.soft-labels-not-keys) | G2 | not from a PC: which keys a program gives its labels is a choice, and no code is wrong in itself |
+| [interface.draw-then-return](topics/interface.md#interface.draw-then-return) | G2 | lint rule `draw-then-return` |
+| [interface.drain-then-wait](topics/interface.md#interface.drain-then-wait) | G2 | lint rule `wait-undrained` |
+| [interface.wait-minus-one](topics/interface.md#interface.wait-minus-one) | emulator | not from a PC: it waited on the emulator and once did not on a G2, for a reason not known, so there is no form to flag |
+| [interface.mouse-lists](topics/interface.md#interface.mouse-lists) | G2 | `hpprime build`, held by `test_appdir.py` |
+| [interface.touch-readings](topics/interface.md#interface.touch-readings) | unverified | not from a PC: it is a finger's movement, which only a running app sees |
+| [interface.dialog-touch-twice](topics/interface.md#interface.dialog-touch-twice) | G2 | not from a PC: it is a touch that outlives a dialog, while the app runs |
+| [interface.screen-capacity](topics/interface.md#interface.screen-capacity) | unverified | not from a PC: it is about what a person sees on the screen |
+| [libraries.published](topics/libraries.md#libraries.published) | unverified | not from a PC: it is about somebody else's code, not run here |
+| [libraries.skeletonapp-container](topics/libraries.md#libraries.skeletonapp-container) | unverified | `hpprime install`, held by `test_emulator.py` |
+| [libraries.usb-keyboard](topics/libraries.md#libraries.usb-keyboard) | unverified | not from a PC: it is about somebody else's code, not run here |
+| [micropython.modules](topics/micropython.md#micropython.modules) | G2 | `hpprime build`, held by `test_appdir.py` |
+| [micropython.community-modules](topics/micropython.md#micropython.community-modules) | unverified | not from a PC: nobody here has run them, so none can be called missing |
+| [micropython.hpprime-module](topics/micropython.md#micropython.hpprime-module) | G2 | not from a PC: it lists calls that work, and there is nothing in it to get wrong |
+| [micropython.hpprime-undocumented](topics/micropython.md#micropython.hpprime-undocumented) | unverified | not from a PC: none of it has been run here |
+| [micropython.eval](topics/micropython.md#micropython.eval) | G2 | not from a PC: it says what works across the bridge, and there is nothing in it to get wrong |
+| [micropython.eval-parentheses](topics/micropython.md#micropython.eval-parentheses) | unverified | not from a PC: which form is required is not known |
+| [micropython.list-with-string-closes-the-app](topics/micropython.md#micropython.list-with-string-closes-the-app) | G2 | `hpprime build`, held by `test_appdir.py`; not from a PC: for any other call, what it returns is known only when it runs |
+| [micropython.string-quotes](topics/micropython.md#micropython.string-quotes) | G2 | not from a PC: the quote comes from data at run time |
+| [micropython.number-notation](topics/micropython.md#micropython.number-notation) | unverified | not from a PC: the number is written at run time, and the failure has not been reproduced here |
+| [micropython.bridge-cost](topics/micropython.md#micropython.bridge-cost) | G2 | not from a PC: it is a time, which only the calculator can take |
+| [micropython.imports](topics/micropython.md#micropython.imports) | G2 | `hpprime build`, held by `test_appdir.py` |
+| [micropython.mark-debugging](topics/micropython.md#micropython.mark-debugging) | G2 | not from a PC: it is a way of finding a failure, not a mistake |
+| [micropython.ppl-calls-python](topics/micropython.md#micropython.ppl-calls-python) | unverified | not from a PC: it has not been measured here |
+| [micropython.not-measured](topics/micropython.md#micropython.not-measured) | unverified | not from a PC: it is a list of what has not been measured |
+| [ppl.local-limit](topics/ppl.md#ppl.local-limit) | G2 | lint rule `local-limit`; `hpprime run`, held by `test_interp.py` |
+| [ppl.locals-at-top](topics/ppl.md#ppl.locals-at-top) | G2 | lint rule `local-first` |
+| [ppl.index-call](topics/ppl.md#ppl.index-call) | G2 | lint rule `index-call` |
+| [ppl.export-initialised](topics/ppl.md#ppl.export-initialised) | G2 | lint rule `export-multiple`; `hpprime run`, held by `test_interp.py` |
+| [ppl.no-end-keywords](topics/ppl.md#ppl.no-end-keywords) | G2 | lint rule `single-end` |
+| [ppl.minus-sign](topics/ppl.md#ppl.minus-sign) | emulator | not from a PC: it is about what the calculator answers, which the source does not show |
+| [ppl.one-based](topics/ppl.md#ppl.one-based) | G2 | lint rule `one-based`; `hpprime run`, held by `test_interp.py` |
+| [ppl.string-index-code](topics/ppl.md#ppl.string-index-code) | emulator | lint rule `string-index`; `hpprime run`, held by `test_interp.py` |
+| [ppl.names-ignore-case](topics/ppl.md#ppl.names-ignore-case) | emulator | nothing to catch, and `lint` stays quiet |
+| [ppl.equality-operators](topics/ppl.md#ppl.equality-operators) | emulator | lint rule `equality-statement` |
+| [ppl.end-semicolon](topics/ppl.md#ppl.end-semicolon) | emulator | lint rule `end-semicolon`; `hpprime run`, held by `test_interp.py` |
+| [ppl.global-index-other-program](topics/ppl.md#ppl.global-index-other-program) | G2 | nothing to catch, and `lint` stays quiet |
+| [ppl.return-in-loop](topics/ppl.md#ppl.return-in-loop) | G2 | nothing to catch, and `lint` stays quiet |
+| [ppl.letter-digit-names](topics/ppl.md#ppl.letter-digit-names) | G2 | nothing to catch, and `lint` stays quiet |
+| [ppl.local-m-matrices](topics/ppl.md#ppl.local-m-matrices) | G2 | nothing to catch, and `lint` stays quiet |
+| [ppl.locals-initialised-one-line](topics/ppl.md#ppl.locals-initialised-one-line) | emulator | nothing to catch, and `lint` stays quiet |
+| [ppl.i-e-as-locals](topics/ppl.md#ppl.i-e-as-locals) | emulator | nothing to catch, and `lint` stays quiet; `hpprime run`, held by `test_interp.py` |
+| [ppl.imaginary-unit](topics/ppl.md#ppl.imaginary-unit) | emulator | not from a PC: it is about what the calculator answers, which the source does not show |
+| [ppl.exponent-glyph](topics/ppl.md#ppl.exponent-glyph) | emulator | not from a PC: it is about what the calculator answers, which the source does not show |
+| [ppl.exact-answers](topics/ppl.md#ppl.exact-answers) | emulator | not from a PC: it is about what the calculator answers, which the source does not show |
+| [ppl.type-codes](topics/ppl.md#ppl.type-codes) | emulator | not from a PC: it is about what the calculator answers, which the source does not show |
+| [ppl.function-always-answers](topics/ppl.md#ppl.function-always-answers) | G2 | `hpprime run`, held by `test_interp.py` |
+| [ppl.home-no-parentheses](topics/ppl.md#ppl.home-no-parentheses) | G2 | not from a PC: it is what a person types on Home, which is not in a file |
+| [ppl.getkey-no-parentheses](topics/ppl.md#ppl.getkey-no-parentheses) | G2 | nothing to catch, and `lint` stays quiet |
+| [ppl.matrices-by-value](topics/ppl.md#ppl.matrices-by-value) | G2 | `hpprime run`, held by `test_interp.py` |
+| [ppl.expr-empty](topics/ppl.md#ppl.expr-empty) | G2 | lint rule `expr-empty` |
+| [ppl.expr-dynamic-access](topics/ppl.md#ppl.expr-dynamic-access) | G2 | lint rule `expr-in-loop` |
+| [ppl.global-namespace](topics/ppl.md#ppl.global-namespace) | G2 | lint rule `export-clash` |
+| [ppl.decimal-point](topics/ppl.md#ppl.decimal-point) | G2 | not from a PC: a comma is also the argument separator, so F(3,5) reads the same either way |
+| [ppl.compilation-order](topics/ppl.md#ppl.compilation-order) | G2 | not from a PC: which program was compiled first is the calculator's state |
+| [ppl.check-last-error](topics/ppl.md#ppl.check-last-error) | emulator | not from a PC: it is what the calculator's editor shows |
+| [ppl.speed-anchor](topics/ppl.md#ppl.speed-anchor) | G2 | not from a PC: it is a time, which only the calculator can take |
+| [ppl.mu-zero-spelling](topics/ppl.md#ppl.mu-zero-spelling) | emulator | lint rule `mu-zero` |
+<!-- End of the table written by `hpprime docs`. -->
 
 ## run
 
@@ -270,7 +419,10 @@ when you leave the app, and that state must not survive into your repository.
 It also deletes `__pycache__`, which holds CPython `.pyc` files MicroPython
 would not read, warns if a Python app has no `main.py`, and warns about imports
 MicroPython does not have, which on the calculator show up as the app closing
-at startup, silently. Use `--allow a,b` for modules you know are there.
+at startup, silently. Use `--allow a,b` for modules you know are there. It
+warns, too, on a call that hands `MOUSE` to Python as it is: `MOUSE` answers
+lists inside lists, and a list that is not all numbers closes the app
+([interface.mouse-lists](topics/interface.md#interface.mouse-lists)).
 
 ## install / pull
 

@@ -157,12 +157,11 @@ file or in a program compiled before it ([results.tsv](../commands/results.tsv))
 | Known from | G2 |
 
 `EXPORT A:=1, B:=2, …;` failed with seven initialised variables on one line;
-two, four and six compile. One declaration per line compiles.
+two to six compile. One declaration per line compiles.
 
 **Evidence.** A compile error on a G2 with firmware 2.4.15515, recorded in the
 table of limits that break compilation. Two, four and six on one line were
-measured on the Virtual Calculator 2.4, build 2025-09-15, on 2026-09-24, by `hpprime examples --compile`, with its two controls coming out as they must, and all three compiled ([results.tsv](../commands/results.tsv)); three and five were not tried, and
-one per line avoids the question.
+measured on the Virtual Calculator 2.4, build 2025-09-15, on 2026-09-24, by `hpprime examples --compile`, with its two controls coming out as they must, and all three compiled ([results.tsv](../commands/results.tsv)). Three and five were measured on the Virtual Calculator 2.4, build 2025-09-15, on 2026-09-25, by `hpprime examples --compile`, with its two controls coming out as they must, and both compiled and answered ([results.tsv](../commands/results.tsv)).
 
 <a name="ppl.no-end-keywords"></a>
 ## END closes everything: there is no ENDIF or ENDFOR
@@ -173,13 +172,14 @@ one per line avoids the question.
 | Kind | rule |
 | Known from | G2 |
 
-`ENDIF`, `ENDFOR`, `ENDWHILE`, `ENDCASE` and `ENDFUNC` do not exist in PPL.
+`ENDIF`, `ENDFOR`, `ENDWHILE`, `ENDCASE`, `ENDFUNC` and `ENDPROC` do not
+exist in PPL.
 Every block ends with `END`, and a function's `END` carries a `;`.
 
 **Evidence.** A compile error on a G2 with firmware 2.4.15515, recorded in the
 table of limits that break compilation, for the first three. `ENDCASE`
 closing a `CASE` and `ENDFUNC` closing a function were measured on the Virtual Calculator 2.4, build 2025-09-15, on 2026-09-24, by `hpprime examples --compile`, with its two controls coming out as they must, and
-neither compiled ([results.tsv](../commands/results.tsv)). `ENDPROC` was not tried. `hpprime lint` catches them,
+neither compiled ([results.tsv](../commands/results.tsv)). `ENDPROC` closing a function was measured on the Virtual Calculator 2.4, build 2025-09-15, on 2026-09-25, by `hpprime examples --compile`, with its two controls coming out as they must, and it did not compile ([results.tsv](../commands/results.tsv)). `hpprime lint` catches them,
 and the names are not on the list of names in `docs/commands/names.tsv`.
 
 <a name="ppl.minus-sign"></a>
@@ -661,7 +661,7 @@ returned 1, so the parentheses are right in source and wrong on Home, not
 wrong everywhere.
 
 <a name="ppl.getkey-no-parentheses"></a>
-## GETKEY takes no parentheses in PPL, and does across the bridge
+## GETKEY is written without parentheses in PPL, and works with them too
 
 | | |
 |---|---|
@@ -669,11 +669,14 @@ wrong everywhere.
 | Kind | rule |
 | Known from | G2 |
 
-In PPL source it is `zk := GETKEY;`. From Python, across the bridge, it is
-`eval('GETKEY()')`.
+In PPL source it is written `zk := GETKEY;`, the form in the programs that
+run on a G2. `GETKEY()` with parentheses compiles as well and answers the
+same (emulator). From Python, across the bridge, it is `eval('GETKEY()')`.
 
-**Evidence.** Both forms are in programs that run on a G2 with firmware
-2.4.15515.
+**Evidence.** Both the PPL form without parentheses and the Python form are
+in programs that run on a G2 with firmware 2.4.15515. `GETKEY()` in PPL
+source was measured on the Virtual Calculator 2.4, build 2025-09-15, on 2026-09-25, by `hpprime examples --compile`, with its two controls coming out as they must: it compiled, beside `GETKEY` without them, and both answered
+−1, no key pending ([results.tsv](../commands/results.tsv)).
 
 <a name="ppl.matrices-by-value"></a>
 ## Matrices are passed by value
@@ -852,9 +855,13 @@ answered as the list spells it -- `π₀`, `σ₁` and
 `σ₂` among them -- so this is one name's spelling and not a rule
 about Greek letters.
 
-**What it costs.** The linter compares a program's names against the list, so
-it accepts the spelling the calculator refuses and flags the one that works
-as an invented name. A person reading HP's documentation, or a model trained
-on it, types the refused one. `docs/commands/names.tsv` is generated from
+**In a program's source the Greek mu does not compile** (emulator):
+`RETURN Inference.μ₀;` with U+03BC did not compile, and the same with U+00B5
+compiled and answered 0.5. The app's name was in front, so the app rule was
+not what refused it. This was measured on the Virtual Calculator 2.4, build 2025-09-15, on 2026-09-25, by `hpprime examples --compile`, with its two controls coming out as they must ([results.tsv](../commands/results.tsv)).
+
+**What it costs.** A person reading HP's documentation, or a model trained
+on it, types the refused one. `hpprime lint` makes it an error, in a
+program's code though not in its strings. `docs/commands/names.tsv` is generated from
 HP's Command Tree and is not edited by hand, so the list keeps HP's spelling
 and this fact carries the correction.

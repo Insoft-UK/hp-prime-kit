@@ -122,6 +122,36 @@ def main():
         ok(A.check_imports(modules, []) == [],
            'no false alarm for a module importing a sibling')
 
+        # ---------------------------------------------------- main.py
+        def said(argv):
+            out = io.StringIO()
+            saved, sys.stdout = sys.stdout, out
+            try:
+                A.cli(argv)
+            finally:
+                sys.stdout = saved
+            return out.getvalue()
+        ok('there is no main.py' in said(
+            ['NOMAIN', os.path.join(src, 'engine.py'), '-o', tmp, '--quiet']),
+           'warns when a Python app has no main.py')
+        ok('no main.py' not in said(
+            ['WITHMAIN'] + modules + ['-o', tmp, '--quiet']),
+           'and says nothing when it has one')
+
+        # ------------------------------------------------ MOUSE, raw
+        put(os.path.join(src, 'touch.py'),
+            'from hpprime import eval as ev\n\n\ndef read():\n'
+            '    return ev("MOUSE")\n')
+        put(os.path.join(src, 'flat.py'),
+            'from hpprime import eval as ev\n\n\ndef read():\n'
+            '    return ev(\'LOCAL zm:=MOUSE; LOCAL zp:=zm(1); \'\n'
+            '              \'IFTE(SIZE(zp)==0,{-1,-1,-1},{zp(1),zp(2),zp(5)})\')\n'
+            '# ev("MOUSE") in a comment is not code\n')
+        ok([k for _, k in A.check_mouse([os.path.join(src, 'touch.py')])]
+           == [5], 'warns about MOUSE handed to Python raw')
+        ok(A.check_mouse([os.path.join(src, 'flat.py')]) == [],
+           'and not when a PPL wrapper flattens it first')
+
         # ------------------------------- the blank app descriptor
         blank = A.build('BLANKAPP', [], base=tmp, quiet=True,
                         descriptor='blank')

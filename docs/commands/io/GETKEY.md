@@ -16,7 +16,8 @@ The key waiting to be read, or −1 when there is none.
 
 ## Behaviour
 
-**No parentheses in PPL**: it is written `zk := GETKEY;` (G2),
+**Written without parentheses in PPL**, `zk := GETKEY;` (G2), and
+`GETKEY()` compiles and answers the same (emulator),
 [ppl.getkey-no-parentheses](../../topics/ppl.md#ppl.getkey-no-parentheses).
 From Python, across the bridge, the examples here write `GETKEY()`.
 

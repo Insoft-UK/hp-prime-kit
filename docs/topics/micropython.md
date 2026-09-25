@@ -172,10 +172,10 @@ form above.
 | Known from | unverified |
 
 The examples here write `ticks()` and `GETKEY()`, and a published library
-writes `eval('ticks')` bare. In PPL itself both are written without
-parentheses
-([ppl.getkey-no-parentheses](ppl.md#ppl.getkey-no-parentheses)), so one form
-may be tolerated rather than required.
+writes `eval('ticks')` bare. In PPL source `GETKEY` compiles and answers
+with and without them
+([ppl.getkey-no-parentheses](ppl.md#ppl.getkey-no-parentheses)), so on the
+Python side too one form may be tolerated rather than required.
 
 **Evidence.** None: nobody has run the two side by side.
 

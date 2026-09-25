@@ -85,10 +85,10 @@ def main():
        'it is %d' % len(m.call('SELF2')))
 
     print('\n-- examples/conformance')
-    rt = os.path.join(ROOT, 'examples', 'conformance', 'ROOT.txt')
-    lints_clean(rt, 'ROOT.txt')
-    calls(rt, 'conformance', {'ROOT(4)': 2.0, 'ROOT(0.25)': 0.5,
-                              'ROOT(-1)': -1.0})
+    rt = os.path.join(ROOT, 'examples', 'conformance', 'BISROOT.txt')
+    lints_clean(rt, 'BISROOT.txt')
+    calls(rt, 'conformance', {'BISROOT(4)': 2.0, 'BISROOT(0.25)': 0.5,
+                              'BISROOT(-1)': -1.0})
 
     print('\n-- examples/apptest')
     at = os.path.join(ROOT, 'examples', 'apptest', 'APPTEST.txt')

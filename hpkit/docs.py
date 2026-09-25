@@ -812,6 +812,9 @@ def generated(root, entries, facts=None):
     out[os.path.join(commands, 'index.md')] = _index(root, entries)
     out[os.path.join(commands, 'groups.md')] = _groups(root, entries)
     out[os.path.join(root, 'docs', LLMS)] = _llms(root, entries, facts)
+    tools = _tools_page(root, facts)
+    if tools:
+        out[tools[0]] = tools[1]
     return out
 
 
@@ -942,6 +945,55 @@ def _groups(root, entries):
     return '\n'.join(lines).rstrip('\n') + '\n'
 
 
+# The table in docs/tools.md that says what catches each fact is written
+# from CAUGHT in hpkit/lint.py, between these two lines, and edited there.
+CAUGHT_START = ('<!-- Written by `hpprime docs` from CAUGHT in hpkit/lint.py, '
+                'which is where it is edited. -->')
+CAUGHT_END = '<!-- End of the table written by `hpprime docs`. -->'
+
+
+def _answer(a):
+    if a[0] == 'rule':
+        return 'lint rule `%s`' % a[1]
+    if a[0] == 'write':
+        return 'a check to write: %s' % a[1]
+    if a[0] == 'command':
+        return '`hpprime %s`, held by `%s`' % (a[1], os.path.basename(a[2]))
+    if a[0] == 'quiet':
+        return 'nothing to catch, and `lint` stays quiet'
+    return 'not from a PC: %s' % a[1]
+
+
+def _caught(facts):
+    """The table's rows: every fact, and what catches it."""
+    from hpkit import lint
+    by_id = dict((f.ident, f) for f in facts)
+    rows = ['| Fact | Known from | Caught by |', '|---|---|---|']
+    for ident, answers in lint.CAUGHT.items():
+        f = by_id.get(ident)
+        name = ('[%s](topics/%s#%s)' % (ident, os.path.basename(f.path), ident)
+                if f else '`%s`' % ident)
+        rows.append('| %s | %s | %s |' % (name, f.label if f else '?',
+                                          '; '.join(_answer(a)
+                                                    for a in answers)))
+    return rows
+
+
+def _tools_page(root, facts):
+    """-> (path, text) of docs/tools.md with its table rewritten, or None
+    when the page, or either line that marks the table, is missing."""
+    path = os.path.join(root, 'docs', 'tools.md')
+    if not os.path.exists(path):
+        return None
+    text = io.open(path, encoding='utf-8').read()
+    if CAUGHT_START not in text or CAUGHT_END not in text:
+        return None
+    head, rest = text.split(CAUGHT_START, 1)
+    tail = rest.split(CAUGHT_END, 1)[1]
+    return path, (head + CAUGHT_START + '\n' + '\n'.join(_caught(facts))
+                  + '\n' + CAUGHT_END + tail)
+
+
 def stale(root, entries, facts=None):
     """Generated pages that are missing, out of date, or no longer made."""
     problems = []
@@ -953,6 +1005,11 @@ def stale(root, entries, facts=None):
         elif io.open(path, encoding='utf-8').read() != text:
             problems.append(Problem(root, path, 1, 'out of date: run hpprime '
                                     'docs to regenerate it'))
+    tools = os.path.join(root, 'docs', 'tools.md')
+    if os.path.exists(tools) and _key(tools) not in set(_key(p) for p in want):
+        problems.append(Problem(root, tools, 1, 'the lines that mark the '
+                                'table of what catches each fact are '
+                                'missing'))
     commands = os.path.join(root, 'docs', 'commands')
     if os.path.isdir(commands):
         wanted = set(_key(p) for p in want)

@@ -1,4 +1,5 @@
-// ROOT - a square root by bisection, in PPL.
+// BISROOT - a square root by bisection, in PPL. Not ROOT, which is the
+// Function app's, and which a program exporting it would hide.
 //
 // This is the kind of code that is worth checking against a reference
 // implementation: an algorithm written twice, once for the calculator and
@@ -7,7 +8,7 @@
 //
 // Run the comparison with:  python examples/conformance/conformance.py
 
-EXPORT ROOT(zc)
+EXPORT BISROOT(zc)
 BEGIN
   LOCAL zlo, zhi, zmid, zi;
   IF zc < 0 THEN RETURN -1; END;

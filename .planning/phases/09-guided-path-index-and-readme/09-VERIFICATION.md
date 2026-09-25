@@ -3,7 +3,7 @@ phase: 09-guided-path-index-and-readme
 status: approved
 verified: 2026-09-24
 requirements: [READ-01, READ-03, READ-04, READ-05, READ-06, CHECK-02]
-recount: in Phase 10, on the finished reference
+recount: in Phase 10 on 2026-09-25, on the finished reference: 10-VERIFICATION.md
 ---
 
 # Phase 9 verification: Guided path, index and README

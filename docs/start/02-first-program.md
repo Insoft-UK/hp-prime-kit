@@ -194,7 +194,7 @@ Each row links to the fact that says how it is known. The last column is what
 | a `LOCAL` half way down a function | *syntax error* | all of them at the top of the `BEGIN` | [ppl.locals-at-top](../topics/ppl.md#ppl.locals-at-top) | error |
 | `L(0)` on a list | its **last** element, with no error | positions count from 1 | [ppl.one-based](../topics/ppl.md#ppl.one-based) | a warning |
 | `MAIN()` on Home | *syntax error* | `MAIN`, with no parentheses | [ppl.home-no-parentheses](../topics/ppl.md#ppl.home-no-parentheses) | cannot see Home |
-| a program that draws, then returns | you see Home and the returned value, not the drawing | wait for a key before returning | [interface.draw-then-return](../topics/interface.md#interface.draw-then-return) | cannot see it |
+| a program that draws, then returns | you see Home and the returned value, not the drawing | wait for a key before returning | [interface.draw-then-return](../topics/interface.md#interface.draw-then-return) | a warning |
 | copying the file into the mirror | nothing is installed | drag it in the CK window | [deploy.ck-mirror](../topics/deploy.md#deploy.ck-mirror) | cannot see it |
 | a program installed before the one whose functions it calls | it does not see them | install in dependency order, or recompile it | [ppl.compilation-order](../topics/ppl.md#ppl.compilation-order) | cannot see it |
 | passing a big matrix to a function | it is copied | keep large data in a global | [ppl.matrices-by-value](../topics/ppl.md#ppl.matrices-by-value) | cannot see it |
