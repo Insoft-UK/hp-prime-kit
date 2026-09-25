@@ -13,6 +13,7 @@ The power of ten a value carries.
 | Call | Result | Known from |
 |---|---|---|
 | `XPON(123.45)` | `2` | [emulator](../results.tsv) |
+| `EXPR("xpon(1000)")` | `3` | [emulator](../results.tsv) |
 
 ## Behaviour
 
@@ -22,6 +23,10 @@ The power of ten a value carries.
 **It is not the number of digits.** 123.45 has three digits before the point
 and the answer is 2, one less, because the mantissa keeps one of them
 (emulator). A program counting columns for a display has to add one.
+
+**Written in lower case it still answers** (emulator): `xpon(1000)` gave 3
+through `EXPR`,
+[ppl.names-ignore-case](../../topics/ppl.md#ppl.names-ignore-case).
 
 What it answers for a value below 1, where the exponent is negative, was not
 run (unverified), and neither was zero.

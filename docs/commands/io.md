@@ -451,19 +451,19 @@ which is the interpreter's own stand-in for a keypress and **not** evidence
 about the calculator (unverified): the entry states no result rather than
 that number.
 
-**`WAIT(-1)` is contradicted by two measurements**, and that is the part
-worth knowing before designing around it (unverified),
-[interface.wait-minus-one](../topics/interface.md#interface.wait-minus-one):
-in one program it did not wait at all -- a results screen flashed past -- and
-in two published apps it is the event loop, answering a number for a key, a
-list for a touch, and −1 every 60 seconds. The likeliest explanation is a key
-still pending in the buffer, and that is a hypothesis.
+**`WAIT(-1)` waits for a key and answers its code** (emulator): in a
+program run from Home it waited twice, straight after the `[Enter]` that
+started it and after the keyboard had been drained, and answered 42, the key
+`1`, the only key tried,
+[interface.wait-minus-one](../topics/interface.md#interface.wait-minus-one).
+One program on a G2 saw it not wait at all, and why is not known
+(unverified).
 
 What does work, measured, is to drain and then wait with
 [GETKEY](io/GETKEY.md) (G2),
 [interface.drain-then-wait](../topics/interface.md#interface.drain-then-wait).
-`WAIT(-1)` would use less battery and deliver touches in the same place; if
-you use it, check it yourself.
+`WAIT(-1)` would use less battery and deliver touches in the same place;
+the G2 reading is the reason to check it in your own program.
 
 ### Related
 

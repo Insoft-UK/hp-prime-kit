@@ -376,7 +376,8 @@ G2 with firmware 2.4.15515.
 A command belonging to an app is refused from Home when another app is
 active, and answers from Home once its own app has been selected. The command
 does not have to be typed inside the app: selecting the app is enough, and
-the call can then be made from Home as usual.
+the call can then be made from Home as usual. Written with its app's name in
+front, a name answers without its app being active (emulator), [apps.qualified-names](#apps.qualified-names).
 
 This is what separates the app functions that a batch can measure from the
 ones it cannot. A batch runs on a calculator reset before it, with whatever
@@ -396,7 +397,8 @@ the Spreadsheet selected before `HPKDOC` was run, `AVERAGE({2,4,6})` answered
 4 and `CellHasData` and `ClearCell` answered 0, where the same three calls
 had been refused from a batch with another app active. So the harness can
 measure an app's functions, provided a person selects the app first: it
-cannot do that itself, because it resets the calculator before every run.
+cannot do that itself, because it resets the calculator before every run. Or
+the call carries the app's name, which needs nobody, [apps.qualified-names](#apps.qualified-names).
 
 **Being active is necessary and not sufficient.** Only four of the
 Spreadsheet's twenty-two names answer even then. The rest want something the
@@ -414,8 +416,52 @@ The Inference app's six lists answered from a foreign app while its `Alpha`
 did not. So whether a variable needs its app is a fact about that variable,
 and each entry states it rather than inheriting it from the rule.
 
+<a name="apps.qualified-names"></a>
+## An app's name in front reaches its variables and functions from another app
+
+| | |
+|---|---|
+| Identifier | `apps.qualified-names` |
+| Kind | rule |
+| Known from | emulator |
+
+A program reaches a variable or a function of an app that is not active by
+writing the app's name in front of it with a dot, and an underscore where the
+app's name has a space: `Statistics_1Var.MeanX`,
+`Triangle_Solver.SSS(3,4,5)`. The bare name is refused in the same place,
+[apps.function-needs-active-app](#apps.function-needs-active-app). It works
+in a program's source as well as through `EXPR`, and it assigns as well as
+reads, where the variable takes an assignment at all.
+
+The name in front picks the app: `Statistics_1Var.MeanX` and
+`Statistics_2Var.MeanX` are two values. Two things it does not change. The
+active app's settings still apply: `Triangle_Solver.SSS(3,4,5)` answers in
+radians from the Function app, where the Triangle Solver, active, answers in
+degrees, [apps.triangle-solver-degrees](#apps.triangle-solver-degrees). And a
+name refused for another reason is still refused: `Solve.Solve`, and the
+Statistics 2Var results before the app has data.
+
+It was measured with the Function app active. Whether it works the same with
+another app active was not tried (unverified).
+
+**Evidence.** Measured on the Virtual Calculator 2.4, build 2025-09-15, on
+2026-09-25, in two batches with the Function app active
+([results.tsv](../commands/results.tsv)). Four controls whose bare form was on
+file: `Function.Xmin` answered −15.9, as `Xmin` does, and
+`Triangle_Solver.AngleA`, `Inference.Alpha` and `Finance.PV` answered −1,
+0.05 and 0, where `AngleA`, `Alpha` and `PV` had been refused under the same
+condition. Of the 42 variables of seven apps, every bare name was refused;
+with the app's name in front, 28 answered at once and the other 14 once their
+app had data or, for `SOLVE`, when called. Twelve took an assignment and read
+it back, and 28 refused one. `Do1VStats`, `Do2VStats`, `SUM`, `SSS` and
+`SOLVE` answered with the app's name in front, and all five had been refused
+bare. Two programs with the form in their source, `ZQREAD`, returning
+`Triangle_Solver.AngleA`, and `ZQSTAT`, setting `Statistics_1Var.D1`, running
+`Do1VStats` and returning `MeanX`, compiled beside a control program that
+compiled and one that did not, and answered −1 and 3.
+
 <a name="apps.triangle-solver-degrees"></a>
-## The Triangle Solver answers in degrees
+## The Triangle Solver answers in degrees while it is active
 
 | | |
 |---|---|
@@ -423,8 +469,8 @@ and each entry states it rather than inheriting it from the rule.
 | Kind | rule |
 | Known from | G2 |
 
-Its answers are in degrees, while everything else this documentation has
-measured is in radians. A program mixing the two gets plausible numbers that
+While it is the active app its answers are in degrees, where everything
+else this documentation has measured is in radians. A program mixing the two gets plausible numbers that
 are wrong by a factor of about 57, and nothing raises.
 
 **Evidence.** Measured on a G2 with firmware 2.4.15515: `SSS(3,4,5)` answers
@@ -434,6 +480,15 @@ degrees to ten figures, and they sum to 180. In radians they would be
 `HAngle` answers 0 beside three inverse trigonometric answers,
 `angle` of two axes answers half of pi, and `rotation` writes a turn of one
 radian as an exponential.
+
+**Called with its app's name in front from another app, it answers in
+radians** (emulator): with the Function app active,
+`Triangle_Solver.SSS(3,4,5)` answered
+`{0.643501108793,0.927295218002,1.57079632679}`, the same angles in radians.
+So the unit follows the app that is active, not the app the command belongs
+to, as [apps.app-mode-overrides-home](#apps.app-mode-overrides-home) found for
+Home's settings, and a program calling the Triangle Solver that way gets
+radians, [apps.qualified-names](#apps.qualified-names).
 
 <a name="apps.reset-leaves-function-active"></a>
 ## A reset calculator has the Function app active
@@ -471,6 +526,46 @@ app that happened to be open, and any of them saying otherwise is wrong.
 app active and again with the Triangle Solver active. Whether any other
 variable behaves that way is untested.
 
+
+<a name="apps.app-mode-overrides-home"></a>
+## The active app's mode overrides Home's
+
+| | |
+|---|---|
+| Identifier | `apps.app-mode-overrides-home` |
+| Kind | rule |
+| Known from | emulator |
+
+A program run from Home computes, and writes numbers as text, in the mode of
+the active app wherever that app's setting is not 0, whatever Home's says:
+
+| The app's setting | Set to | A program on Home, with Home's at its reset value |
+|---|---|---|
+| [AAngle](../commands/common-app-mode/AAngle.md) | 2 | `SIN(90)` answers 1: degrees |
+| [AComplex](../commands/common-app-mode/AComplex.md) | 2 | `(-4)^0.5` answers `2*i`, where Home refuses it |
+| [AFormat](../commands/common-app-mode/AFormat.md) | 2 | `STRING(1/3)` answers `"0.3333"`, as many decimals as [ADigits](../commands/common-app-mode/ADigits.md) |
+
+At 0, each leaves the choice to Home's own
+[HAngle](../commands/home-settings/HAngle.md),
+[HComplex](../commands/home-settings/HComplex.md) and
+[HFormat](../commands/home-settings/HFormat.md). The app's values are
+shifted by one against Home's: its own choices start at 1, so `AAngle` 1 is
+radians where `HAngle` 0 is.
+
+So the same program answers differently depending on which app is active and
+how it is set. The Triangle Solver's degrees,
+[apps.triangle-solver-degrees](#apps.triangle-solver-degrees), and the
+Finance app's two decimals,
+[apps.finance-shows-two-decimals](#apps.finance-shows-two-decimals), are
+likely this rule with those apps' own settings, which were not read
+(unverified).
+
+**Evidence.** Measured on the Virtual Calculator 2.4, build 2025-09-15, on
+2026-09-24, with the Function app active, as on a reset calculator, each
+setting changed and put back inside one row
+([results.tsv](../commands/results.tsv)). `AAngle` at 1 made `SIN(90)`
+answer 0.893996663601, the sine of 90 radians, and at 0 the same; `AComplex`
+and `AFormat` at 1 changed nothing. Another app was not tried.
 
 <a name="apps.finance-shows-two-decimals"></a>
 ## The Finance app turns numbers into text with two decimals

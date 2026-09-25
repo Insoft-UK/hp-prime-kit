@@ -1,6 +1,6 @@
 # PV
 
-The present value: needs the Finance app, and a program can set it.
+The present value: refused bare unless the Finance app is active, and a program can set it.
 
 | | |
 |---|---|
@@ -17,6 +17,7 @@ The present value: needs the Finance app, and a program can set it.
 | `EXPR(" PV")` | `0.00` | [emulator](../results.tsv) |
 | `EXPR("PV:=1000")` | `1000.00` | [emulator](../results.tsv) |
 | `EXPR("(PV)")` | `1000.00` | [emulator](../results.tsv) |
+| `EXPR("Finance.PV")` | `0` | [emulator](../results.tsv) |
 
 ## Behaviour
 
@@ -35,11 +36,16 @@ nothing more. It read `0.00` once Finance was active.
 [TvmPV](TvmPV.md) was measured from a batch nobody had touched, so
 with the Function app active, and it answered. A program that cannot select
 the Finance app can still compute this value by calling the function with
-its arguments.
+its arguments, or read it as `Finance.PV`, below.
 
 **A program can set it, and the value stays** (emulator). With the Finance app
 active, `PV:=1000` answered `1000.00` and a later read in the same pass
 answered `1000.00`. That is the only assignment measured in this app.
+
+**With the app's name in front it answers from another app** (emulator):
+`Finance.PV` read `0` with the Function app active, where `PV` alone was
+refused, [apps.qualified-names](../../topics/apps.md#apps.qualified-names). It came back as `0`, not `0.00`: the two decimals follow the
+app that is active, not the app the variable belongs to.
 
 The interpreter does not implement it, so `hpprime run` cannot check a program
 that uses it (unverified).

@@ -10,7 +10,7 @@ caught. The real documentation has to pass untouched: a check that flags
 correct pages gets ignored, which is worse than having none.
 """
 from __future__ import unicode_literals
-import io, os, shutil, sys, tempfile
+import io, os, re, shutil, sys, tempfile
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
@@ -245,6 +245,110 @@ def index_for_models():
         len(entries), len(facts), size, docs.LLMS_BUDGET)
 
 
+CITATION = re.compile(r'\[([^\],\s]+), (G2|emulator|HP help|unverified)\]')
+
+
+def paste_block():
+    """docs/ai/prompts.md section 1 restates the documentation for a chat that
+    cannot read it. Every rule in it names where it comes from, [identifier,
+    label], and each identifier is a fact with that label or an entry with an
+    example so labelled. The wording is not checked; the citations are."""
+    entries, facts, _ = docs.load(ROOT)
+    by_fact = dict((f.ident, f.label) for f in facts)
+    by_entry = dict((e.name, set(x.label for x in e.examples))
+                    for e in entries)
+    text = io.open(os.path.join(ROOT, 'docs', 'ai', 'prompts.md'),
+                   encoding='utf-8').read().replace('\r\n', '\n')
+    section = text.split('\n## 1.', 1)[1].split('\n## 2.', 1)[0]
+    rules = []
+    for block in re.findall(r'^```\n(.*?)^```', section, re.M | re.S):
+        for chunk in re.split(r'\n(?=- )', block):
+            if chunk.startswith('- '):
+                rules.append(' '.join(chunk.split()))
+    wrong = []
+    for rule in rules:
+        cites = CITATION.findall(rule)
+        if not cites:
+            wrong.append('no citation: %s' % rule[:60])
+        for ident, label in cites:
+            if '.' in ident:
+                if ident not in by_fact:
+                    wrong.append('%s is not a fact' % ident)
+                elif by_fact[ident] != label:
+                    wrong.append('%s is %s, not %s'
+                                 % (ident, by_fact[ident], label))
+            elif ident not in by_entry:
+                wrong.append('%s has no entry' % ident)
+            elif label not in by_entry[ident]:
+                wrong.append('%s has no example labelled %s' % (ident, label))
+    if not rules:
+        return False, 'no rules found'
+    if wrong:
+        return False, '; '.join(wrong)
+    return True, '%d rules, each citing a fact or an entry' % len(rules)
+
+
+def readme_numbers():
+    """What the README says about the documentation's size is computed from
+    the documentation, so a batch that adds entries fails the suite until the
+    README says so. Each phrase is looked for with its line breaks ignored."""
+    from hpkit import examples
+    from hpkit import names as namelist
+    entries, facts, _ = docs.load(ROOT)
+    rows = namelist.read(docs._list_path(ROOT))[0]
+    written = set(e.name for e in entries)
+    total, have = {}, {}
+    for r in rows:
+        if r.documented:
+            total[r.kind] = total.get(r.kind, 0) + 1
+            have[r.kind] = have.get(r.kind, 0) + (r.name in written)
+    results = examples.read_results(ROOT)
+    ex = [(e, x) for e in entries for x in e.examples]
+    stored = sum(1 for e, x in ex if (e.name, x.call) in results)
+    novalue = sum(1 for e, x in ex if x.no_value)
+    by_hand = sum(1 for e, x in ex if not x.no_value
+                  and (e.name, x.call) not in results and x.label == 'G2')
+    labels = dict((l, sum(1 for f in facts if f.label == l))
+                  for l in docs.LABELS)
+
+    def of(kind, noun):
+        if have.get(kind) == total.get(kind):
+            return 'all %d %s' % (total[kind], noun)
+        return '%d of the %d %s' % (have.get(kind, 0), total[kind], noun)
+
+    phrases = [
+        '%d of the %d names that get an entry have one'
+        % (len(written & set(r.name for r in rows if r.documented)),
+           sum(total.values())),
+        of('app function', 'app functions'),
+        of('app variable', 'app variables'),
+        of('variable', 'variables of Home and the system'),
+    ] + [
+        'the other %d %s' % (total[k] - have[k], noun)
+        for k, noun in (('app variable', 'app variables'),
+                        ('variable', 'variables of Home and the system'))
+        if have[k] < total[k]
+    ] + [
+        'Of the %d examples, %d have the Virtual Calculator\'s answer'
+        % (len(ex), stored),
+        '%d were measured by hand on a G2' % by_hand,
+        '%d have no value to record' % novalue,
+        '%d facts about the platform: %d measured on a G2, %d on the '
+        'emulator, and %d unverified'
+        % (len(facts), labels['G2'], labels['emulator'],
+           labels['unverified']),
+    ]
+    if all(have.get(k) == total.get(k)
+           for k in ('statement', 'command', 'function')):
+        phrases.append('every statement, command and Home function')
+    text = ' '.join(io.open(os.path.join(ROOT, 'README.md'),
+                            encoding='utf-8').read().split())
+    missing = [p for p in phrases if p not in text]
+    if missing:
+        return False, 'the README does not say: %s' % '; '.join(missing)
+    return True, '%d numbers, all current' % len(phrases)
+
+
 def main():
     ok = bad = 0
     problems, notes = docs.check(ROOT)
@@ -277,6 +381,22 @@ def main():
     else:
         bad += 1
         print('  FAIL  the index for models: %s' % why)
+
+    good, why = readme_numbers()
+    if good:
+        ok += 1
+        print('  ok    the README states the documentation as it is: %s' % why)
+    else:
+        bad += 1
+        print('  FAIL  the README: %s' % why)
+
+    good, why = paste_block()
+    if good:
+        ok += 1
+        print('  ok    the paste block for chats cites: %s' % why)
+    else:
+        bad += 1
+        print('  FAIL  the paste block for chats: %s' % why)
 
     good, why = quiet_when_uncovered()
     if good:

@@ -13,6 +13,9 @@ Ten raised to the value: the antilogarithm.
 | Call | Result | Known from |
 |---|---|---|
 | `ALOG(3)` | `1000` | [emulator](../results.tsv) |
+| `EXPR("ALOG(2)")` | `100` | [emulator](../results.tsv) |
+| `EXPR("alog(2)")` | `100` | [emulator](../results.tsv) |
+| `EXPR("Alog(2)")` | `100` | [emulator](../results.tsv) |
 
 ## Behaviour
 
@@ -22,6 +25,10 @@ what `LOG` does, in the same way `EXP` undoes `LN`.
 The answer came back as a plain number, `TYPE` 0 (emulator),
 [ppl.type-codes](../../topics/ppl.md#ppl.type-codes), so it is not held as an
 exact power of ten that a later calculation could keep whole.
+
+**The calculator read its name in any case** (emulator): `alog(2)` and
+`Alog(2)` answered 100, as `ALOG(2)` did, through `EXPR`. That is
+[ppl.names-ignore-case](../../topics/ppl.md#ppl.names-ignore-case).
 
 What it does with a negative or a fractional argument was not run
 (unverified), though a fraction is the ordinary use: `ALOG(0.5)` is the square

@@ -6,9 +6,9 @@ Every name that gets an entry, under the group HP files it in. A name that has i
 
 ## advanced-graphing
 
-6 names, 0 with an entry.
+6 names, 6 with an entry.
 
-`NumXStart` · `NumXStep` · `NumXZoom` · `NumYStart` · `NumYStep` · `NumYZoom`
+[NumXStart](advanced-graphing/NumXStart.md) · [NumXStep](advanced-graphing/NumXStep.md) · [NumXZoom](advanced-graphing/NumXZoom.md) · [NumYStart](advanced-graphing/NumYStart.md) · [NumYStep](advanced-graphing/NumYStep.md) · [NumYZoom](advanced-graphing/NumYZoom.md)
 
 ## app
 
@@ -42,21 +42,21 @@ Every name that gets an entry, under the group HP files it in. A name that has i
 
 ## common-app-mode
 
-4 names, 0 with an entry.
+4 names, 4 with an entry.
 
-`AAngle` · `AComplex` · `ADigits` · `AFormat`
+[AAngle](common-app-mode/AAngle.md) · [AComplex](common-app-mode/AComplex.md) · [ADigits](common-app-mode/ADigits.md) · [AFormat](common-app-mode/AFormat.md)
 
 ## common-numeric-view
 
-12 names, 0 with an entry.
+12 names, 12 with an entry.
 
-`AFiles` · `AFilesB` · `ANote` · `AProgram` · `AVars` · `DelAFiles` · `DelAVars` · `NumIndep` · `NumStart` · `NumStep` · `NumType` · `NumZoom`
+[AFiles](common-numeric-view/AFiles.md) · [AFilesB](common-numeric-view/AFilesB.md) · [ANote](common-numeric-view/ANote.md) · [AProgram](common-numeric-view/AProgram.md) · [AVars](common-numeric-view/AVars.md) · [DelAFiles](common-numeric-view/DelAFiles.md) · [DelAVars](common-numeric-view/DelAVars.md) · [NumIndep](common-numeric-view/NumIndep.md) · [NumStart](common-numeric-view/NumStart.md) · [NumStep](common-numeric-view/NumStep.md) · [NumType](common-numeric-view/NumType.md) · [NumZoom](common-numeric-view/NumZoom.md)
 
 ## common-plot-view
 
-30 names, 0 with an entry.
+30 names, 30 with an entry.
 
-`Axes` · `Cursor` · `GridDots` · `GridLines` · `ImageDisplay` · `ImageName` · `ImageOpacity` · `ImageXmax` · `ImageXmin` · `ImageYmax` · `ImageYmin` · `Labels` · `Nmax` · `Nmin` · `PlotMethod` · `Recenter` · `Tmax` · `Tmin` · `Tstep` · `Xmax` · `Xmin` · `Xtick` · `Xzoom` · `Ymax` · `Ymin` · `Ytick` · `Yzoom` · `θmax` · `θmin` · `θstep`
+[Axes](common-plot-view/Axes.md) · [Cursor](common-plot-view/Cursor.md) · [GridDots](common-plot-view/GridDots.md) · [GridLines](common-plot-view/GridLines.md) · [ImageDisplay](common-plot-view/ImageDisplay.md) · [ImageName](common-plot-view/ImageName.md) · [ImageOpacity](common-plot-view/ImageOpacity.md) · [ImageXmax](common-plot-view/ImageXmax.md) · [ImageXmin](common-plot-view/ImageXmin.md) · [ImageYmax](common-plot-view/ImageYmax.md) · [ImageYmin](common-plot-view/ImageYmin.md) · [Labels](common-plot-view/Labels.md) · [Nmax](common-plot-view/Nmax.md) · [Nmin](common-plot-view/Nmin.md) · [PlotMethod](common-plot-view/PlotMethod.md) · [Recenter](common-plot-view/Recenter.md) · [Tmax](common-plot-view/Tmax.md) · [Tmin](common-plot-view/Tmin.md) · [Tstep](common-plot-view/Tstep.md) · [Xmax](common-plot-view/Xmax.md) · [Xmin](common-plot-view/Xmin.md) · [Xtick](common-plot-view/Xtick.md) · [Xzoom](common-plot-view/Xzoom.md) · [Ymax](common-plot-view/Ymax.md) · [Ymin](common-plot-view/Ymin.md) · [Ytick](common-plot-view/Ytick.md) · [Yzoom](common-plot-view/Yzoom.md) · [θmax](common-plot-view/θmax.md) · [θmin](common-plot-view/θmin.md) · [θstep](common-plot-view/θstep.md)
 
 ## drawing
 
@@ -90,15 +90,15 @@ Every name that gets an entry, under the group HP files it in. A name that has i
 
 ## home
 
-1 name, 0 with an entry.
+1 name, 1 with an entry.
 
-`Ans`
+[Ans](home/Ans.md)
 
 ## home-settings
 
-9 names, 0 with an entry.
+9 names, 9 with an entry.
 
-`Base` · `Bits` · `Entry` · `HAngle` · `HComplex` · `HDigits` · `HFormat` · `HSeparator` · `Signed`
+[Base](home-settings/Base.md) · [Bits](home-settings/Bits.md) · [Entry](home-settings/Entry.md) · [HAngle](home-settings/HAngle.md) · [HComplex](home-settings/HComplex.md) · [HDigits](home-settings/HDigits.md) · [HFormat](home-settings/HFormat.md) · [HSeparator](home-settings/HSeparator.md) · [Signed](home-settings/Signed.md)
 
 ## hyperbolic
 
@@ -126,9 +126,9 @@ Every name that gets an entry, under the group HP files it in. A name that has i
 
 ## linear-solver
 
-5 names, 3 with an entry.
+5 names, 5 with an entry.
 
-[LinSolve](linear-solver/LinSolve.md) · `LSolution` · `LSystem` · [Solve2×2](linear-solver/Solve2×2.md) · [Solve3×3](linear-solver/Solve3×3.md)
+[LinSolve](linear-solver/LinSolve.md) · [LSolution](linear-solver/LSolution.md) · [LSystem](linear-solver/LSystem.md) · [Solve2×2](linear-solver/Solve2×2.md) · [Solve3×3](linear-solver/Solve3×3.md)
 
 ## list
 
@@ -160,6 +160,12 @@ Every name that gets an entry, under the group HP files it in. A name that has i
 
 [CEILING](numbers/CEILING.md) · [FLOOR](numbers/FLOOR.md) · [FP](numbers/FP.md) · [IP](numbers/IP.md) · [MANT](numbers/MANT.md) · [ROUND](numbers/ROUND.md) · [TRUNCATE](numbers/TRUNCATE.md) · [XPON](numbers/XPON.md)
 
+## other
+
+1 name, 1 with an entry.
+
+[GET](other/GET.md)
+
 ## probability
 
 28 names, 28 with an entry.
@@ -168,15 +174,15 @@ Every name that gets an entry, under the group HP files it in. A name that has i
 
 ## sequence
 
-1 name, 0 with an entry.
+1 name, 1 with an entry.
 
-`SeqPlot`
+[SeqPlot](sequence/SeqPlot.md)
 
 ## solve
 
-2 names, 1 with an entry.
+2 names, 2 with an entry.
 
-`SOLVE` · [Solve](solve/Solve.md)
+[SOLVE](solve/SOLVE-var.md) · [Solve](solve/Solve.md)
 
 ## special
 
@@ -186,21 +192,21 @@ Every name that gets an entry, under the group HP files it in. A name that has i
 
 ## spreadsheet
 
-26 names, 22 with an entry.
+26 names, 26 with an entry.
 
-[AMORT](spreadsheet/AMORT.md) · [AVERAGE](spreadsheet/AVERAGE.md) · [CellHasData](spreadsheet/CellHasData.md) · [ClearCell](spreadsheet/ClearCell.md) · `Col` · `ColWidth` · [ConfT1mean](spreadsheet/ConfT1mean.md) · [ConfT2mean](spreadsheet/ConfT2mean.md) · [ConfZ1mean](spreadsheet/ConfZ1mean.md) · [ConfZ1prop](spreadsheet/ConfZ1prop.md) · [ConfZ2mean](spreadsheet/ConfZ2mean.md) · [ConfZ2prop](spreadsheet/ConfZ2prop.md) · [HypT1mean](spreadsheet/HypT1mean.md) · [HypT2mean](spreadsheet/HypT2mean.md) · [HypZ1mean](spreadsheet/HypZ1mean.md) · [HypZ1prop](spreadsheet/HypZ1prop.md) · [HypZ2mean](spreadsheet/HypZ2mean.md) · [HypZ2prop](spreadsheet/HypZ2prop.md) · [PredX](spreadsheet/PredX.md) · [PredY](spreadsheet/PredY.md) · [REGRS](spreadsheet/REGRS.md) · `Row` · `RowHeight` · [STAT1](spreadsheet/STAT1.md) · [STAT2](spreadsheet/STAT2.md) · [SUM](spreadsheet/SUM.md)
+[AMORT](spreadsheet/AMORT.md) · [AVERAGE](spreadsheet/AVERAGE.md) · [CellHasData](spreadsheet/CellHasData.md) · [ClearCell](spreadsheet/ClearCell.md) · [Col](spreadsheet/Col.md) · [ColWidth](spreadsheet/ColWidth.md) · [ConfT1mean](spreadsheet/ConfT1mean.md) · [ConfT2mean](spreadsheet/ConfT2mean.md) · [ConfZ1mean](spreadsheet/ConfZ1mean.md) · [ConfZ1prop](spreadsheet/ConfZ1prop.md) · [ConfZ2mean](spreadsheet/ConfZ2mean.md) · [ConfZ2prop](spreadsheet/ConfZ2prop.md) · [HypT1mean](spreadsheet/HypT1mean.md) · [HypT2mean](spreadsheet/HypT2mean.md) · [HypZ1mean](spreadsheet/HypZ1mean.md) · [HypZ1prop](spreadsheet/HypZ1prop.md) · [HypZ2mean](spreadsheet/HypZ2mean.md) · [HypZ2prop](spreadsheet/HypZ2prop.md) · [PredX](spreadsheet/PredX.md) · [PredY](spreadsheet/PredY.md) · [REGRS](spreadsheet/REGRS.md) · [Row](spreadsheet/Row.md) · [RowHeight](spreadsheet/RowHeight.md) · [STAT1](spreadsheet/STAT1.md) · [STAT2](spreadsheet/STAT2.md) · [SUM](spreadsheet/SUM.md)
 
 ## statistics-1var
 
-22 names, 6 with an entry.
+22 names, 22 with an entry.
 
-[CHECK](statistics-1var/CHECK.md) · [Do1VStats](statistics-1var/Do1VStats.md) · `Hmax` · `Hmin` · `Hwidth` · [ISCHECK](statistics-1var/ISCHECK.md) · `MaxVal` · `MeanX` · `MedVal` · `MinVal` · `NbItem` · `Q₁` · `Q₃` · `serrX` · [SetFreq](statistics-1var/SetFreq.md) · [SetSample](statistics-1var/SetSample.md) · `ssX` · `sX` · [UNCHECK](statistics-1var/UNCHECK.md) · `ΣX` · `σX` · `ΣX2`
+[CHECK](statistics-1var/CHECK.md) · [Do1VStats](statistics-1var/Do1VStats.md) · [Hmax](statistics-1var/Hmax.md) · [Hmin](statistics-1var/Hmin.md) · [Hwidth](statistics-1var/Hwidth.md) · [ISCHECK](statistics-1var/ISCHECK.md) · [MaxVal](statistics-1var/MaxVal.md) · [MeanX](statistics-1var/MeanX.md) · [MedVal](statistics-1var/MedVal.md) · [MinVal](statistics-1var/MinVal.md) · [NbItem](statistics-1var/NbItem.md) · [Q₁](statistics-1var/Q₁.md) · [Q₃](statistics-1var/Q₃.md) · [serrX](statistics-1var/serrX.md) · [SetFreq](statistics-1var/SetFreq.md) · [SetSample](statistics-1var/SetSample.md) · [ssX](statistics-1var/ssX.md) · [sX](statistics-1var/sX.md) · [UNCHECK](statistics-1var/UNCHECK.md) · [ΣX](statistics-1var/ΣX.md) · [σX](statistics-1var/σX-var.md) · [ΣX2](statistics-1var/ΣX2.md)
 
 ## statistics-2var
 
-17 names, 5 with an entry.
+17 names, 17 with an entry.
 
-`CoefDet` · `Corr` · [Do2VStats](statistics-2var/Do2VStats.md) · `MeanY` · [Resid](statistics-2var/Resid.md) · [residue](statistics-2var/residue.md) · `sCov` · `serrY` · [SetDepend](statistics-2var/SetDepend.md) · [SetIndep](statistics-2var/SetIndep.md) · `ssY` · `sY` · `σCov` · `ΣXY` · `ΣY` · `σY` · `ΣY2`
+[CoefDet](statistics-2var/CoefDet.md) · [Corr](statistics-2var/Corr.md) · [Do2VStats](statistics-2var/Do2VStats.md) · [MeanY](statistics-2var/MeanY.md) · [Resid](statistics-2var/Resid.md) · [residue](statistics-2var/residue.md) · [sCov](statistics-2var/sCov.md) · [serrY](statistics-2var/serrY.md) · [SetDepend](statistics-2var/SetDepend.md) · [SetIndep](statistics-2var/SetIndep.md) · [ssY](statistics-2var/ssY.md) · [sY](statistics-2var/sY.md) · [σCov](statistics-2var/σCov.md) · [ΣXY](statistics-2var/ΣXY.md) · [ΣY](statistics-2var/ΣY.md) · [σY](statistics-2var/σY-var.md) · [ΣY2](statistics-2var/ΣY2.md)
 
 ## strings
 
@@ -210,9 +216,9 @@ Every name that gets an entry, under the group HP files it in. A name that has i
 
 ## system
 
-9 names, 0 with an entry.
+9 names, 9 with an entry.
 
-`Date` · `DelHVars` · `HVars` · `Language` · `Notes` · `Programs` · `Theme` · `Time` · `TOff`
+[Date](system/Date.md) · [DelHVars](system/DelHVars.md) · [HVars](system/HVars.md) · [Language](system/Language.md) · [Notes](system/Notes.md) · [Programs](system/Programs.md) · [Theme](system/Theme.md) · [Time](system/Time.md) · [TOff](system/TOff.md)
 
 ## triangle-solver
 
@@ -237,9 +243,3 @@ Every name that gets an entry, under the group HP files it in. A name that has i
 2 names, 2 with an entry.
 
 [EXPORT](variable/EXPORT.md) · [LOCAL](variable/LOCAL.md)
-
-## ungrouped
-
-1 name, 0 with an entry.
-
-`GET`

@@ -317,13 +317,13 @@ BEGIN
 END;
 """),
     ('a name the file does not define, indexed twice', 'index-call', 'WARN',
-     'unverified', """
+     'emulator', """
 EXPORT F()
 BEGIN
   RETURN ZSTRANGE(1)(2);
 END;
 """),
-    ('index 0 into a list', 'one-based', 'WARN', 'unverified', """
+    ('index 0 into a list', 'one-based', 'WARN', 'emulator', """
 EXPORT F()
 BEGIN
   LOCAL zl;
@@ -348,7 +348,14 @@ BEGIN
   RETURN 1;
 END;
 """),
-    ('10 locals in one LOCAL', 'local-limit', 'WARN', 'unverified', """
+    ('9 locals in one LOCAL', 'local-limit', 'ERROR', 'emulator', """
+EXPORT F()
+BEGIN
+  LOCAL a, b, c, d, e2, f, g, h, j;
+  RETURN 1;
+END;
+"""),
+    ('10 locals in one LOCAL', 'local-limit', 'ERROR', 'emulator', """
 EXPORT F()
 BEGIN
   LOCAL a, b, c, d, e2, f, g, h, i, j;
@@ -366,9 +373,9 @@ END;
      """
 EXPORT A:=1, B:=2, C:=3, D:=4, E:=5, F:=6, G:=7;
 """),
-    ('2 initialised variables in one EXPORT', 'export-multiple', 'WARN',
-     'unverified', """
-EXPORT A:=1, B:=2;
+    ('6 initialised variables in one EXPORT, which compile',
+     'export-multiple', None, None, """
+EXPORT A:=1, B:=2, C:=3, D:=4, E:=5, F:=6;
 """),
     ('a LOCAL half way down a function', 'local-first', 'ERROR', 'G2', """
 EXPORT F(a)
@@ -379,7 +386,8 @@ BEGIN
   RETURN x;
 END;
 """),
-    ('a LOCAL inside a nested block', 'local-first', 'WARN', 'unverified', """
+    ('a LOCAL inside a nested block, which compiles', 'local-first', None,
+     None, """
 EXPORT F(a)
 BEGIN
   LOCAL x;
@@ -400,7 +408,7 @@ BEGIN
   RETURN a;
 END;
 """),
-    ("a function's END without ;", 'end-semicolon', 'WARN', 'unverified', """
+    ("a function's END without ;", 'end-semicolon', 'ERROR', 'emulator', """
 EXPORT F(a)
 BEGIN
   RETURN a;
@@ -413,11 +421,35 @@ BEGIN
   RETURN a;
 END;
 """),
-    ('ENDCASE', 'single-end', 'WARN', 'unverified', """
+    ('ENDCASE', 'single-end', 'ERROR', 'emulator', """
 EXPORT F(a)
 BEGIN
   CASE IF a > 0 THEN a := 1; END; ENDCASE;
   RETURN a;
+END;
+"""),
+    ('ENDPROC', 'single-end', 'WARN', 'unverified', """
+EXPORT F(a)
+BEGIN
+  RETURN a;
+ENDPROC;
+"""),
+    ('a single = as a statement', 'equality-statement', 'WARN', 'emulator',
+     """
+EXPORT F()
+BEGIN
+  LOCAL za;
+  za := 1;
+  za = 2;
+  RETURN za;
+END;
+"""),
+    ('a single = in a condition, which compares', 'equality-statement', None,
+     None, """
+EXPORT F(a)
+BEGIN
+  IF a = 2 THEN RETURN 5; END;
+  RETURN a == 3;
 END;
 """),
 ]
@@ -425,7 +457,7 @@ END;
 # What a finding looks like: (source, rule, how its line ends).
 SHAPES = [
     (EVIDENCE[0][4], 'index-call', '[ppl.index-call, G2]'),
-    (EVIDENCE[5][4], 'one-based', '[ppl.one-based, unverified]'),
+    (EVIDENCE[5][4], 'one-based', '[ppl.one-based, emulator]'),
     ("""
 EXPORT F(a)
 BEGIN

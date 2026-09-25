@@ -1379,7 +1379,7 @@ The nth root, written between the degree and the number.
 |---|---|
 | Syntax | `n NTHROOT value` |
 | Group | catalog |
-| Runs on the PC | no |
+| Runs on the PC | yes |
 
 ### Examples
 
@@ -1387,6 +1387,13 @@ The nth root, written between the degree and the number.
 |---|---|---|
 | `EXPR("3 NTHROOT 8")` | `2` | [emulator](results.tsv) |
 | `EXPR("NTHROOT(3,8)")` | *error* | [emulator](results.tsv) |
+| `EXPR("3 NTHROOT 8 + 19")` | `21` | [emulator](results.tsv) |
+| `EXPR("2 * 3 NTHROOT 8")` | `4` | [emulator](results.tsv) |
+| `EXPR("2 ^ 3 NTHROOT 8")` | `4` | [emulator](results.tsv) |
+| `EXPR("-3 NTHROOT 8")` | `−2` | [emulator](results.tsv) |
+| `EXPR("2 NTHROOT 3 NTHROOT 64")` | `11.0356646359` | [emulator](results.tsv) |
+| `EXPR("3 NTHROOT (-8)")` | `−2` | [emulator](results.tsv) |
+| `EXPR("2 NTHROOT (-4)")` | *error* | [emulator](results.tsv) |
 
 ### Behaviour
 
@@ -1402,16 +1409,27 @@ That is why HP's list gives this name no syntax string (HP help), where it
 gives one to almost every other name: there is no call shape to write down.
 `MOD` sits in exactly the same position and was settled the same way.
 
-**The interpreter answers 3 to the form the calculator answers 2 to**
-(unverified). It does not know `NTHROOT` as an operator, so it evaluates the
-left operand and drops the rest of the expression without raising, which is
-the defect [MOD](arithmetic/MOD.md) records. Here the contrast is sharper,
-because the calculator's answer is known: a program checked on the PC gets a
-plausible number that is simply not what the calculator will compute.
+**It binds tighter than anything around it** (emulator): tighter than
+`+` and `*` -- `3 NTHROOT 8 + 19` is 21 and `2 * 3 NTHROOT 8` is 4 -- and
+tighter than `^` and a minus sign in front: `2 ^ 3 NTHROOT 8` is 4, two
+squared, and `-3 NTHROOT 8` is `−2`, the minus applied to the root. So it
+does not sit with `*` the way [MOD](arithmetic/MOD.md) does. Two in a row
+go left to right: `2 NTHROOT 3 NTHROOT 64` is 11.0356646359, which is 64 to
+the power of one over the square root of 3.
 
-So `hpprime run` cannot check a program that uses this name, and it will not
-say so (unverified). A model writing PPL from habit reaches for the
-parentheses, which will not compile at all.
+**An odd root of a negative number is real** (emulator): `3 NTHROOT (-8)`
+answers `−2`. An even one, `2 NTHROOT (-4)`, is refused on a calculator
+with [HComplex](home-settings/HComplex.md) at 0, as a reset one has it.
+With it at 1 it answers `2*i`, and the odd root stays real (emulator).
+
+**The interpreter on the PC follows these answers** (unverified: that is the
+interpreter, not a calculator). It refuses the call form as the calculator
+does, and refuses what was not measured -- a degree of 0 or below, or one
+that is not a whole number under a negative -- rather than choose. Until 2026-09-24 it answered 3 to `3 NTHROOT 8`, dropping the rest of
+the expression.
+
+A model writing PPL from habit reaches for the parentheses, which will not
+compile at all (emulator).
 
 ### Related
 

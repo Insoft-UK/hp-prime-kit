@@ -4,7 +4,7 @@
 
 Every name PPL has, from [the list of names](names.tsv): what kind of name it is and where HP files it, and, for the ones with an entry, what it does and the weakest label among its examples. How an entry is written: [format.md](../format.md).
 
-598 of 706 names have an entry so far. The list also holds 436 CAS names, 7 keywords and 24 operators, which are not documented one by one.
+706 of 706 names have an entry so far. The list also holds 436 CAS names, 7 keywords and 24 operators, which are not documented one by one.
 
 | Name | Kind | Group | What it does | Weakest evidence |
 |---|---|---|---|---|
@@ -12,26 +12,26 @@ Every name PPL has, from [the list of names](names.tsv): what kind of name it is
 | [%](arithmetic/%.md) | function | [arithmetic](arithmetic.md) | A percentage of a value. | emulator |
 | [%CHANGE](more/%CHANGE.md) | command | [more](more.md) | The percentage change from one number to another. | emulator |
 | [%TOTAL](more/%TOTAL.md) | command | [more](more.md) | What percentage one number is of another. | emulator |
-| `AAngle` | variable | common-app-mode | no entry yet | |
+| [AAngle](common-app-mode/AAngle.md) | variable | [common-app-mode](common-app-mode.md) | The active app's angle mode: 0 leaves it to Home, 1 is radians and 2 degrees, and a program on Home follows it. | emulator |
 | [AAS](triangle-solver/AAS.md) | app function | [triangle-solver](triangle-solver.md) | Two angles and the side not between them. | emulator |
 | [ABS](matrix/ABS.md) | function | [matrix](matrix.md) | The absolute value of a number, or the norm of a matrix. | emulator |
 | [abscissa](geometry/abscissa.md) | app function | [geometry](geometry.md) | The x coordinate of a point. | emulator |
 | [Accrued](finance/Accrued.md) | app variable | [finance](finance.md) | The accrued interest of a bond, 0 on a fresh calculator. | emulator |
-| `AComplex` | variable | common-app-mode | no entry yet | |
+| [AComplex](common-app-mode/AComplex.md) | variable | [common-app-mode](common-app-mode.md) | The active app's setting for complex numbers: 0 leaves it to Home, and at 2 a program on Home gets complex answers. | emulator |
 | [ACOS](catalog/ACOS.md) | function | [catalog](catalog.md) | The inverse cosine. | emulator |
 | [ACOSH](hyperbolic/ACOSH.md) | function | [hyperbolic](hyperbolic.md) | The inverse hyperbolic cosine. | emulator |
 | [ACOT](trigonometry/ACOT.md) | function | [trigonometry](trigonometry.md) | The inverse cotangent. | emulator |
 | [ACSC](trigonometry/ACSC.md) | function | [trigonometry](trigonometry.md) | The inverse cosecant. | emulator |
 | [ADDCOL](matrix/ADDCOL.md) | command | [matrix](matrix.md) | Inserts a column into a matrix. | emulator |
 | [ADDROW](matrix/ADDROW.md) | command | [matrix](matrix.md) | Inserts a row into a matrix. | emulator |
-| `ADigits` | variable | common-app-mode | no entry yet | |
+| [ADigits](common-app-mode/ADigits.md) | variable | [common-app-mode](common-app-mode.md) | The active app's number of digits, 4 on a reset calculator, which STRING follows once the app's format is fixed. | emulator |
 | [affix](geometry/affix.md) | app function | [geometry](geometry.md) | A point as a complex number. | emulator |
-| `AFiles` | variable | common-numeric-view | no entry yet | |
-| `AFilesB` | variable | common-numeric-view | no entry yet | |
-| `AFormat` | variable | common-app-mode | no entry yet | |
+| [AFiles](common-numeric-view/AFiles.md) | variable | [common-numeric-view](common-numeric-view.md) | The names of the files the active app holds, a list, empty on a reset calculator. | emulator |
+| [AFilesB](common-numeric-view/AFilesB.md) | variable | [common-numeric-view](common-numeric-view.md) | A second list of the active app's files, empty on a reset calculator. | emulator |
+| [AFormat](common-app-mode/AFormat.md) | variable | [common-app-mode](common-app-mode.md) | The active app's number format: 0 leaves it to Home, and at 2 STRING writes a fixed number of decimals. | emulator |
 | [ALOG](arithmetic/ALOG.md) | function | [arithmetic](arithmetic.md) | Ten raised to the value: the antilogarithm. | emulator |
 | [ALPHA](catalog/ALPHA.md) | function | [catalog](catalog.md) | On HP's list of names, and refused as a call. | emulator |
-| [Alpha](inference/Alpha.md) | app variable | [inference](inference.md) | The significance level: refused with the wrong app, set and kept with its own. | emulator |
+| [Alpha](inference/Alpha.md) | app variable | [inference](inference.md) | The significance level: refused bare with the wrong app, set and kept with its own. | emulator |
 | [AltHyp](inference/AltHyp.md) | app variable | [inference](inference.md) | Which alternative hypothesis the test uses. | emulator |
 | [altitude](geometry/altitude.md) | app function | [geometry](geometry.md) | The altitude of a triangle, as a line. | emulator |
 | [AMORT](spreadsheet/AMORT.md) | app function | [spreadsheet](spreadsheet.md) | An amortisation table into a range, refused from Home. | emulator |
@@ -39,11 +39,11 @@ Every name PPL has, from [the list of names](names.tsv): what kind of name it is
 | [AngleA](triangle-solver/AngleA.md) | app variable | [triangle-solver](triangle-solver.md) | The angle opposite side A, which DoSolve writes rather than reads. | emulator |
 | [AngleB](triangle-solver/AngleB.md) | app variable | [triangle-solver](triangle-solver.md) | The angle opposite side B. | emulator |
 | [AngleC](triangle-solver/AngleC.md) | app variable | [triangle-solver](triangle-solver.md) | The angle opposite side C. | emulator |
-| `ANote` | variable | common-numeric-view | no entry yet | |
+| [ANote](common-numeric-view/ANote.md) | variable | [common-numeric-view](common-numeric-view.md) | The active app's note, a string, empty on a reset calculator. | emulator |
 | [AnovaOneWay](inference/AnovaOneWay.md) | app function | [inference](inference.md) | One-way analysis of variance over any number of samples. | emulator |
-| `Ans` | variable | home | no entry yet | |
+| [Ans](home/Ans.md) | variable | [home](home.md) | The last answer on Home, which a program's EXPR does not change. | emulator |
 | [Apps](geometry/Apps.md) | app function | [geometry](geometry.md) | Answers the calculator's list of apps, by name. | emulator |
-| `AProgram` | variable | common-numeric-view | no entry yet | |
+| [AProgram](common-numeric-view/AProgram.md) | variable | [common-numeric-view](common-numeric-view.md) | The active app's program, a string, empty on a reset calculator. | emulator |
 | [ARC](drawing/ARC.md) | command | [drawing](drawing.md) | Draws a circle or an arc, in the drawing units of the current view. | emulator |
 | [ARC_P](drawing/ARC_P.md) | command | [drawing](drawing.md) | Draws a circle or an arc, in pixels. | emulator |
 | [arcLen](geometry/arcLen.md) | app function | [geometry](geometry.md) | The length of an arc, answered wrongly for the curve tried here. | emulator |
@@ -57,10 +57,10 @@ Every name PPL has, from [the list of names](names.tsv): what kind of name it is
 | [ASINH](hyperbolic/ASINH.md) | function | [hyperbolic](hyperbolic.md) | The inverse hyperbolic sine. | emulator |
 | [ATAN](catalog/ATAN.md) | function | [catalog](catalog.md) | The inverse tangent. | emulator |
 | [ATANH](hyperbolic/ATANH.md) | function | [hyperbolic](hyperbolic.md) | The inverse hyperbolic tangent. | emulator |
-| `AVars` | variable | common-numeric-view | no entry yet | |
+| [AVars](common-numeric-view/AVars.md) | variable | [common-numeric-view](common-numeric-view.md) | The names of the active app's own variables, a list, empty on a reset calculator. | emulator |
 | [AVERAGE](spreadsheet/AVERAGE.md) | app function | [spreadsheet](spreadsheet.md) | The mean of a list, once the Spreadsheet app is active. | emulator |
-| `Axes` | variable | common-plot-view | no entry yet | |
-| `Base` | variable | home-settings | no entry yet | |
+| [Axes](common-plot-view/Axes.md) | variable | [common-plot-view](common-plot-view.md) | A setting of the active app's plot view, 0 on a reset calculator. | emulator |
+| [Base](home-settings/Base.md) | variable | [home-settings](home-settings.md) | The base Home writes integers in: 3, hexadecimal, on a reset calculator. | emulator |
 | [BEG](finance/BEG.md) | app variable | [finance](finance.md) | Whether payments fall at the start of a period, 1 once Finance is active. | emulator |
 | [BEGIN](block/BEGIN.md) | statement | [block](block.md) | Opens a function's body, and `END;` closes it. | HP help |
 | [Beta](special/Beta.md) | function | [special](special.md) | The beta function. | emulator |
@@ -71,7 +71,7 @@ Every name PPL has, from [the list of names](names.tsv): what kind of name it is
 | [BITAND](integer/BITAND.md) | command | [integer](integer.md) | The bitwise AND of two or more integers. | emulator |
 | [BITNOT](integer/BITNOT.md) | command | [integer](integer.md) | The bitwise NOT of an integer. | emulator |
 | [BITOR](integer/BITOR.md) | command | [integer](integer.md) | The bitwise OR of two or more integers. | emulator |
-| `Bits` | variable | home-settings | no entry yet | |
+| [Bits](home-settings/Bits.md) | variable | [home-settings](home-settings.md) | The size in bits of Home's integers, 32 on a reset calculator. | emulator |
 | [BITSL](integer/BITSL.md) | command | [integer](integer.md) | Shifts an integer's bits to the left. | emulator |
 | [BITSR](integer/BITSR.md) | command | [integer](integer.md) | Shifts an integer's bits to the right. | emulator |
 | [BITXOR](integer/BITXOR.md) | command | [integer](integer.md) | The bitwise exclusive OR of two or more integers. | emulator |
@@ -125,12 +125,12 @@ Every name PPL has, from [the list of names](names.tsv): what kind of name it is
 | [circle](geometry/circle.md) | app function | [geometry](geometry.md) | The circle whose diameter joins two points. | emulator |
 | [circumcircle](geometry/circumcircle.md) | app function | [geometry](geometry.md) | The circle through three points. | emulator |
 | [ClearCell](spreadsheet/ClearCell.md) | app function | [spreadsheet](spreadsheet.md) | Empties the current cell, and answers 0 with the app active. | emulator |
-| `CoefDet` | app variable | statistics-2var | no entry yet | |
+| [CoefDet](statistics-2var/CoefDet.md) | app variable | [statistics-2var](statistics-2var.md) | The coefficient of determination of the Statistics 2Var data, which Do2VStats writes: refused until the app has data. | emulator |
 | [coefDet](inference/coefDet.md) | app variable | [inference](inference.md) | The coefficient of determination of a fitted line. | emulator |
-| `Col` | app variable | spreadsheet | no entry yet | |
+| [Col](spreadsheet/Col.md) | app variable | [spreadsheet](spreadsheet.md) | A Spreadsheet variable, 0 on a reset calculator, which a program cannot set. | emulator |
 | [COLNORM](matrix/COLNORM.md) | function | [matrix](matrix.md) | The largest column sum of a matrix, taking absolute values. | emulator |
 | [COLOR](catalog/COLOR.md) | function | [catalog](catalog.md) | Answers its own name back, unevaluated. | emulator |
-| `ColWidth` | app variable | spreadsheet | no entry yet | |
+| [ColWidth](spreadsheet/ColWidth.md) | app variable | [spreadsheet](spreadsheet.md) | A Spreadsheet setting, −1 on a reset calculator, which a program can set. | emulator |
 | [COMB](probability/COMB.md) | function | [probability](probability.md) | How many ways to choose r things from n, order not counting. | emulator |
 | [CONCAT](list/CONCAT.md) | function | [list](list.md) | Joins values and lists into one list. | emulator |
 | [COND](matrix/COND.md) | function | [matrix](matrix.md) | The condition number of a matrix. | emulator |
@@ -149,7 +149,7 @@ Every name PPL has, from [the list of names](names.tsv): what kind of name it is
 | [CONVERT](units/CONVERT.md) | function | [units](units.md) | Changes a value from one unit into another. | emulator |
 | [coordinates](geometry/coordinates.md) | app function | [geometry](geometry.md) | Both coordinates of a point, as a vector. | emulator |
 | [CopyVar](catalog/CopyVar.md) | function | [catalog](catalog.md) | Copies one variable into another. | emulator |
-| `Corr` | app variable | statistics-2var | no entry yet | |
+| [Corr](statistics-2var/Corr.md) | app variable | [statistics-2var](statistics-2var.md) | The correlation coefficient of the Statistics 2Var data, which Do2VStats writes: refused until the app has data. | emulator |
 | [corr](inference/corr.md) | app variable | [inference](inference.md) | The correlation of a fitted line. | emulator |
 | [COS](catalog/COS.md) | function | [catalog](catalog.md) | The cosine. | emulator |
 | [COSH](hyperbolic/COSH.md) | function | [hyperbolic](hyperbolic.md) | The hyperbolic cosine. | emulator |
@@ -163,10 +163,10 @@ Every name PPL has, from [the list of names](names.tsv): what kind of name it is
 | [CritVal2](inference/CritVal2.md) | app variable | [inference](inference.md) | The second critical value, unread after the run. | emulator |
 | [CROSS](matrix/CROSS.md) | function | [matrix](matrix.md) | The cross product of two vectors. | emulator |
 | [CSC](trigonometry/CSC.md) | function | [trigonometry](trigonometry.md) | The cosecant: one over the sine. | emulator |
-| `Cursor` | variable | common-plot-view | no entry yet | |
+| [Cursor](common-plot-view/Cursor.md) | variable | [common-plot-view](common-plot-view.md) | A setting of the active app's plot view, 0 on a reset calculator. | emulator |
 | [C→PX](drawing/C→PX.md) | command | [drawing](drawing.md) | Turns a point of the current view into pixel coordinates. | emulator |
 | [DataType](inference/DataType.md) | app variable | [inference](inference.md) | Which shape of data the app is set to read. | emulator |
-| `Date` | variable | system | no entry yet | |
+| [Date](system/Date.md) | variable | [system](system.md) | Today's date as a real, the year before the point and the month and day after it. | emulator |
 | [Date360](finance/Date360.md) | app variable | [finance](finance.md) | Whether date arithmetic counts a 360-day year. | emulator |
 | [DATEADD](more/DATEADD.md) | command | [more](more.md) | The date a number of days later. | emulator |
 | [DateDays](finance/DateDays.md) | app function | [finance](finance.md) | The days between two dates, refused in the form tried here. | emulator |
@@ -176,10 +176,10 @@ Every name PPL has, from [the list of names](names.tsv): what kind of name it is
 | [DAYOFWEEK](more/DAYOFWEEK.md) | command | [more](more.md) | Which day of the week a date falls on. | emulator |
 | [DDAYS](more/DDAYS.md) | command | [more](more.md) | How many days between two dates. | emulator |
 | [DEBUG](catalog/DEBUG.md) | function | [catalog](catalog.md) | Starts a program under the debugger. | unverified |
-| `DelAFiles` | variable | common-numeric-view | no entry yet | |
-| `DelAVars` | variable | common-numeric-view | no entry yet | |
+| [DelAFiles](common-numeric-view/DelAFiles.md) | variable | [common-numeric-view](common-numeric-view.md) | On HP's list of names, and refused when called with nothing. | emulator |
+| [DelAVars](common-numeric-view/DelAVars.md) | variable | [common-numeric-view](common-numeric-view.md) | On HP's list of names, and refused when called with nothing. | emulator |
 | [DELCOL](matrix/DELCOL.md) | command | [matrix](matrix.md) | The matrix without one of its columns. | emulator |
-| `DelHVars` | variable | system | no entry yet | |
+| [DelHVars](system/DelHVars.md) | variable | [system](system.md) | On HP's list of names, and the one use of it tried was refused. | emulator |
 | [DelInstruction](geometry/DelInstruction.md) | app function | [geometry](geometry.md) | Refused, and nothing published says what it is for. | emulator |
 | [DELROW](matrix/DELROW.md) | command | [matrix](matrix.md) | The matrix without one of its rows. | emulator |
 | [Depreciate](finance/Depreciate.md) | app function | [finance](finance.md) | Depreciation over the life of an asset, refused in the form tried here. | emulator |
@@ -195,8 +195,8 @@ Every name PPL has, from [the list of names](names.tsv): what kind of name it is
 | [DiscPayback](finance/DiscPayback.md) | app variable | [finance](finance.md) | The discounted payback period, refused either way. | emulator |
 | [distance](geometry/distance.md) | app function | [geometry](geometry.md) | The distance between two points. | emulator |
 | [Dividend](finance/Dividend.md) | app variable | [finance](finance.md) | The dividend yield in a Black-Scholes calculation. | emulator |
-| [Do1VStats](statistics-1var/Do1VStats.md) | app function | [statistics-1var](statistics-1var.md) | Computes the one-variable statistics, refused with an empty data set. | emulator |
-| [Do2VStats](statistics-2var/Do2VStats.md) | app function | [statistics-2var](statistics-2var.md) | Computes the two-variable statistics, and its data set could not be filled. | emulator |
+| [Do1VStats](statistics-1var/Do1VStats.md) | app function | [statistics-1var](statistics-1var.md) | Computes the one-variable statistics of an analysis and writes them into the app's variables; answers 1. | emulator |
+| [Do2VStats](statistics-2var/Do2VStats.md) | app function | [statistics-2var](statistics-2var.md) | Computes the two-variable statistics of an analysis and writes them into the app's variables; answers 1. | emulator |
 | [DoInference](inference/DoInference.md) | app function | [inference](inference.md) | Runs the Inference app's own test and writes the results into the app's variables. | emulator |
 | [DoSolve](triangle-solver/DoSolve.md) | app function | [triangle-solver](triangle-solver.md) | Solves the triangle the app holds, once something has put one there. | emulator |
 | [DOT](matrix/DOT.md) | function | [matrix](matrix.md) | The dot product of two vectors. | emulator |
@@ -211,7 +211,7 @@ Every name PPL has, from [the list of names](names.tsv): what kind of name it is
 | [EIGENVV](matrix/EIGENVV.md) | function | [matrix](matrix.md) | The eigenvectors and eigenvalues of a square matrix, together. | emulator |
 | [element](geometry/element.md) | app function | [geometry](geometry.md) | A point part of the way along an object. | emulator |
 | [ellipse](geometry/ellipse.md) | app function | [geometry](geometry.md) | An ellipse, answered as a parametric plot. | emulator |
-| `Entry` | variable | home-settings | no entry yet | |
+| [Entry](home-settings/Entry.md) | variable | [home-settings](home-settings.md) | Home's entry mode, 0 on a reset calculator. | emulator |
 | [EQ](list/EQ.md) | function | [list](list.md) | Whether two objects are equal. | emulator |
 | [equation](geometry/equation.md) | app function | [geometry](geometry.md) | The equation of an object. | emulator |
 | [erf](special/erf.md) | function | [special](special.md) | The error function. | emulator |
@@ -250,35 +250,35 @@ Every name PPL has, from [the list of names](names.tsv): what kind of name it is
 | [GEOMETRIC](probability/GEOMETRIC.md) | function | [probability](probability.md) | The probability that the first success comes on try k. | emulator |
 | [geometric_cdf](probability/geometric_cdf.md) | function | [probability](probability.md) | The probability that the first success comes on try k or earlier. | emulator |
 | [geometric_icdf](probability/geometric_icdf.md) | function | [probability](probability.md) | The try a geometric distribution reaches a probability at. | emulator |
-| `GET` | unknown | - | no entry yet | |
+| [GET](other/GET.md) | unknown | [other](other.md) | On HP's list of names, and refused in every form tried. | emulator |
 | [GETBASE](catalog/GETBASE.md) | function | [catalog](catalog.md) | Answers the base a based integer is written in. | emulator |
 | [GETBITS](integer/GETBITS.md) | command | [integer](integer.md) | How many bits an integer of the calculator's `#` kind carries. | emulator |
 | [GETKEY](io/GETKEY.md) | command | [io](io.md) | The key waiting to be read, or −1 when there is none. | emulator |
 | [GETPIX](drawing/GETPIX.md) | command | [drawing](drawing.md) | The colour of one point, in the drawing units of the current view. | emulator |
 | [GETPIX_P](drawing/GETPIX_P.md) | command | [drawing](drawing.md) | The colour of one pixel. | emulator |
 | [GF](catalog/GF.md) | function | [catalog](catalog.md) | Builds a Galois field and describes it back as text. | emulator |
-| `GridDots` | variable | common-plot-view | no entry yet | |
-| `GridLines` | variable | common-plot-view | no entry yet | |
+| [GridDots](common-plot-view/GridDots.md) | variable | [common-plot-view](common-plot-view.md) | A setting of the active app's plot view, 0 on a reset calculator. | emulator |
+| [GridLines](common-plot-view/GridLines.md) | variable | [common-plot-view](common-plot-view.md) | A setting of the active app's plot view, 0 on a reset calculator. | emulator |
 | [GROBH](drawing/GROBH.md) | command | [drawing](drawing.md) | How tall a grob is, in the drawing units of the current view. | emulator |
 | [GROBH_P](drawing/GROBH_P.md) | command | [drawing](drawing.md) | How tall a grob is, in pixels. | emulator |
 | [GROBW](drawing/GROBW.md) | command | [drawing](drawing.md) | How wide a grob is, in the drawing units of the current view. | emulator |
 | [GROBW_P](drawing/GROBW_P.md) | command | [drawing](drawing.md) | How wide a grob is, in pixels. | emulator |
 | [GSize](finance/GSize.md) | app variable | [finance](finance.md) | The group size of an amortisation, 12 once Finance is active. | emulator |
 | [half_line](geometry/half_line.md) | app function | [geometry](geometry.md) | The ray from one point through another. | emulator |
-| `HAngle` | variable | home-settings | no entry yet | |
-| `HComplex` | variable | home-settings | no entry yet | |
-| `HDigits` | variable | home-settings | no entry yet | |
+| [HAngle](home-settings/HAngle.md) | variable | [home-settings](home-settings.md) | The angle mode of Home: 0 is radians and 1 is degrees. | emulator |
+| [HComplex](home-settings/HComplex.md) | variable | [home-settings](home-settings.md) | Whether Home answers with complex numbers: at 0 the square root of a negative is refused, at 1 it is imaginary. | emulator |
+| [HDigits](home-settings/HDigits.md) | variable | [home-settings](home-settings.md) | How many decimal places Home's fixed format shows, 8 on a reset calculator. | emulator |
 | [Heaviside](catalog/Heaviside.md) | function | [catalog](catalog.md) | The step that is 0 below zero and 1 above it. | emulator |
 | [hessenberg](matrix/hessenberg.md) | function | [matrix](matrix.md) | The Hessenberg reduction of a matrix. | emulator |
-| `HFormat` | variable | home-settings | no entry yet | |
+| [HFormat](home-settings/HFormat.md) | variable | [home-settings](home-settings.md) | How Home writes numbers: 0, the standard format, on a reset calculator, and 1 for a fixed number of decimals. | emulator |
 | [hilbert](matrix/hilbert.md) | function | [matrix](matrix.md) | A Hilbert matrix of the size given. | emulator |
-| `Hmax` | app variable | statistics-1var | no entry yet | |
-| `Hmin` | app variable | statistics-1var | no entry yet | |
+| [Hmax](statistics-1var/Hmax.md) | app variable | [statistics-1var](statistics-1var.md) | A setting of the Statistics 1Var app, 24 on a reset calculator, which a program can set. | emulator |
+| [Hmin](statistics-1var/Hmin.md) | app variable | [statistics-1var](statistics-1var.md) | A setting of the Statistics 1Var app, 0 on a reset calculator, which a program can set. | emulator |
 | [HMS→](more/HMS→.md) | command | [more](more.md) | Turns hours, minutes and seconds into a plain decimal number. | emulator |
 | [homothety](geometry/homothety.md) | app function | [geometry](geometry.md) | Scales an object about a centre. | emulator |
-| `HSeparator` | variable | home-settings | no entry yet | |
-| `HVars` | variable | system | no entry yet | |
-| `Hwidth` | app variable | statistics-1var | no entry yet | |
+| [HSeparator](home-settings/HSeparator.md) | variable | [home-settings](home-settings.md) | A Home setting for how numbers are separated, 0 on a reset calculator. | emulator |
+| [HVars](system/HVars.md) | variable | [system](system.md) | The names of the variables created on Home, as a list. | emulator |
+| [Hwidth](statistics-1var/Hwidth.md) | app variable | [statistics-1var](statistics-1var.md) | A setting of the Statistics 1Var app, 1 on a reset calculator, which a program can set. | emulator |
 | [hyperbola](geometry/hyperbola.md) | app function | [geometry](geometry.md) | A hyperbola, answered as two parametric plots in a list. | emulator |
 | [HypT1mean](spreadsheet/HypT1mean.md) | app function | [spreadsheet](spreadsheet.md) | A t test for one mean, refused from Home. | emulator |
 | [HypT2mean](spreadsheet/HypT2mean.md) | app function | [spreadsheet](spreadsheet.md) | A t test for two means, refused from Home. | emulator |
@@ -293,13 +293,13 @@ Every name PPL has, from [the list of names](names.tsv): what kind of name it is
 | [IFTE](catalog/IFTE.md) | function | [catalog](catalog.md) | Answers one of two values, depending on a test. | emulator |
 | [ihermite](matrix/ihermite.md) | function | [matrix](matrix.md) | The Hermite normal form of an integer matrix. | emulator |
 | [IM](arithmetic/IM.md) | function | [arithmetic](arithmetic.md) | The imaginary part of a complex number. | emulator |
-| `ImageDisplay` | variable | common-plot-view | no entry yet | |
-| `ImageName` | variable | common-plot-view | no entry yet | |
-| `ImageOpacity` | variable | common-plot-view | no entry yet | |
-| `ImageXmax` | variable | common-plot-view | no entry yet | |
-| `ImageXmin` | variable | common-plot-view | no entry yet | |
-| `ImageYmax` | variable | common-plot-view | no entry yet | |
-| `ImageYmin` | variable | common-plot-view | no entry yet | |
+| [ImageDisplay](common-plot-view/ImageDisplay.md) | variable | [common-plot-view](common-plot-view.md) | Whether the picture behind the active app's plot is shown, 0 on a reset calculator. | emulator |
+| [ImageName](common-plot-view/ImageName.md) | variable | [common-plot-view](common-plot-view.md) | The name of the picture behind the active app's plot, empty on a reset calculator. | emulator |
+| [ImageOpacity](common-plot-view/ImageOpacity.md) | variable | [common-plot-view](common-plot-view.md) | How opaque the picture behind the active app's plot is, 75 on a reset calculator. | emulator |
+| [ImageXmax](common-plot-view/ImageXmax.md) | variable | [common-plot-view](common-plot-view.md) | Where the picture behind the plot ends across, 30 on a reset calculator. | emulator |
+| [ImageXmin](common-plot-view/ImageXmin.md) | variable | [common-plot-view](common-plot-view.md) | Where the picture behind the plot starts across, 0 on a reset calculator. | emulator |
+| [ImageYmax](common-plot-view/ImageYmax.md) | variable | [common-plot-view](common-plot-view.md) | Where the picture behind the plot ends upwards, 20 on a reset calculator. | emulator |
+| [ImageYmin](common-plot-view/ImageYmin.md) | variable | [common-plot-view](common-plot-view.md) | Where the picture behind the plot starts upwards, 0 on a reset calculator. | emulator |
 | [incircle](geometry/incircle.md) | app function | [geometry](geometry.md) | The circle inscribed in a triangle. | emulator |
 | [InfType](inference/InfType.md) | app variable | [inference](inference.md) | Which inference the app is set to perform. | emulator |
 | [INPUT](io/INPUT.md) | command | [io](io.md) | Asks a person for one or more values, in a modal form. | HP help |
@@ -343,8 +343,8 @@ Every name PPL has, from [the list of names](names.tsv): what kind of name it is
 | [KILL](block/KILL.md) | statement | [block](block.md) | Stops the program that is running. | HP help |
 | [l1norm](matrix/l1norm.md) | function | [matrix](matrix.md) | The sum of the absolute values of a vector's elements. | emulator |
 | [l2norm](matrix/l2norm.md) | function | [matrix](matrix.md) | The Euclidean length of a vector. | emulator |
-| `Labels` | variable | common-plot-view | no entry yet | |
-| `Language` | variable | system | no entry yet | |
+| [Labels](common-plot-view/Labels.md) | variable | [common-plot-view](common-plot-view.md) | A setting of the active app's plot view, 0 on a reset calculator. | emulator |
+| [Language](system/Language.md) | variable | [system](system.md) | The calculator's language, as a number. | emulator |
 | [LEFT](strings/LEFT.md) | command | [strings](strings.md) | The first n characters of a string. | emulator |
 | [LifeAsset](finance/LifeAsset.md) | app variable | [finance](finance.md) | The life of an asset in years, 1 as the app arrives. | emulator |
 | [LINE](drawing/LINE.md) | command | [drawing](drawing.md) | Draws a straight line, in the drawing units of the current view. | emulator |
@@ -369,9 +369,9 @@ Every name PPL has, from [the list of names](names.tsv): what kind of name it is
 | [LOG](catalog/LOG.md) | function | [catalog](catalog.md) | The logarithm, base ten unless another base is given. | emulator |
 | [LOWER](strings/LOWER.md) | command | [strings](strings.md) | The string in lower case. | emulator |
 | [LQ](matrix/LQ.md) | function | [matrix](matrix.md) | The LQ decomposition of a matrix. | emulator |
-| `LSolution` | app variable | linear-solver | no entry yet | |
+| [LSolution](linear-solver/LSolution.md) | app variable | [linear-solver](linear-solver.md) | The Linear Solver's solution, computed as soon as LSystem is set; refused while LSystem is all zeros. | emulator |
 | [LSQ](matrix/LSQ.md) | function | [matrix](matrix.md) | The least-squares solution of a system of equations. | emulator |
-| `LSystem` | app variable | linear-solver | no entry yet | |
+| [LSystem](linear-solver/LSystem.md) | app variable | [linear-solver](linear-solver.md) | The Linear Solver's system, one row per equation with its constant last; setting it solves it. | emulator |
 | [LU](matrix/LU.md) | function | [matrix](matrix.md) | The LU decomposition of a square matrix. | emulator |
 | [Macaulay](finance/Macaulay.md) | app variable | [finance](finance.md) | A bond’s Macaulay duration. | emulator |
 | [MAKELIST](list/MAKELIST.md) | function | [list](list.md) | Builds a list by working an expression out over a range. | emulator |
@@ -383,20 +383,20 @@ Every name PPL has, from [the list of names](names.tsv): what kind of name it is
 | [MAX](arithmetic/MAX.md) | function | [arithmetic](arithmetic.md) | The largest of the values given, or the larger of each pair of two lists. | emulator |
 | [maxnorm](matrix/maxnorm.md) | function | [matrix](matrix.md) | The largest absolute value among a vector's elements. | emulator |
 | [MAXREAL](catalog/MAXREAL.md) | function | [catalog](catalog.md) | The largest real the calculator holds. | emulator |
-| `MaxVal` | app variable | statistics-1var | no entry yet | |
-| `MeanX` | app variable | statistics-1var | no entry yet | |
-| `MeanY` | app variable | statistics-2var | no entry yet | |
+| [MaxVal](statistics-1var/MaxVal.md) | app variable | [statistics-1var](statistics-1var.md) | The largest data value of the Statistics 1Var data, which Do1VStats writes: 7 for {1,2,2,3,7}. | emulator |
+| [MeanX](statistics-1var/MeanX.md) | app variable | [statistics-1var](statistics-1var.md) | The mean of the Statistics 1Var data, which Do1VStats writes: 3 for {1,2,2,3,7}. | emulator |
+| [MeanY](statistics-2var/MeanY.md) | app variable | [statistics-2var](statistics-2var.md) | The mean of the second column of the Statistics 2Var data, which Do2VStats writes: refused until the app has data. | emulator |
 | [Mean₁](inference/Mean₁.md) | app variable | [inference](inference.md) | The first sample mean, 0.461368 before anything was asked. | emulator |
 | [Mean₂](inference/Mean₂.md) | app variable | [inference](inference.md) | The second sample mean, 0.522851 before anything was asked. | emulator |
 | [median_line](geometry/median_line.md) | app function | [geometry](geometry.md) | The line from a vertex to the middle of the opposite side. | emulator |
-| `MedVal` | app variable | statistics-1var | no entry yet | |
+| [MedVal](statistics-1var/MedVal.md) | app variable | [statistics-1var](statistics-1var.md) | The median of the Statistics 1Var data, which Do1VStats writes: 2 for {1,2,2,3,7}. | emulator |
 | [MEMORY](catalog/MEMORY.md) | function | [catalog](catalog.md) | Answers two figures about the calculator's memory. | emulator |
 | [Method](inference/Method.md) | app variable | [inference](inference.md) | Which method the chosen inference uses. | emulator |
 | [MID](strings/MID.md) | command | [strings](strings.md) | Part of a string: from a start position, a given number of characters or up to the end. | emulator |
 | [midpoint](geometry/midpoint.md) | app function | [geometry](geometry.md) | The middle of a segment. | emulator |
 | [MIN](arithmetic/MIN.md) | function | [arithmetic](arithmetic.md) | The smallest of the values given, or the smaller of each pair of two lists. | emulator |
 | [MINREAL](catalog/MINREAL.md) | function | [catalog](catalog.md) | The smallest positive real the calculator holds. | emulator |
-| `MinVal` | app variable | statistics-1var | no entry yet | |
+| [MinVal](statistics-1var/MinVal.md) | app variable | [statistics-1var](statistics-1var.md) | The smallest data value of the Statistics 1Var data, which Do1VStats writes: 1 for {1,2,2,3,7}. | emulator |
 | [MIRR](finance/MIRR.md) | app variable | [finance](finance.md) | The modified internal rate of return, refused either way. | emulator |
 | [mkisom](matrix/mkisom.md) | function | [matrix](matrix.md) | Builds the matrix of an isometry. | emulator |
 | [MKSA](units/MKSA.md) | function | [units](units.md) | Rewrites a value in the base SI units. | emulator |
@@ -406,31 +406,31 @@ Every name PPL has, from [the list of names](names.tsv): what kind of name it is
 | [MS](inference/MS.md) | app variable | [inference](inference.md) | The mean square of an analysis of variance. | emulator |
 | [MSerr](inference/MSerr.md) | app variable | [inference](inference.md) | The error mean square of an analysis of variance. | emulator |
 | [MSGBOX](io/MSGBOX.md) | command | [io](io.md) | Shows a message and waits for it to be dismissed. | HP help |
-| `NbItem` | app variable | statistics-1var | no entry yet | |
+| [NbItem](statistics-1var/NbItem.md) | app variable | [statistics-1var](statistics-1var.md) | The number of data points of the Statistics 1Var data, which Do1VStats writes: 5 for {1,2,2,3,7}. | emulator |
 | [NbPmt](finance/NbPmt.md) | app variable | [finance](finance.md) | The number of payments, which needs the Finance app to be read. | emulator |
 | [NEG](catalog/NEG.md) | function | [catalog](catalog.md) | Negation, refused when it is written as a call. | emulator |
 | [NewValue](finance/NewValue.md) | app variable | [finance](finance.md) | The new value of a percentage change. | emulator |
 | [NFV](finance/NFV.md) | app variable | [finance](finance.md) | The net future value, refused with or without the Finance app. | emulator |
-| `Nmax` | variable | common-plot-view | no entry yet | |
-| `Nmin` | variable | common-plot-view | no entry yet | |
+| [Nmax](common-plot-view/Nmax.md) | variable | [common-plot-view](common-plot-view.md) | The last index plotted of a plot, refused while the Function app is active. | emulator |
+| [Nmin](common-plot-view/Nmin.md) | variable | [common-plot-view](common-plot-view.md) | The first index plotted of a plot, refused while the Function app is active. | emulator |
 | [NomInt](finance/NomInt.md) | app variable | [finance](finance.md) | A nominal interest rate. | emulator |
 | [NORMALD](probability/NORMALD.md) | function | [probability](probability.md) | The normal density at a point. | emulator |
 | [NORMALD_CDF](probability/NORMALD_CDF.md) | function | [probability](probability.md) | The probability that a normal value is at or below a point. | emulator |
 | [NORMALD_ICDF](probability/NORMALD_ICDF.md) | function | [probability](probability.md) | The point a normal distribution reaches a given probability at. | emulator |
-| `Notes` | variable | system | no entry yet | |
+| [Notes](system/Notes.md) | variable | [system](system.md) | The names of the notes on the calculator, as a list. | emulator |
 | [NPV](finance/NPV.md) | app variable | [finance](finance.md) | The net present value, refused with or without the Finance app. | emulator |
 | [NTHROOT](catalog/NTHROOT.md) | function | [catalog](catalog.md) | The nth root, written between the degree and the number. | emulator |
-| `NumIndep` | variable | common-numeric-view | no entry yet | |
-| `NumStart` | variable | common-numeric-view | no entry yet | |
-| `NumStep` | variable | common-numeric-view | no entry yet | |
-| `NumType` | variable | common-numeric-view | no entry yet | |
-| `NumXStart` | app variable | advanced-graphing | no entry yet | |
-| `NumXStep` | app variable | advanced-graphing | no entry yet | |
-| `NumXZoom` | app variable | advanced-graphing | no entry yet | |
-| `NumYStart` | app variable | advanced-graphing | no entry yet | |
-| `NumYStep` | app variable | advanced-graphing | no entry yet | |
-| `NumYZoom` | app variable | advanced-graphing | no entry yet | |
-| `NumZoom` | variable | common-numeric-view | no entry yet | |
+| [NumIndep](common-numeric-view/NumIndep.md) | variable | [common-numeric-view](common-numeric-view.md) | The values the active app's numeric view is built from, a list, empty on a reset calculator. | emulator |
+| [NumStart](common-numeric-view/NumStart.md) | variable | [common-numeric-view](common-numeric-view.md) | Where the active app's numeric view starts, 0 on a reset calculator. | emulator |
+| [NumStep](common-numeric-view/NumStep.md) | variable | [common-numeric-view](common-numeric-view.md) | The step between the rows of the active app's numeric view, 0.1 on a reset calculator. | emulator |
+| [NumType](common-numeric-view/NumType.md) | variable | [common-numeric-view](common-numeric-view.md) | How the active app's numeric view is built, 0 on a reset calculator. | emulator |
+| [NumXStart](advanced-graphing/NumXStart.md) | app variable | [advanced-graphing](advanced-graphing.md) | A setting of the Advanced Graphing app's numeric view, 0 on a reset calculator, which a program can set. | emulator |
+| [NumXStep](advanced-graphing/NumXStep.md) | app variable | [advanced-graphing](advanced-graphing.md) | A setting of the Advanced Graphing app's numeric view, 0.1 on a reset calculator, which a program can set. | emulator |
+| [NumXZoom](advanced-graphing/NumXZoom.md) | app variable | [advanced-graphing](advanced-graphing.md) | A setting of the Advanced Graphing app's numeric view, 2 on a reset calculator, which a program can set. | emulator |
+| [NumYStart](advanced-graphing/NumYStart.md) | app variable | [advanced-graphing](advanced-graphing.md) | A setting of the Advanced Graphing app's numeric view, 0 on a reset calculator, which a program can set. | emulator |
+| [NumYStep](advanced-graphing/NumYStep.md) | app variable | [advanced-graphing](advanced-graphing.md) | A setting of the Advanced Graphing app's numeric view, 0.1 on a reset calculator, which a program can set. | emulator |
+| [NumYZoom](advanced-graphing/NumYZoom.md) | app variable | [advanced-graphing](advanced-graphing.md) | A setting of the Advanced Graphing app's numeric view, 2 on a reset calculator, which a program can set. | emulator |
+| [NumZoom](common-numeric-view/NumZoom.md) | variable | [common-numeric-view](common-numeric-view.md) | The zoom factor of the active app's numeric view, 2 on a reset calculator. | emulator |
 | [NUS](finance/NUS.md) | app variable | [finance](finance.md) | The net uniform series, refused with or without the Finance app. | emulator |
 | [n₁](inference/n₁.md) | app variable | [inference](inference.md) | The first sample size, 50 in the app’s loaded example. | emulator |
 | [n₂](inference/n₂.md) | app variable | [inference](inference.md) | The second sample size, also 50. | emulator |
@@ -462,7 +462,7 @@ Every name PPL has, from [the list of names](names.tsv): what kind of name it is
 | [plotfunc](geometry/plotfunc.md) | app function | [geometry](geometry.md) | Rewrites a function as a parametric plot. | emulator |
 | [plotimplicit](geometry/plotimplicit.md) | app function | [geometry](geometry.md) | Answered an empty list. | emulator |
 | [plotlist](geometry/plotlist.md) | app function | [geometry](geometry.md) | Joins a matrix of points into a segment. | emulator |
-| `PlotMethod` | variable | common-plot-view | no entry yet | |
+| [PlotMethod](common-plot-view/PlotMethod.md) | variable | [common-plot-view](common-plot-view.md) | A setting of the active app's plot view, 0 on a reset calculator. | emulator |
 | [plotode](geometry/plotode.md) | app function | [geometry](geometry.md) | Refused, quoting the call back in its answer. | emulator |
 | [plotparam](geometry/plotparam.md) | app function | [geometry](geometry.md) | Refused, though two other commands answer by building one. | emulator |
 | [plotpolar](geometry/plotpolar.md) | app function | [geometry](geometry.md) | Rewrites a polar expression as a parametric plot. | emulator |
@@ -488,10 +488,10 @@ Every name PPL has, from [the list of names](names.tsv): what kind of name it is
 | [Prob](inference/Prob.md) | app variable | [inference](inference.md) | The p-value, 0 until DoInference put 0.172021922639 in it. | emulator |
 | [ProbList](inference/ProbList.md) | app variable | [inference](inference.md) | Empty, and holds the hypothesised probabilities of a goodness-of-fit test. | emulator |
 | [Profit](finance/Profit.md) | app variable | [finance](finance.md) | The profit of a break-even calculation. | emulator |
-| `Programs` | variable | system | no entry yet | |
+| [Programs](system/Programs.md) | variable | [system](system.md) | The names of the programs on the calculator, as a list of strings. | emulator |
 | [projection](geometry/projection.md) | app function | [geometry](geometry.md) | The foot of the perpendicular from a point to a curve. | emulator |
 | [Psi](special/Psi.md) | function | [special](special.md) | The polygamma function. | emulator |
-| [PV](finance/PV.md) | app variable | [finance](finance.md) | The present value: needs the Finance app, and a program can set it. | emulator |
+| [PV](finance/PV.md) | app variable | [finance](finance.md) | The present value: refused bare unless the Finance app is active, and a program can set it. | emulator |
 | [PX→C](drawing/PX→C.md) | command | [drawing](drawing.md) | Turns a pixel position into the coordinates of the current view. | emulator |
 | [QPI](catalog/QPI.md) | function | [catalog](catalog.md) | Turns a decimal into an exact form, as a fraction or a multiple of pi. | emulator |
 | [QR](matrix/QR.md) | function | [matrix](matrix.md) | The QR decomposition of a matrix. | emulator |
@@ -500,8 +500,8 @@ Every name PPL has, from [the list of names](names.tsv): what kind of name it is
 | [QuadSolve](explorer/QuadSolve.md) | app function | [explorer](explorer.md) | The roots of a quadratic, as a list. | emulator |
 | [Quantity](finance/Quantity.md) | app variable | [finance](finance.md) | The units sold in a break-even calculation. | emulator |
 | [QUOTE](catalog/QUOTE.md) | function | [catalog](catalog.md) | Hands back an expression without evaluating it. | emulator |
-| `Q₁` | app variable | statistics-1var | no entry yet | |
-| `Q₃` | app variable | statistics-1var | no entry yet | |
+| [Q₁](statistics-1var/Q₁.md) | app variable | [statistics-1var](statistics-1var.md) | The first quartile of the Statistics 1Var data, which Do1VStats writes: 1.5 for {1,2,2,3,7}. | emulator |
+| [Q₃](statistics-1var/Q₃.md) | app variable | [statistics-1var](statistics-1var.md) | The third quartile of the Statistics 1Var data, which Do1VStats writes: 5 for {1,2,2,3,7}. | emulator |
 | [radius](geometry/radius.md) | app function | [geometry](geometry.md) | The radius of a circle. | emulator |
 | [RANDINT](probability/RANDINT.md) | function | [probability](probability.md) | A random whole number. | emulator |
 | [RANDMAT](matrix/RANDMAT.md) | function | [matrix](matrix.md) | A matrix of random numbers. | emulator |
@@ -511,7 +511,7 @@ Every name PPL has, from [the list of names](names.tsv): what kind of name it is
 | [RANDSEED](probability/RANDSEED.md) | function | [probability](probability.md) | Sets the starting point of the random sequence. | emulator |
 | [RANK](matrix/RANK.md) | function | [matrix](matrix.md) | How many independent rows a matrix has. | emulator |
 | [RE](arithmetic/RE.md) | function | [arithmetic](arithmetic.md) | The real part of a complex number. | emulator |
-| `Recenter` | variable | common-plot-view | no entry yet | |
+| [Recenter](common-plot-view/Recenter.md) | variable | [common-plot-view](common-plot-view.md) | A setting of the active app's plot view, 0 on a reset calculator. | emulator |
 | [reciprocation](geometry/reciprocation.md) | app function | [geometry](geometry.md) | The polar line of a point with respect to a circle. | emulator |
 | [RECT](drawing/RECT.md) | command | [drawing](drawing.md) | Draws a filled rectangle in drawing units, and clears the screen when called bare. | emulator |
 | [RECT_P](drawing/RECT_P.md) | command | [drawing](drawing.md) | Draws a filled rectangle, in pixels, and clears the screen when called bare. | emulator |
@@ -536,8 +536,8 @@ Every name PPL has, from [the list of names](names.tsv): what kind of name it is
 | [ROTATE](strings/ROTATE.md) | command | [strings](strings.md) | Moves the characters of a string around by n places. | emulator |
 | [rotation](geometry/rotation.md) | app function | [geometry](geometry.md) | Turns an object about a centre, answering a complex exponential. | emulator |
 | [ROUND](numbers/ROUND.md) | function | [numbers](numbers.md) | Rounds a value to a number of decimal places, or to significant figures. | emulator |
-| `Row` | app variable | spreadsheet | no entry yet | |
-| `RowHeight` | app variable | spreadsheet | no entry yet | |
+| [Row](spreadsheet/Row.md) | app variable | [spreadsheet](spreadsheet.md) | A Spreadsheet variable, 0 on a reset calculator, which a program cannot set. | emulator |
+| [RowHeight](spreadsheet/RowHeight.md) | app variable | [spreadsheet](spreadsheet.md) | A Spreadsheet setting, −1 on a reset calculator, which a program can set. | emulator |
 | [ROWNORM](matrix/ROWNORM.md) | function | [matrix](matrix.md) | The largest row sum of a matrix, taking absolute values. | emulator |
 | [RREF](matrix/RREF.md) | function | [matrix](matrix.md) | The reduced row echelon form of a matrix. | emulator |
 | [R→B](integer/R→B.md) | command | [integer](integer.md) | An ordinary number as a `#` integer. | emulator |
@@ -548,17 +548,17 @@ Every name PPL has, from [the list of names](names.tsv): what kind of name it is
 | [SCALE](matrix/SCALE.md) | command | [matrix](matrix.md) | Multiplies one row of a matrix by a number. | emulator |
 | [SCALEADD](matrix/SCALEADD.md) | command | [matrix](matrix.md) | Multiplies one row by a number and adds it to another row. | emulator |
 | [SCHUR](matrix/SCHUR.md) | function | [matrix](matrix.md) | The Schur decomposition of a square matrix. | emulator |
-| `sCov` | app variable | statistics-2var | no entry yet | |
+| [sCov](statistics-2var/sCov.md) | app variable | [statistics-2var](statistics-2var.md) | The sample covariance of the Statistics 2Var data, which Do2VStats writes: refused until the app has data. | emulator |
 | [SEC](trigonometry/SEC.md) | function | [trigonometry](trigonometry.md) | The secant: one over the cosine. | emulator |
 | [segment](geometry/segment.md) | app function | [geometry](geometry.md) | The segment between two points. | emulator |
 | [SemiAnnual](finance/SemiAnnual.md) | app variable | [finance](finance.md) | Whether a bond pays its coupon twice a year. | emulator |
-| `SeqPlot` | app variable | sequence | no entry yet | |
+| [SeqPlot](sequence/SeqPlot.md) | app variable | [sequence](sequence.md) | A Sequence app setting, 0 on a reset calculator; assigning 1 raised nothing and left it at 0. | emulator |
 | [SERIAL](catalog/SERIAL.md) | function | [catalog](catalog.md) | Answers this calculator's serial number, which is never stored here. | emulator |
 | [serrInter](inference/serrInter.md) | app variable | [inference](inference.md) | The standard error of the intercept. | emulator |
 | [serrLine](inference/serrLine.md) | app variable | [inference](inference.md) | The standard error of the fitted line. | emulator |
 | [serrSlope](inference/serrSlope.md) | app variable | [inference](inference.md) | The standard error of the slope. | emulator |
-| `serrX` | app variable | statistics-1var | no entry yet | |
-| `serrY` | app variable | statistics-2var | no entry yet | |
+| [serrX](statistics-1var/serrX.md) | app variable | [statistics-1var](statistics-1var.md) | The standard error of the mean of the Statistics 1Var data, which Do1VStats writes: 1.04880884817 for {1,2,2,3,7}. | emulator |
+| [serrY](statistics-2var/serrY.md) | app variable | [statistics-2var](statistics-2var.md) | The standard error of the mean of the second column of the Statistics 2Var data, which Do2VStats writes: refused until the app has data. | emulator |
 | [SETBASE](integer/SETBASE.md) | command | [integer](integer.md) | Shows an integer in another base. | emulator |
 | [SETBITS](integer/SETBITS.md) | command | [integer](integer.md) | Turns a number into the calculator's `#` integer. | emulator |
 | [SetDate](finance/SetDate.md) | app variable | [finance](finance.md) | A bond’s settlement date, 2017.0101 as the app arrives. | emulator |
@@ -571,7 +571,7 @@ Every name PPL has, from [the list of names](names.tsv): what kind of name it is
 | [SideB](triangle-solver/SideB.md) | app variable | [triangle-solver](triangle-solver.md) | The side opposite angle B. | emulator |
 | [SideC](triangle-solver/SideC.md) | app variable | [triangle-solver](triangle-solver.md) | The side opposite angle C. | emulator |
 | [SIGN](arithmetic/SIGN.md) | function | [arithmetic](arithmetic.md) | Whether a value is positive, negative or zero. | emulator |
-| `Signed` | variable | home-settings | no entry yet | |
+| [Signed](home-settings/Signed.md) | variable | [home-settings](home-settings.md) | Whether Home's integers are signed, 0 on a reset calculator. | emulator |
 | [SignedArea](function/SignedArea.md) | app variable | [function](function.md) | The Function app's stored area, and the only one of the five whose name is free. | emulator |
 | [similarity](geometry/similarity.md) | app function | [geometry](geometry.md) | Scales and turns an object about a centre. | emulator |
 | [SIN](catalog/SIN.md) | function | [catalog](catalog.md) | The sine. | emulator |
@@ -581,8 +581,8 @@ Every name PPL has, from [the list of names](names.tsv): what kind of name it is
 | [SLOPE](function/SLOPE.md) | app function | [function](function.md) | The slope of a function at a value. | emulator |
 | [Slope](function/Slope-var.md) | app variable | [function](function.md) | The Function app's stored slope, 0 before and after SLOPE answered 4. | emulator |
 | [slope](geometry/slope.md) | app function | [geometry](geometry.md) | The slope of a line, or of the line through two points. | emulator |
-| `SOLVE` | app variable | solve | no entry yet | |
-| [Solve](solve/Solve.md) | app function | [solve](solve.md) | Refused in five forms, with and without its own app active. | emulator |
+| [SOLVE](solve/SOLVE-var.md) | app variable | [solve](solve.md) | The Solve app's solver, which HP's list files as a variable: with the app's name in front it solves. | emulator |
+| [Solve](solve/Solve.md) | app function | [solve](solve.md) | Refused in six forms: with and without its own app active, and with its app's name in front. | emulator |
 | [Solve2×2](linear-solver/Solve2×2.md) | app function | [linear-solver](linear-solver.md) | A syntax error even with its own app active, unlike every other app function. | emulator |
 | [Solve3×3](linear-solver/Solve3×3.md) | app function | [linear-solver](linear-solver.md) | A syntax error like its pair, in a group whose other name answers. | emulator |
 | [SORT](list/SORT.md) | function | [list](list.md) | Puts a list in order, optionally by a chosen element. | emulator |
@@ -592,9 +592,9 @@ Every name PPL has, from [the list of names](names.tsv): what kind of name it is
 | [SS](inference/SS.md) | app variable | [inference](inference.md) | The sum of squares of an analysis of variance. | emulator |
 | [SSA](triangle-solver/SSA.md) | app function | [triangle-solver](triangle-solver.md) | Two sides and an angle not between them, the ambiguous case. | emulator |
 | [SSerr](inference/SSerr.md) | app variable | [inference](inference.md) | The error sum of squares of an analysis of variance. | emulator |
-| [SSS](triangle-solver/SSS.md) | app function | [triangle-solver](triangle-solver.md) | Solves a triangle from three sides, and answers in degrees. | emulator |
-| `ssX` | app variable | statistics-1var | no entry yet | |
-| `ssY` | app variable | statistics-2var | no entry yet | |
+| [SSS](triangle-solver/SSS.md) | app function | [triangle-solver](triangle-solver.md) | Solves a triangle from three sides, in degrees while its app is active. | emulator |
+| [ssX](statistics-1var/ssX.md) | app variable | [statistics-1var](statistics-1var.md) | The sum of the squared deviations from the mean of the Statistics 1Var data, which Do1VStats writes: 22 for {1,2,2,3,7}. | emulator |
+| [ssY](statistics-2var/ssY.md) | app variable | [statistics-2var](statistics-2var.md) | The sum of the squared deviations of the second column of the Statistics 2Var data, which Do2VStats writes: refused until the app has data. | emulator |
 | [STARTAPP](app/STARTAPP.md) | command | [app](app.md) | Starts an app by name. | HP help |
 | [STARTVIEW](app/STARTVIEW.md) | command | [app](app.md) | Opens one of the current app's views. | HP help |
 | [STAT1](spreadsheet/STAT1.md) | app function | [spreadsheet](spreadsheet.md) | One-variable statistics over a range, refused from Home. | emulator |
@@ -609,15 +609,15 @@ Every name PPL has, from [the list of names](names.tsv): what kind of name it is
 | [SUB](matrix/SUB.md) | command | [matrix](matrix.md) | The rectangle of a matrix between two corners. | emulator |
 | [SUBGROB](drawing/SUBGROB.md) | command | [drawing](drawing.md) | Copies part of a grob into another grob, in drawing units. | emulator |
 | [SUBGROB_P](drawing/SUBGROB_P.md) | command | [drawing](drawing.md) | Copies part of a grob into another grob, in pixels. | emulator |
-| [SUM](spreadsheet/SUM.md) | app function | [spreadsheet](spreadsheet.md) | Adds up a list, once the Spreadsheet app is active. | emulator |
+| [SUM](spreadsheet/SUM.md) | app function | [spreadsheet](spreadsheet.md) | Adds up a list; refused unless the Spreadsheet app is active or named in front of it. | emulator |
 | [SUPPRESS](catalog/SUPPRESS.md) | function | [catalog](catalog.md) | Removes the element at a position. | emulator |
 | [suppress](list/suppress.md) | function | [list](list.md) | Removes the element at a position from a list. | emulator |
 | [SVD](matrix/SVD.md) | function | [matrix](matrix.md) | The singular value decomposition of a matrix. | emulator |
 | [SVL](matrix/SVL.md) | function | [matrix](matrix.md) | The singular values of a matrix. | emulator |
 | [SWAPCOL](matrix/SWAPCOL.md) | command | [matrix](matrix.md) | Exchanges two columns of a matrix. | emulator |
 | [SWAPROW](matrix/SWAPROW.md) | command | [matrix](matrix.md) | Exchanges two rows of a matrix. | emulator |
-| `sX` | app variable | statistics-1var | no entry yet | |
-| `sY` | app variable | statistics-2var | no entry yet | |
+| [sX](statistics-1var/sX.md) | app variable | [statistics-1var](statistics-1var.md) | The sample standard deviation of the Statistics 1Var data, which Do1VStats writes: 2.34520787991 for {1,2,2,3,7}. | emulator |
+| [sY](statistics-2var/sY.md) | app variable | [statistics-2var](statistics-2var.md) | The sample standard deviation of the second column of the Statistics 2Var data, which Do2VStats writes: refused until the app has data. | emulator |
 | [s₁](inference/s₁.md) | app variable | [inference](inference.md) | The first sample standard deviation, 0.2776. | emulator |
 | [s₂](inference/s₂.md) | app variable | [inference](inference.md) | The second sample standard deviation, 0.2943. | emulator |
 | [TAN](catalog/TAN.md) | function | [catalog](catalog.md) | The tangent. | emulator |
@@ -628,13 +628,13 @@ Every name PPL has, from [the list of names](names.tsv): what kind of name it is
 | [TEVAL](more/TEVAL.md) | command | [more](more.md) | How long an expression takes to evaluate. | emulator |
 | [TEXTOUT](drawing/TEXTOUT.md) | command | [drawing](drawing.md) | Draws text in the coordinates of the current view. | emulator |
 | [TEXTOUT_P](drawing/TEXTOUT_P.md) | command | [drawing](drawing.md) | Draws text, and answers the x it finished at. | emulator |
-| `Theme` | variable | system | no entry yet | |
+| [Theme](system/Theme.md) | variable | [system](system.md) | The display theme, as a list of two integers. | emulator |
 | [TICKS](more/TICKS.md) | command | [more](more.md) | Milliseconds since the calculator started. | emulator |
-| `Time` | variable | system | no entry yet | |
+| [Time](system/Time.md) | variable | [system](system.md) | The time of day, a real that STRING writes in hours, minutes and seconds. | emulator |
 | [TimeMarket](finance/TimeMarket.md) | app variable | [finance](finance.md) | The time to expiry in a Black-Scholes calculation. | emulator |
-| `Tmax` | variable | common-plot-view | no entry yet | |
-| `Tmin` | variable | common-plot-view | no entry yet | |
-| `TOff` | variable | system | no entry yet | |
+| [Tmax](common-plot-view/Tmax.md) | variable | [common-plot-view](common-plot-view.md) | The end of the parameter range of a plot, refused while the Function app is active. | emulator |
+| [Tmin](common-plot-view/Tmin.md) | variable | [common-plot-view](common-plot-view.md) | The start of the parameter range of a plot, refused while the Function app is active. | emulator |
+| [TOff](system/TOff.md) | variable | [system](system.md) | The time before the calculator turns itself off, 300000 on a reset calculator. | emulator |
 | [Total](finance/Total.md) | app variable | [finance](finance.md) | A total, 0 on a fresh calculator. | emulator |
 | [TotalCF](finance/TotalCF.md) | app variable | [finance](finance.md) | The total of the cash flows, 0 while there are none. | emulator |
 | [TRACE](matrix/TRACE.md) | function | [matrix](matrix.md) | The sum of the diagonal of a square matrix. | emulator |
@@ -645,7 +645,7 @@ Every name PPL has, from [the list of names](names.tsv): what kind of name it is
 | [TriType](triangle-solver/TriType.md) | app variable | [triangle-solver](triangle-solver.md) | The one variable of this app that DoSolve left alone. | emulator |
 | [TRN](matrix/TRN.md) | function | [matrix](matrix.md) | The transpose of a matrix: rows become columns. | emulator |
 | [TRUNCATE](numbers/TRUNCATE.md) | function | [numbers](numbers.md) | Cuts a value to a number of decimal places, without rounding. | emulator |
-| `Tstep` | variable | common-plot-view | no entry yet | |
+| [Tstep](common-plot-view/Tstep.md) | variable | [common-plot-view](common-plot-view.md) | The step of the parameter range of a plot, refused while the Function app is active. | emulator |
 | [TvmFV](finance/TvmFV.md) | app function | [finance](finance.md) | The future value, from the other four. | emulator |
 | [TvmIPYR](finance/TvmIPYR.md) | app function | [finance](finance.md) | The interest rate a year, from the other four. | emulator |
 | [TvmNbPmt](finance/TvmNbPmt.md) | app function | [finance](finance.md) | How many payments, from the other four. | emulator |
@@ -670,22 +670,22 @@ Every name PPL has, from [the list of names](names.tsv): what kind of name it is
 | [Volatility](finance/Volatility.md) | app variable | [finance](finance.md) | The volatility in a Black-Scholes calculation. | emulator |
 | [WAIT](io/WAIT.md) | command | [io](io.md) | Pauses for a number of seconds, or until a key is pressed. | HP help |
 | [WHILE](loop/WHILE.md) | statement | [loop](loop.md) | Repeats a block while a test is true, checking the test first. | emulator |
-| [Xlist](inference/Xlist.md) | app variable | [inference](inference.md) | The one variable measured that answers with the wrong app active. | emulator |
-| `Xmax` | variable | common-plot-view | no entry yet | |
-| `Xmin` | variable | common-plot-view | no entry yet | |
+| [Xlist](inference/Xlist.md) | app variable | [inference](inference.md) | An Inference list that answers `{}` with another app active, as the app's other five lists do. | emulator |
+| [Xmax](common-plot-view/Xmax.md) | variable | [common-plot-view](common-plot-view.md) | The right edge of the active app's plot window, 15.9 on a reset calculator. | emulator |
+| [Xmin](common-plot-view/Xmin.md) | variable | [common-plot-view](common-plot-view.md) | The left edge of the active app's plot window, −15.9 on a reset calculator. | emulator |
 | [XPON](numbers/XPON.md) | function | [numbers](numbers.md) | The power of ten a value carries. | emulator |
-| `Xtick` | variable | common-plot-view | no entry yet | |
+| [Xtick](common-plot-view/Xtick.md) | variable | [common-plot-view](common-plot-view.md) | The spacing of the marks on the x axis of the active app's plot, 1 on a reset calculator. | emulator |
 | [Xval](inference/Xval.md) | app variable | [inference](inference.md) | A value of x to predict from a fitted line. | emulator |
-| `Xzoom` | variable | common-plot-view | no entry yet | |
+| [Xzoom](common-plot-view/Xzoom.md) | variable | [common-plot-view](common-plot-view.md) | The factor the active app's plot zooms by across, 2 on a reset calculator. | emulator |
 | [x₁](inference/x₁.md) | app variable | [inference](inference.md) | The first count, 21 of 50 in the loaded example. | emulator |
 | [x₂](inference/x₂.md) | app variable | [inference](inference.md) | The second count, 26 of 50. | emulator |
 | [YieldBond](finance/YieldBond.md) | app variable | [finance](finance.md) | A bond’s yield. | emulator |
 | [Ylist](inference/Ylist.md) | app variable | [inference](inference.md) | The second data list, and the one that proved a list can be assigned. | emulator |
-| `Ymax` | variable | common-plot-view | no entry yet | |
-| `Ymin` | variable | common-plot-view | no entry yet | |
-| `Ytick` | variable | common-plot-view | no entry yet | |
+| [Ymax](common-plot-view/Ymax.md) | variable | [common-plot-view](common-plot-view.md) | The top edge of the active app's plot window, 10.9 on a reset calculator. | emulator |
+| [Ymin](common-plot-view/Ymin.md) | variable | [common-plot-view](common-plot-view.md) | The bottom edge of the active app's plot window, −10.9 on a reset calculator. | emulator |
+| [Ytick](common-plot-view/Ytick.md) | variable | [common-plot-view](common-plot-view.md) | The spacing of the marks on the y axis of the active app's plot, 1 on a reset calculator. | emulator |
 | [Yval](inference/Yval.md) | app variable | [inference](inference.md) | A value of y predicted from a fitted line. | emulator |
-| `Yzoom` | variable | common-plot-view | no entry yet | |
+| [Yzoom](common-plot-view/Yzoom.md) | variable | [common-plot-view](common-plot-view.md) | The factor the active app's plot zooms by upwards, 2 on a reset calculator. | emulator |
 | [Zeta](special/Zeta.md) | function | [special](special.md) | The Riemann zeta function. | emulator |
 | [zoomauto](geometry/zoomauto.md) | app function | [geometry](geometry.md) | Refused, with the whole zoom family. | emulator |
 | [zoombox](geometry/zoombox.md) | app function | [geometry](geometry.md) | Refused, with the whole zoom family. | emulator |
@@ -695,22 +695,22 @@ Every name PPL has, from [the list of names](names.tsv): what kind of name it is
 | [zoominteger](geometry/zoominteger.md) | app function | [geometry](geometry.md) | Refused, with the whole zoom family. | emulator |
 | [zoomout](geometry/zoomout.md) | app function | [geometry](geometry.md) | Refused, with the whole zoom family. | emulator |
 | [ΔLIST](catalog/ΔLIST.md) | function | [catalog](catalog.md) | The differences between neighbouring elements of a list. | emulator |
-| `θmax` | variable | common-plot-view | no entry yet | |
-| `θmin` | variable | common-plot-view | no entry yet | |
-| `θstep` | variable | common-plot-view | no entry yet | |
+| [θmax](common-plot-view/θmax.md) | variable | [common-plot-view](common-plot-view.md) | The end of the angle range of a plot, refused while the Function app is active. | emulator |
+| [θmin](common-plot-view/θmin.md) | variable | [common-plot-view](common-plot-view.md) | The start of the angle range of a plot, refused while the Function app is active. | emulator |
+| [θstep](common-plot-view/θstep.md) | variable | [common-plot-view](common-plot-view.md) | The step of the angle range of a plot, refused while the Function app is active. | emulator |
 | [μ₀](inference/μ₀.md) | app variable | [inference](inference.md) | Refused as HP spells it, and the calculator wants a different codepoint. | emulator |
 | [ΠLIST](list/ΠLIST.md) | function | [list](list.md) | The product of every element of a list. | emulator |
 | [π₀](inference/π₀.md) | app variable | [inference](inference.md) | The null-hypothesis proportion, which arrived at 0.5 and spells correctly. | emulator |
 | [Σ](catalog/Σ.md) | function | [catalog](catalog.md) | The sum of an expression over a range. | emulator |
-| `σCov` | app variable | statistics-2var | no entry yet | |
+| [σCov](statistics-2var/σCov.md) | app variable | [statistics-2var](statistics-2var.md) | The population covariance of the Statistics 2Var data, which Do2VStats writes: refused until the app has data. | emulator |
 | [ΣLIST](catalog/ΣLIST.md) | function | [catalog](catalog.md) | The sum of every element of a list. | emulator |
-| `ΣX` | app variable | statistics-1var | no entry yet | |
-| `σX` | app variable | statistics-1var | no entry yet | |
-| `ΣX2` | app variable | statistics-1var | no entry yet | |
-| `ΣXY` | app variable | statistics-2var | no entry yet | |
-| `ΣY` | app variable | statistics-2var | no entry yet | |
-| `σY` | app variable | statistics-2var | no entry yet | |
-| `ΣY2` | app variable | statistics-2var | no entry yet | |
+| [ΣX](statistics-1var/ΣX.md) | app variable | [statistics-1var](statistics-1var.md) | The sum of the data of the Statistics 1Var data, which Do1VStats writes: 15 for {1,2,2,3,7}. | emulator |
+| [σX](statistics-1var/σX-var.md) | app variable | [statistics-1var](statistics-1var.md) | The population standard deviation of the Statistics 1Var data, which Do1VStats writes: 2.09761769634 for {1,2,2,3,7}. | emulator |
+| [ΣX2](statistics-1var/ΣX2.md) | app variable | [statistics-1var](statistics-1var.md) | The sum of the squares of the data of the Statistics 1Var data, which Do1VStats writes: 67 for {1,2,2,3,7}. | emulator |
+| [ΣXY](statistics-2var/ΣXY.md) | app variable | [statistics-2var](statistics-2var.md) | The sum of the products of the pairs of the Statistics 2Var data, which Do2VStats writes: refused until the app has data. | emulator |
+| [ΣY](statistics-2var/ΣY.md) | app variable | [statistics-2var](statistics-2var.md) | The sum of the second column of the Statistics 2Var data, which Do2VStats writes: refused until the app has data. | emulator |
+| [σY](statistics-2var/σY-var.md) | app variable | [statistics-2var](statistics-2var.md) | The population standard deviation of the second column of the Statistics 2Var data, which Do2VStats writes: refused until the app has data. | emulator |
+| [ΣY2](statistics-2var/ΣY2.md) | app variable | [statistics-2var](statistics-2var.md) | The sum of the squares of the second column of the Statistics 2Var data, which Do2VStats writes: refused until the app has data. | emulator |
 | [σ₁](inference/σ₁.md) | app variable | [inference](inference.md) | The first population deviation, 0.2887. | emulator |
 | [σ₂](inference/σ₂.md) | app variable | [inference](inference.md) | The second population deviation, equal to the first. | emulator |
 | [→HMS](more/→HMS.md) | command | [more](more.md) | Turns a decimal number into hours, minutes and seconds. | emulator |

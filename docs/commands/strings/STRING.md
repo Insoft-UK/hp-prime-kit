@@ -45,6 +45,14 @@ HP's help gives three optional arguments -- a mode, a precision and a
 separator -- and no example of any of them (HP help). Nothing here has run
 them, so the entry does not say what they do.
 
+**The text follows Home's number format** (emulator). With
+[HFormat](../home-settings/HFormat.md) at 1 and
+[HDigits](../home-settings/HDigits.md) at 2, `STRING(1/3)` answered `"0.33"`;
+at the reset settings it is `"0.333333333333"`. A program that builds text
+from a number, or compares one, depends on two settings it may never have
+set. The interpreter on the PC writes numbers one way only (unverified: that
+is the interpreter, not a calculator).
+
 ## Related
 
 [EXPR](EXPR.md) · [DIM](DIM.md) ·

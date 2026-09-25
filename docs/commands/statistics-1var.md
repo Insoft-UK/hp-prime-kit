@@ -7,11 +7,27 @@ Every entry in this group, in full. Each one is written in its own file, and tha
 | | |
 |---|---|
 | [CHECK](#CHECK) | Turns on one of the statistics app's analyses. |
-| [Do1VStats](#Do1VStats) | Computes the one-variable statistics, refused with an empty data set. |
+| [Do1VStats](#Do1VStats) | Computes the one-variable statistics of an analysis and writes them into the app's variables; answers 1. |
+| [Hmax](#Hmax) | A setting of the Statistics 1Var app, 24 on a reset calculator, which a program can set. |
+| [Hmin](#Hmin) | A setting of the Statistics 1Var app, 0 on a reset calculator, which a program can set. |
+| [Hwidth](#Hwidth) | A setting of the Statistics 1Var app, 1 on a reset calculator, which a program can set. |
 | [ISCHECK](#ISCHECK) | Says whether one of the statistics app's analyses is on. |
+| [MaxVal](#MaxVal) | The largest data value of the Statistics 1Var data, which Do1VStats writes: 7 for {1,2,2,3,7}. |
+| [MeanX](#MeanX) | The mean of the Statistics 1Var data, which Do1VStats writes: 3 for {1,2,2,3,7}. |
+| [MedVal](#MedVal) | The median of the Statistics 1Var data, which Do1VStats writes: 2 for {1,2,2,3,7}. |
+| [MinVal](#MinVal) | The smallest data value of the Statistics 1Var data, which Do1VStats writes: 1 for {1,2,2,3,7}. |
+| [NbItem](#NbItem) | The number of data points of the Statistics 1Var data, which Do1VStats writes: 5 for {1,2,2,3,7}. |
+| [Q₁](#Q₁) | The first quartile of the Statistics 1Var data, which Do1VStats writes: 1.5 for {1,2,2,3,7}. |
+| [Q₃](#Q₃) | The third quartile of the Statistics 1Var data, which Do1VStats writes: 5 for {1,2,2,3,7}. |
 | [SetFreq](#SetFreq) | Points a data set's frequencies at a column, refused on a reset calculator. |
 | [SetSample](#SetSample) | Points a data set at a column, refused on a reset calculator. |
 | [UNCHECK](#UNCHECK) | Turns off one of the statistics app's analyses. |
+| [sX](#sX) | The sample standard deviation of the Statistics 1Var data, which Do1VStats writes: 2.34520787991 for {1,2,2,3,7}. |
+| [serrX](#serrX) | The standard error of the mean of the Statistics 1Var data, which Do1VStats writes: 1.04880884817 for {1,2,2,3,7}. |
+| [ssX](#ssX) | The sum of the squared deviations from the mean of the Statistics 1Var data, which Do1VStats writes: 22 for {1,2,2,3,7}. |
+| [ΣX](#ΣX) | The sum of the data of the Statistics 1Var data, which Do1VStats writes: 15 for {1,2,2,3,7}. |
+| [ΣX2](#ΣX2) | The sum of the squares of the data of the Statistics 1Var data, which Do1VStats writes: 67 for {1,2,2,3,7}. |
+| [σX](#σX) | The population standard deviation of the Statistics 1Var data, which Do1VStats writes: 2.09761769634 for {1,2,2,3,7}. |
 
 ---
 
@@ -70,11 +86,12 @@ that uses it (unverified).
 
 ## Do1VStats
 
-Computes the one-variable statistics, refused with an empty data set.
+Computes the one-variable statistics of an analysis and writes them into the app's variables; answers 1.
 
 | | |
 |---|---|
 | Syntax | `Do1VStats(Hn)` |
+| Syntax | `Statistics_1Var.Do1VStats(Statistics_1Var.Hn)` |
 | Group | statistics-1var |
 | Runs on the PC | no |
 
@@ -83,34 +100,190 @@ Computes the one-variable statistics, refused with an empty data set.
 | Call | Result | Known from |
 |---|---|---|
 | `EXPR("Do1VStats(H1)")` | *error* | [emulator](results.tsv) |
+| `EXPR("Statistics_1Var.D1:={1,2,2,3,7}")` | `{1,2,2,3,7}` | [emulator](results.tsv) |
+| `EXPR("Statistics_1Var.Do1VStats(Statistics_1Var.H1)")` | `1` | [emulator](results.tsv) |
 
 ### Behaviour
 
-**The refusal is most likely about `H1` rather than about this command**
-(unverified). A batch runs on a calculator reset before it, so the app's
-first data set holds nothing, and there is nothing to compute statistics
-from.
+**Bare it was refused because another app was active, not for want of data**
+(emulator). The first row was taken with the Function app active,
+[apps.reset-leaves-function-active](../topics/apps.md#apps.reset-leaves-function-active),
+and this entry used to blame the empty data set. With the app's name in front,
+under the same condition, it answered 1 once `D1` held data,
+[apps.qualified-names](../topics/apps.md#apps.qualified-names).
 
-**Three of this group's six names answered and three refused** (emulator).
-[CHECK](statistics-1var/CHECK.md), [UNCHECK](statistics-1var/UNCHECK.md) and [ISCHECK](statistics-1var/ISCHECK.md) work; this
-one, [SetFreq](statistics-1var/SetFreq.md) and [SetSample](statistics-1var/SetSample.md) do not. The three
-that work take a number, and the three that refuse all name a data set.
+**A program puts the data in with an assignment** (emulator):
+`Statistics_1Var.D1:={1,2,2,3,7}` answered the list. On a reset calculator
+`H1` takes its data from `D1`: that is what made the results below come out.
 
-**That division is the evidence** (emulator): it points at the empty data
-sets rather than at the group, because the same batch showed the group
-reachable.
+**It writes its results into the app, and answers only 1** (emulator): after
+it ran on `{1,2,2,3,7}`, [NbItem](statistics-1var/NbItem.md) read 5, [MeanX](statistics-1var/MeanX.md) 3,
+[MedVal](statistics-1var/MedVal.md) 2, [Q₁](statistics-1var/Q₁.md) 1.5 and [sX](statistics-1var/sX.md) 2.34520787991, all of
+which read 0 before. So a program collects the statistics from those
+variables, not from what this returns, as with
+[DoInference](inference/DoInference.md).
 
-**The lesson from `function` applies here** (emulator). That group was
-recorded as refused until a batch measured the setup and found the variable
-held the wrong thing; the same probe is owed here -- fill `H1`, read it back,
-then call this.
+**Bare, three of this group's names answer from another app and three do not**
+(emulator): [CHECK](statistics-1var/CHECK.md), [UNCHECK](statistics-1var/UNCHECK.md) and [ISCHECK](statistics-1var/ISCHECK.md)
+answered with the Function app active; this one, [SetFreq](statistics-1var/SetFreq.md) and
+[SetSample](statistics-1var/SetSample.md) were refused. The other two were not tried with the
+app's name in front (unverified).
+
+**Whether it answers with no data was not tried** (unverified).
 
 The interpreter does not implement it, so `hpprime run` cannot check a program
 that uses it (unverified).
 
 ### Related
 
-[SetSample](statistics-1var/SetSample.md) · [SetFreq](statistics-1var/SetFreq.md) · [CHECK](statistics-1var/CHECK.md)
+[NbItem](statistics-1var/NbItem.md) · [MeanX](statistics-1var/MeanX.md) · [SetFreq](statistics-1var/SetFreq.md) · [apps.qualified-names](../topics/apps.md#apps.qualified-names)
+
+---
+
+<a name="Hmax"></a>
+
+## Hmax
+
+A setting of the Statistics 1Var app, 24 on a reset calculator, which a program can set.
+
+| | |
+|---|---|
+| Syntax | `Statistics_1Var.Hmax` → real |
+| Syntax | `Statistics_1Var.Hmax:=value` |
+| Group | statistics-1var |
+| Runs on the PC | no |
+
+### Examples
+
+| Call | Result | Known from |
+|---|---|---|
+| `EXPR("Statistics_1Var.Hmax")` | `24` | [emulator](results.tsv) |
+| `EXPR("Hmax")` | *error* | [emulator](results.tsv) |
+| `EXPR("Statistics_1Var.D1:={1,2,2,3,7}"); EXPR("Statistics_1Var.Do1VStats(Statistics_1Var.H1)"); RETURN EXPR("Statistics_1Var.Hmax");` | `24` | [emulator](results.tsv) |
+| `LOCAL o, r; o := EXPR("Statistics_1Var.Hmax"); IFERR EXPR("Statistics_1Var.Hmax:=20"); r := EXPR("Statistics_1Var.Hmax"); THEN r := "refused"; END; IFERR EXPR("Statistics_1Var.Hmax:=" + STRING(o)); THEN r := r; END; RETURN r;` | `20` | [emulator](results.tsv) |
+
+### Behaviour
+
+**What it holds is read from its name** (unverified): HP's list gives the name
+and its app, and nothing more.
+
+**A program reaches it with its app's name in front** (emulator):
+`Statistics_1Var.Hmax` answered `24` with the Function app active, where
+`Hmax` alone was refused,
+[apps.qualified-names](../topics/apps.md#apps.qualified-names). The bare
+name was not tried with its own app active (unverified).
+
+**[Do1VStats](statistics-1var/Do1VStats.md) does not change it** (emulator): it read 24 before
+the command ran on `{1,2,2,3,7}` and 24 after.
+
+**A program can set it** (emulator): set to 20 through `Statistics_1Var.Hmax`,
+it read back 20. The row reads the first value, sets another, reads again and
+puts the first one back.
+
+The interpreter does not implement it, so `hpprime run` cannot check a program
+that uses it (unverified).
+
+### Related
+
+[Hmin](statistics-1var/Hmin.md) · [Hwidth](statistics-1var/Hwidth.md) · [Do1VStats](statistics-1var/Do1VStats.md) · [apps.qualified-names](../topics/apps.md#apps.qualified-names)
+
+---
+
+<a name="Hmin"></a>
+
+## Hmin
+
+A setting of the Statistics 1Var app, 0 on a reset calculator, which a program can set.
+
+| | |
+|---|---|
+| Syntax | `Statistics_1Var.Hmin` → real |
+| Syntax | `Statistics_1Var.Hmin:=value` |
+| Group | statistics-1var |
+| Runs on the PC | no |
+
+### Examples
+
+| Call | Result | Known from |
+|---|---|---|
+| `EXPR("Statistics_1Var.Hmin")` | `0` | [emulator](results.tsv) |
+| `EXPR("Hmin")` | *error* | [emulator](results.tsv) |
+| `EXPR("Statistics_1Var.D1:={1,2,2,3,7}"); EXPR("Statistics_1Var.Do1VStats(Statistics_1Var.H1)"); RETURN EXPR("Statistics_1Var.Hmin");` | `0` | [emulator](results.tsv) |
+| `LOCAL o, r; o := EXPR("Statistics_1Var.Hmin"); IFERR EXPR("Statistics_1Var.Hmin:=-1"); r := EXPR("Statistics_1Var.Hmin"); THEN r := "refused"; END; IFERR EXPR("Statistics_1Var.Hmin:=" + STRING(o)); THEN r := r; END; RETURN r;` | `−1` | [emulator](results.tsv) |
+
+### Behaviour
+
+**What it holds is read from its name** (unverified): HP's list gives the name
+and its app, and nothing more.
+
+**A program reaches it with its app's name in front** (emulator):
+`Statistics_1Var.Hmin` answered `0` with the Function app active, where `Hmin`
+alone was refused,
+[apps.qualified-names](../topics/apps.md#apps.qualified-names). The bare
+name was not tried with its own app active (unverified).
+
+**[Do1VStats](statistics-1var/Do1VStats.md) does not change it** (emulator): it read 0 before
+the command ran on `{1,2,2,3,7}` and 0 after.
+
+**A program can set it** (emulator): set to −1 through `Statistics_1Var.Hmin`,
+it read back −1. The row reads the first value, sets another, reads again and
+puts the first one back.
+
+The interpreter does not implement it, so `hpprime run` cannot check a program
+that uses it (unverified).
+
+### Related
+
+[Hmax](statistics-1var/Hmax.md) · [Hwidth](statistics-1var/Hwidth.md) · [Do1VStats](statistics-1var/Do1VStats.md) · [apps.qualified-names](../topics/apps.md#apps.qualified-names)
+
+---
+
+<a name="Hwidth"></a>
+
+## Hwidth
+
+A setting of the Statistics 1Var app, 1 on a reset calculator, which a program can set.
+
+| | |
+|---|---|
+| Syntax | `Statistics_1Var.Hwidth` → real |
+| Syntax | `Statistics_1Var.Hwidth:=value` |
+| Group | statistics-1var |
+| Runs on the PC | no |
+
+### Examples
+
+| Call | Result | Known from |
+|---|---|---|
+| `EXPR("Statistics_1Var.Hwidth")` | `1` | [emulator](results.tsv) |
+| `EXPR("Hwidth")` | *error* | [emulator](results.tsv) |
+| `EXPR("Statistics_1Var.D1:={1,2,2,3,7}"); EXPR("Statistics_1Var.Do1VStats(Statistics_1Var.H1)"); RETURN EXPR("Statistics_1Var.Hwidth");` | `1` | [emulator](results.tsv) |
+| `LOCAL o, r; o := EXPR("Statistics_1Var.Hwidth"); IFERR EXPR("Statistics_1Var.Hwidth:=2"); r := EXPR("Statistics_1Var.Hwidth"); THEN r := "refused"; END; IFERR EXPR("Statistics_1Var.Hwidth:=" + STRING(o)); THEN r := r; END; RETURN r;` | `2` | [emulator](results.tsv) |
+
+### Behaviour
+
+**What it holds is read from its name** (unverified): HP's list gives the name
+and its app, and nothing more.
+
+**A program reaches it with its app's name in front** (emulator):
+`Statistics_1Var.Hwidth` answered `1` with the Function app active, where
+`Hwidth` alone was refused,
+[apps.qualified-names](../topics/apps.md#apps.qualified-names). The bare
+name was not tried with its own app active (unverified).
+
+**[Do1VStats](statistics-1var/Do1VStats.md) does not change it** (emulator): it read 1 before
+the command ran on `{1,2,2,3,7}` and 1 after.
+
+**A program can set it** (emulator): set to 2 through
+`Statistics_1Var.Hwidth`, it read back 2. The row reads the first value, sets
+another, reads again and puts the first one back.
+
+The interpreter does not implement it, so `hpprime run` cannot check a program
+that uses it (unverified).
+
+### Related
+
+[Hmin](statistics-1var/Hmin.md) · [Hmax](statistics-1var/Hmax.md) · [Do1VStats](statistics-1var/Do1VStats.md) · [apps.qualified-names](../topics/apps.md#apps.qualified-names)
 
 ---
 
@@ -157,6 +330,367 @@ that uses it (unverified).
 ### Related
 
 [CHECK](statistics-1var/CHECK.md) · [UNCHECK](statistics-1var/UNCHECK.md) · [Do1VStats](statistics-1var/Do1VStats.md)
+
+---
+
+<a name="MaxVal"></a>
+
+## MaxVal
+
+The largest data value of the Statistics 1Var data, which Do1VStats writes: 7 for {1,2,2,3,7}.
+
+| | |
+|---|---|
+| Syntax | `Statistics_1Var.MaxVal` → real |
+| Group | statistics-1var |
+| Runs on the PC | no |
+
+### Examples
+
+| Call | Result | Known from |
+|---|---|---|
+| `EXPR("Statistics_1Var.MaxVal")` | `0` | [emulator](results.tsv) |
+| `EXPR("MaxVal")` | *error* | [emulator](results.tsv) |
+| `EXPR("Statistics_1Var.D1:={1,2,2,3,7}"); EXPR("Statistics_1Var.Do1VStats(Statistics_1Var.H1)"); RETURN EXPR("Statistics_1Var.MaxVal");` | `7` | [emulator](results.tsv) |
+| `LOCAL o, r; EXPR("Statistics_1Var.D1:={1,2,2,3,7}"); EXPR("Statistics_1Var.Do1VStats(Statistics_1Var.H1)"); o := EXPR("Statistics_1Var.MaxVal"); IFERR EXPR("Statistics_1Var.MaxVal:=99"); r := EXPR("Statistics_1Var.MaxVal"); THEN r := "refused"; END; IFERR EXPR("Statistics_1Var.MaxVal:=" + STRING(o)); THEN r := r; END; RETURN r;` | `"refused"` | [emulator](results.tsv) |
+
+### Behaviour
+
+**A program reaches it with its app's name in front** (emulator):
+`Statistics_1Var.MaxVal` answered `0` with the Function app active, where
+`MaxVal` alone was refused,
+[apps.qualified-names](../topics/apps.md#apps.qualified-names). The bare
+name was not tried with its own app active (unverified).
+
+**It reads 0 before there is data** (emulator), on a reset calculator, so a
+program cannot tell a real 0 from no data by reading it. The Statistics 2Var
+results refuse instead, as [MeanY](statistics-2var/MeanY.md) does.
+
+**It holds the largest value** (emulator): with the data `{1,2,2,3,7}` put in
+`D1` and [Do1VStats](statistics-1var/Do1VStats.md) run on `H1`, it answered 7.
+
+**A program cannot set it** (emulator): assigning 99 was refused, in a call
+whose read of it had answered just before. [Do1VStats](statistics-1var/Do1VStats.md) writes
+it.
+
+The interpreter does not implement it, so `hpprime run` cannot check a program
+that uses it (unverified).
+
+### Related
+
+[Do1VStats](statistics-1var/Do1VStats.md) · [NbItem](statistics-1var/NbItem.md) · [apps.qualified-names](../topics/apps.md#apps.qualified-names)
+
+---
+
+<a name="MeanX"></a>
+
+## MeanX
+
+The mean of the Statistics 1Var data, which Do1VStats writes: 3 for {1,2,2,3,7}.
+
+| | |
+|---|---|
+| Syntax | `Statistics_1Var.MeanX` → real |
+| Group | statistics-1var |
+| Runs on the PC | no |
+
+### Examples
+
+| Call | Result | Known from |
+|---|---|---|
+| `EXPR("Statistics_1Var.MeanX")` | `0` | [emulator](results.tsv) |
+| `EXPR("MeanX")` | *error* | [emulator](results.tsv) |
+| `EXPR("Statistics_1Var.D1:={1,2,2,3,7}"); EXPR("Statistics_1Var.Do1VStats(Statistics_1Var.H1)"); RETURN EXPR("Statistics_1Var.MeanX");` | `3` | [emulator](results.tsv) |
+| `EXPR("Statistics_2Var.C1:={1,2,3,4}"); EXPR("Statistics_2Var.C2:={2,3,5,9}"); EXPR("Statistics_2Var.Do2VStats(Statistics_2Var.S1)"); RETURN EXPR("Statistics_2Var.MeanX");` | `2.5` | [emulator](results.tsv) |
+| `LOCAL o, r; EXPR("Statistics_1Var.D1:={1,2,2,3,7}"); EXPR("Statistics_1Var.Do1VStats(Statistics_1Var.H1)"); o := EXPR("Statistics_1Var.MeanX"); IFERR EXPR("Statistics_1Var.MeanX:=99"); r := EXPR("Statistics_1Var.MeanX"); THEN r := "refused"; END; IFERR EXPR("Statistics_1Var.MeanX:=" + STRING(o)); THEN r := r; END; RETURN r;` | `"refused"` | [emulator](results.tsv) |
+
+### Behaviour
+
+**A program reaches it with its app's name in front** (emulator):
+`Statistics_1Var.MeanX` answered `0` with the Function app active, where
+`MeanX` alone was refused,
+[apps.qualified-names](../topics/apps.md#apps.qualified-names). The bare
+name was not tried with its own app active (unverified).
+
+**It reads 0 before there is data** (emulator), on a reset calculator, so a
+program cannot tell a real 0 from no data by reading it. The Statistics 2Var
+results refuse instead, as [MeanY](statistics-2var/MeanY.md) does.
+
+**It holds the mean** (emulator): with the data `{1,2,2,3,7}` put in `D1` and
+[Do1VStats](statistics-1var/Do1VStats.md) run on `H1`, it answered 3, which is not the median,
+2.
+
+**Read through Statistics 2Var it is that app's** (emulator): with `{1,2,3,4}`
+and `{2,3,5,9}` in `C1` and `C2` and
+[Do2VStats](statistics-2var/Do2VStats.md) run on `S1`,
+`Statistics_2Var.MeanX` answered 2.5, the mean of `C1`, in the batch where
+`Statistics_1Var.MeanX` answered 3. So the app's name in front decides which
+app's value is read. The other statistics of x were not read through
+Statistics 2Var (unverified).
+
+**A program cannot set it** (emulator): assigning 99 was refused, in a call
+whose read of it had answered just before. [Do1VStats](statistics-1var/Do1VStats.md) writes
+it.
+
+The interpreter does not implement it, so `hpprime run` cannot check a program
+that uses it (unverified).
+
+### Related
+
+[Do1VStats](statistics-1var/Do1VStats.md) · [NbItem](statistics-1var/NbItem.md) · [apps.qualified-names](../topics/apps.md#apps.qualified-names)
+
+---
+
+<a name="MedVal"></a>
+
+## MedVal
+
+The median of the Statistics 1Var data, which Do1VStats writes: 2 for {1,2,2,3,7}.
+
+| | |
+|---|---|
+| Syntax | `Statistics_1Var.MedVal` → real |
+| Group | statistics-1var |
+| Runs on the PC | no |
+
+### Examples
+
+| Call | Result | Known from |
+|---|---|---|
+| `EXPR("Statistics_1Var.MedVal")` | `0` | [emulator](results.tsv) |
+| `EXPR("MedVal")` | *error* | [emulator](results.tsv) |
+| `EXPR("Statistics_1Var.D1:={1,2,2,3,7}"); EXPR("Statistics_1Var.Do1VStats(Statistics_1Var.H1)"); RETURN EXPR("Statistics_1Var.MedVal");` | `2` | [emulator](results.tsv) |
+| `LOCAL o, r; EXPR("Statistics_1Var.D1:={1,2,2,3,7}"); EXPR("Statistics_1Var.Do1VStats(Statistics_1Var.H1)"); o := EXPR("Statistics_1Var.MedVal"); IFERR EXPR("Statistics_1Var.MedVal:=99"); r := EXPR("Statistics_1Var.MedVal"); THEN r := "refused"; END; IFERR EXPR("Statistics_1Var.MedVal:=" + STRING(o)); THEN r := r; END; RETURN r;` | `"refused"` | [emulator](results.tsv) |
+
+### Behaviour
+
+**A program reaches it with its app's name in front** (emulator):
+`Statistics_1Var.MedVal` answered `0` with the Function app active, where
+`MedVal` alone was refused,
+[apps.qualified-names](../topics/apps.md#apps.qualified-names). The bare
+name was not tried with its own app active (unverified).
+
+**It reads 0 before there is data** (emulator), on a reset calculator, so a
+program cannot tell a real 0 from no data by reading it. The Statistics 2Var
+results refuse instead, as [MeanY](statistics-2var/MeanY.md) does.
+
+**It holds the median** (emulator): with the data `{1,2,2,3,7}` put in `D1`
+and [Do1VStats](statistics-1var/Do1VStats.md) run on `H1`, it answered 2, which is not the
+mean, 3.
+
+**A program cannot set it** (emulator): assigning 99 was refused, in a call
+whose read of it had answered just before. [Do1VStats](statistics-1var/Do1VStats.md) writes
+it.
+
+The interpreter does not implement it, so `hpprime run` cannot check a program
+that uses it (unverified).
+
+### Related
+
+[Do1VStats](statistics-1var/Do1VStats.md) · [NbItem](statistics-1var/NbItem.md) · [apps.qualified-names](../topics/apps.md#apps.qualified-names)
+
+---
+
+<a name="MinVal"></a>
+
+## MinVal
+
+The smallest data value of the Statistics 1Var data, which Do1VStats writes: 1 for {1,2,2,3,7}.
+
+| | |
+|---|---|
+| Syntax | `Statistics_1Var.MinVal` → real |
+| Group | statistics-1var |
+| Runs on the PC | no |
+
+### Examples
+
+| Call | Result | Known from |
+|---|---|---|
+| `EXPR("Statistics_1Var.MinVal")` | `0` | [emulator](results.tsv) |
+| `EXPR("MinVal")` | *error* | [emulator](results.tsv) |
+| `EXPR("Statistics_1Var.D1:={1,2,2,3,7}"); EXPR("Statistics_1Var.Do1VStats(Statistics_1Var.H1)"); RETURN EXPR("Statistics_1Var.MinVal");` | `1` | [emulator](results.tsv) |
+| `LOCAL o, r; EXPR("Statistics_1Var.D1:={1,2,2,3,7}"); EXPR("Statistics_1Var.Do1VStats(Statistics_1Var.H1)"); o := EXPR("Statistics_1Var.MinVal"); IFERR EXPR("Statistics_1Var.MinVal:=99"); r := EXPR("Statistics_1Var.MinVal"); THEN r := "refused"; END; IFERR EXPR("Statistics_1Var.MinVal:=" + STRING(o)); THEN r := r; END; RETURN r;` | `"refused"` | [emulator](results.tsv) |
+
+### Behaviour
+
+**A program reaches it with its app's name in front** (emulator):
+`Statistics_1Var.MinVal` answered `0` with the Function app active, where
+`MinVal` alone was refused,
+[apps.qualified-names](../topics/apps.md#apps.qualified-names). The bare
+name was not tried with its own app active (unverified).
+
+**It reads 0 before there is data** (emulator), on a reset calculator, so a
+program cannot tell a real 0 from no data by reading it. The Statistics 2Var
+results refuse instead, as [MeanY](statistics-2var/MeanY.md) does.
+
+**It holds the smallest value** (emulator): with the data `{1,2,2,3,7}` put in
+`D1` and [Do1VStats](statistics-1var/Do1VStats.md) run on `H1`, it answered 1.
+
+**A program cannot set it** (emulator): assigning 99 was refused, in a call
+whose read of it had answered just before. [Do1VStats](statistics-1var/Do1VStats.md) writes
+it.
+
+The interpreter does not implement it, so `hpprime run` cannot check a program
+that uses it (unverified).
+
+### Related
+
+[Do1VStats](statistics-1var/Do1VStats.md) · [NbItem](statistics-1var/NbItem.md) · [apps.qualified-names](../topics/apps.md#apps.qualified-names)
+
+---
+
+<a name="NbItem"></a>
+
+## NbItem
+
+The number of data points of the Statistics 1Var data, which Do1VStats writes: 5 for {1,2,2,3,7}.
+
+| | |
+|---|---|
+| Syntax | `Statistics_1Var.NbItem` → real |
+| Group | statistics-1var |
+| Runs on the PC | no |
+
+### Examples
+
+| Call | Result | Known from |
+|---|---|---|
+| `EXPR("Statistics_1Var.NbItem")` | `0` | [emulator](results.tsv) |
+| `EXPR("NbItem")` | *error* | [emulator](results.tsv) |
+| `EXPR("Statistics_1Var.D1:={1,2,2,3,7}"); EXPR("Statistics_1Var.Do1VStats(Statistics_1Var.H1)"); RETURN EXPR("Statistics_1Var.NbItem");` | `5` | [emulator](results.tsv) |
+| `LOCAL o, r; EXPR("Statistics_1Var.D1:={1,2,2,3,7}"); EXPR("Statistics_1Var.Do1VStats(Statistics_1Var.H1)"); o := EXPR("Statistics_1Var.NbItem"); IFERR EXPR("Statistics_1Var.NbItem:=99"); r := EXPR("Statistics_1Var.NbItem"); THEN r := "refused"; END; IFERR EXPR("Statistics_1Var.NbItem:=" + STRING(o)); THEN r := r; END; RETURN r;` | `"refused"` | [emulator](results.tsv) |
+
+### Behaviour
+
+**A program reaches it with its app's name in front** (emulator):
+`Statistics_1Var.NbItem` answered `0` with the Function app active, where
+`NbItem` alone was refused,
+[apps.qualified-names](../topics/apps.md#apps.qualified-names). The bare
+name was not tried with its own app active (unverified).
+
+**It reads 0 before there is data** (emulator), on a reset calculator, so a
+program cannot tell a real 0 from no data by reading it. The Statistics 2Var
+results refuse instead, as [MeanY](statistics-2var/MeanY.md) does.
+
+**It holds the number of data points** (emulator): with the data `{1,2,2,3,7}`
+put in `D1` and [Do1VStats](statistics-1var/Do1VStats.md) run on `H1`, it answered 5, the
+length of that list.
+
+**A program cannot set it** (emulator): assigning 99 was refused, in a call
+whose read of it had answered just before. [Do1VStats](statistics-1var/Do1VStats.md) writes
+it.
+
+The interpreter does not implement it, so `hpprime run` cannot check a program
+that uses it (unverified).
+
+### Related
+
+[Do1VStats](statistics-1var/Do1VStats.md) · [MeanX](statistics-1var/MeanX.md) · [apps.qualified-names](../topics/apps.md#apps.qualified-names)
+
+---
+
+<a name="Q₁"></a>
+
+## Q₁
+
+The first quartile of the Statistics 1Var data, which Do1VStats writes: 1.5 for {1,2,2,3,7}.
+
+| | |
+|---|---|
+| Syntax | `Statistics_1Var.Q₁` → real |
+| Group | statistics-1var |
+| Runs on the PC | no |
+
+### Examples
+
+| Call | Result | Known from |
+|---|---|---|
+| `EXPR("Statistics_1Var.Q₁")` | `0` | [emulator](results.tsv) |
+| `EXPR("Q₁")` | *error* | [emulator](results.tsv) |
+| `EXPR("Statistics_1Var.D1:={1,2,2,3,7}"); EXPR("Statistics_1Var.Do1VStats(Statistics_1Var.H1)"); RETURN EXPR("Statistics_1Var.Q₁");` | `1.5` | [emulator](results.tsv) |
+| `LOCAL o, r; EXPR("Statistics_1Var.D1:={1,2,2,3,7}"); EXPR("Statistics_1Var.Do1VStats(Statistics_1Var.H1)"); o := EXPR("Statistics_1Var.Q₁"); IFERR EXPR("Statistics_1Var.Q₁:=99"); r := EXPR("Statistics_1Var.Q₁"); THEN r := "refused"; END; IFERR EXPR("Statistics_1Var.Q₁:=" + STRING(o)); THEN r := r; END; RETURN r;` | `"refused"` | [emulator](results.tsv) |
+
+### Behaviour
+
+**A program reaches it with its app's name in front** (emulator):
+`Statistics_1Var.Q₁` answered `0` with the Function app active, where `Q₁`
+alone was refused,
+[apps.qualified-names](../topics/apps.md#apps.qualified-names). The bare
+name was not tried with its own app active (unverified).
+
+**It reads 0 before there is data** (emulator), on a reset calculator, so a
+program cannot tell a real 0 from no data by reading it. The Statistics 2Var
+results refuse instead, as [MeanY](statistics-2var/MeanY.md) does.
+
+**It holds the first quartile** (emulator): with the data `{1,2,2,3,7}` put in
+`D1` and [Do1VStats](statistics-1var/Do1VStats.md) run on `H1`, it answered 1.5, the median of
+the lower half `{1,2}` with the median itself left out. Counting the median
+in, the lower half `{1,2,2}` would give 2. An even count was not tried
+(unverified).
+
+**A program cannot set it** (emulator): assigning 99 was refused, in a call
+whose read of it had answered just before. [Do1VStats](statistics-1var/Do1VStats.md) writes
+it.
+
+The interpreter does not implement it, so `hpprime run` cannot check a program
+that uses it (unverified).
+
+### Related
+
+[Do1VStats](statistics-1var/Do1VStats.md) · [NbItem](statistics-1var/NbItem.md) · [apps.qualified-names](../topics/apps.md#apps.qualified-names)
+
+---
+
+<a name="Q₃"></a>
+
+## Q₃
+
+The third quartile of the Statistics 1Var data, which Do1VStats writes: 5 for {1,2,2,3,7}.
+
+| | |
+|---|---|
+| Syntax | `Statistics_1Var.Q₃` → real |
+| Group | statistics-1var |
+| Runs on the PC | no |
+
+### Examples
+
+| Call | Result | Known from |
+|---|---|---|
+| `EXPR("Statistics_1Var.Q₃")` | `0` | [emulator](results.tsv) |
+| `EXPR("Q₃")` | *error* | [emulator](results.tsv) |
+| `EXPR("Statistics_1Var.D1:={1,2,2,3,7}"); EXPR("Statistics_1Var.Do1VStats(Statistics_1Var.H1)"); RETURN EXPR("Statistics_1Var.Q₃");` | `5` | [emulator](results.tsv) |
+| `LOCAL o, r; EXPR("Statistics_1Var.D1:={1,2,2,3,7}"); EXPR("Statistics_1Var.Do1VStats(Statistics_1Var.H1)"); o := EXPR("Statistics_1Var.Q₃"); IFERR EXPR("Statistics_1Var.Q₃:=99"); r := EXPR("Statistics_1Var.Q₃"); THEN r := "refused"; END; IFERR EXPR("Statistics_1Var.Q₃:=" + STRING(o)); THEN r := r; END; RETURN r;` | `"refused"` | [emulator](results.tsv) |
+
+### Behaviour
+
+**A program reaches it with its app's name in front** (emulator):
+`Statistics_1Var.Q₃` answered `0` with the Function app active, where `Q₃`
+alone was refused,
+[apps.qualified-names](../topics/apps.md#apps.qualified-names). The bare
+name was not tried with its own app active (unverified).
+
+**It reads 0 before there is data** (emulator), on a reset calculator, so a
+program cannot tell a real 0 from no data by reading it. The Statistics 2Var
+results refuse instead, as [MeanY](statistics-2var/MeanY.md) does.
+
+**It holds the third quartile** (emulator): with the data `{1,2,2,3,7}` put in
+`D1` and [Do1VStats](statistics-1var/Do1VStats.md) run on `H1`, it answered 5, the median of
+the upper half `{3,7}` with the median itself left out. Counting the median
+in, the upper half `{2,3,7}` would give 3. An even count was not tried
+(unverified).
+
+**A program cannot set it** (emulator): assigning 99 was refused, in a call
+whose read of it had answered just before. [Do1VStats](statistics-1var/Do1VStats.md) writes
+it.
+
+The interpreter does not implement it, so `hpprime run` cannot check a program
+that uses it (unverified).
+
+### Related
+
+[Do1VStats](statistics-1var/Do1VStats.md) · [NbItem](statistics-1var/NbItem.md) · [apps.qualified-names](../topics/apps.md#apps.qualified-names)
 
 ---
 
@@ -285,3 +819,314 @@ that uses it (unverified).
 ### Related
 
 [CHECK](statistics-1var/CHECK.md) · [ISCHECK](statistics-1var/ISCHECK.md)
+
+---
+
+<a name="sX"></a>
+
+## sX
+
+The sample standard deviation of the Statistics 1Var data, which Do1VStats writes: 2.34520787991 for {1,2,2,3,7}.
+
+| | |
+|---|---|
+| Syntax | `Statistics_1Var.sX` → real |
+| Group | statistics-1var |
+| Runs on the PC | no |
+
+### Examples
+
+| Call | Result | Known from |
+|---|---|---|
+| `EXPR("Statistics_1Var.sX")` | `0` | [emulator](results.tsv) |
+| `EXPR("sX")` | *error* | [emulator](results.tsv) |
+| `EXPR("Statistics_1Var.D1:={1,2,2,3,7}"); EXPR("Statistics_1Var.Do1VStats(Statistics_1Var.H1)"); RETURN EXPR("Statistics_1Var.sX");` | `2.34520787991` | [emulator](results.tsv) |
+| `LOCAL o, r; EXPR("Statistics_1Var.D1:={1,2,2,3,7}"); EXPR("Statistics_1Var.Do1VStats(Statistics_1Var.H1)"); o := EXPR("Statistics_1Var.sX"); IFERR EXPR("Statistics_1Var.sX:=99"); r := EXPR("Statistics_1Var.sX"); THEN r := "refused"; END; IFERR EXPR("Statistics_1Var.sX:=" + STRING(o)); THEN r := r; END; RETURN r;` | `"refused"` | [emulator](results.tsv) |
+
+### Behaviour
+
+**A program reaches it with its app's name in front** (emulator):
+`Statistics_1Var.sX` answered `0` with the Function app active, where `sX`
+alone was refused,
+[apps.qualified-names](../topics/apps.md#apps.qualified-names). The bare
+name was not tried with its own app active (unverified).
+
+**It reads 0 before there is data** (emulator), on a reset calculator, so a
+program cannot tell a real 0 from no data by reading it. The Statistics 2Var
+results refuse instead, as [MeanY](statistics-2var/MeanY.md) does.
+
+**It holds the sample standard deviation** (emulator): with the data
+`{1,2,2,3,7}` put in `D1` and [Do1VStats](statistics-1var/Do1VStats.md) run on `H1`, it
+answered 2.34520787991, dividing by one less than the count: the square root
+of 22/4. The population one is [σX](statistics-1var/σX-var.md).
+
+**A program cannot set it** (emulator): assigning 99 was refused, in a call
+whose read of it had answered just before. [Do1VStats](statistics-1var/Do1VStats.md) writes
+it.
+
+The interpreter does not implement it, so `hpprime run` cannot check a program
+that uses it (unverified).
+
+### Related
+
+[Do1VStats](statistics-1var/Do1VStats.md) · [NbItem](statistics-1var/NbItem.md) · [apps.qualified-names](../topics/apps.md#apps.qualified-names)
+
+---
+
+<a name="serrX"></a>
+
+## serrX
+
+The standard error of the mean of the Statistics 1Var data, which Do1VStats writes: 1.04880884817 for {1,2,2,3,7}.
+
+| | |
+|---|---|
+| Syntax | `Statistics_1Var.serrX` → real |
+| Group | statistics-1var |
+| Runs on the PC | no |
+
+### Examples
+
+| Call | Result | Known from |
+|---|---|---|
+| `EXPR("Statistics_1Var.serrX")` | `0` | [emulator](results.tsv) |
+| `EXPR("serrX")` | *error* | [emulator](results.tsv) |
+| `EXPR("Statistics_1Var.D1:={1,2,2,3,7}"); EXPR("Statistics_1Var.Do1VStats(Statistics_1Var.H1)"); RETURN EXPR("Statistics_1Var.serrX");` | `1.04880884817` | [emulator](results.tsv) |
+| `LOCAL o, r; EXPR("Statistics_1Var.D1:={1,2,2,3,7}"); EXPR("Statistics_1Var.Do1VStats(Statistics_1Var.H1)"); o := EXPR("Statistics_1Var.serrX"); IFERR EXPR("Statistics_1Var.serrX:=99"); r := EXPR("Statistics_1Var.serrX"); THEN r := "refused"; END; IFERR EXPR("Statistics_1Var.serrX:=" + STRING(o)); THEN r := r; END; RETURN r;` | `"refused"` | [emulator](results.tsv) |
+
+### Behaviour
+
+**A program reaches it with its app's name in front** (emulator):
+`Statistics_1Var.serrX` answered `0` with the Function app active, where
+`serrX` alone was refused,
+[apps.qualified-names](../topics/apps.md#apps.qualified-names). The bare
+name was not tried with its own app active (unverified).
+
+**It reads 0 before there is data** (emulator), on a reset calculator, so a
+program cannot tell a real 0 from no data by reading it. The Statistics 2Var
+results refuse instead, as [MeanY](statistics-2var/MeanY.md) does.
+
+**It holds the standard error of the mean** (emulator): with the data
+`{1,2,2,3,7}` put in `D1` and [Do1VStats](statistics-1var/Do1VStats.md) run on `H1`, it
+answered 1.04880884817, the sample deviation, 2.34520787991, over the square
+root of the count, 5.
+
+**A program cannot set it** (emulator): assigning 99 was refused, in a call
+whose read of it had answered just before. [Do1VStats](statistics-1var/Do1VStats.md) writes
+it.
+
+The interpreter does not implement it, so `hpprime run` cannot check a program
+that uses it (unverified).
+
+### Related
+
+[Do1VStats](statistics-1var/Do1VStats.md) · [NbItem](statistics-1var/NbItem.md) · [apps.qualified-names](../topics/apps.md#apps.qualified-names)
+
+---
+
+<a name="ssX"></a>
+
+## ssX
+
+The sum of the squared deviations from the mean of the Statistics 1Var data, which Do1VStats writes: 22 for {1,2,2,3,7}.
+
+| | |
+|---|---|
+| Syntax | `Statistics_1Var.ssX` → real |
+| Group | statistics-1var |
+| Runs on the PC | no |
+
+### Examples
+
+| Call | Result | Known from |
+|---|---|---|
+| `EXPR("Statistics_1Var.ssX")` | `0` | [emulator](results.tsv) |
+| `EXPR("ssX")` | *error* | [emulator](results.tsv) |
+| `EXPR("Statistics_1Var.D1:={1,2,2,3,7}"); EXPR("Statistics_1Var.Do1VStats(Statistics_1Var.H1)"); RETURN EXPR("Statistics_1Var.ssX");` | `22` | [emulator](results.tsv) |
+| `LOCAL o, r; EXPR("Statistics_1Var.D1:={1,2,2,3,7}"); EXPR("Statistics_1Var.Do1VStats(Statistics_1Var.H1)"); o := EXPR("Statistics_1Var.ssX"); IFERR EXPR("Statistics_1Var.ssX:=99"); r := EXPR("Statistics_1Var.ssX"); THEN r := "refused"; END; IFERR EXPR("Statistics_1Var.ssX:=" + STRING(o)); THEN r := r; END; RETURN r;` | `"refused"` | [emulator](results.tsv) |
+
+### Behaviour
+
+**A program reaches it with its app's name in front** (emulator):
+`Statistics_1Var.ssX` answered `0` with the Function app active, where `ssX`
+alone was refused,
+[apps.qualified-names](../topics/apps.md#apps.qualified-names). The bare
+name was not tried with its own app active (unverified).
+
+**It reads 0 before there is data** (emulator), on a reset calculator, so a
+program cannot tell a real 0 from no data by reading it. The Statistics 2Var
+results refuse instead, as [MeanY](statistics-2var/MeanY.md) does.
+
+**It holds the sum of the squared deviations from the mean** (emulator): with
+the data `{1,2,2,3,7}` put in `D1` and [Do1VStats](statistics-1var/Do1VStats.md) run on `H1`,
+it answered 22, which is 67 less 15 squared over 5.
+
+**A program cannot set it** (emulator): assigning 99 was refused, in a call
+whose read of it had answered just before. [Do1VStats](statistics-1var/Do1VStats.md) writes
+it.
+
+The interpreter does not implement it, so `hpprime run` cannot check a program
+that uses it (unverified).
+
+### Related
+
+[Do1VStats](statistics-1var/Do1VStats.md) · [NbItem](statistics-1var/NbItem.md) · [apps.qualified-names](../topics/apps.md#apps.qualified-names)
+
+---
+
+<a name="ΣX"></a>
+
+## ΣX
+
+The sum of the data of the Statistics 1Var data, which Do1VStats writes: 15 for {1,2,2,3,7}.
+
+| | |
+|---|---|
+| Syntax | `Statistics_1Var.ΣX` → real |
+| Group | statistics-1var |
+| Runs on the PC | no |
+
+### Examples
+
+| Call | Result | Known from |
+|---|---|---|
+| `EXPR("Statistics_1Var.ΣX")` | `0` | [emulator](results.tsv) |
+| `EXPR("ΣX")` | *error* | [emulator](results.tsv) |
+| `EXPR("Statistics_1Var.D1:={1,2,2,3,7}"); EXPR("Statistics_1Var.Do1VStats(Statistics_1Var.H1)"); RETURN EXPR("Statistics_1Var.ΣX");` | `15` | [emulator](results.tsv) |
+| `EXPR("Statistics_2Var.C1:={1,2,3,4}"); EXPR("Statistics_2Var.C2:={2,3,5,9}"); EXPR("Statistics_2Var.Do2VStats(Statistics_2Var.S1)"); RETURN EXPR("Statistics_2Var.ΣX");` | `10` | [emulator](results.tsv) |
+| `LOCAL o, r; EXPR("Statistics_1Var.D1:={1,2,2,3,7}"); EXPR("Statistics_1Var.Do1VStats(Statistics_1Var.H1)"); o := EXPR("Statistics_1Var.ΣX"); IFERR EXPR("Statistics_1Var.ΣX:=99"); r := EXPR("Statistics_1Var.ΣX"); THEN r := "refused"; END; IFERR EXPR("Statistics_1Var.ΣX:=" + STRING(o)); THEN r := r; END; RETURN r;` | `"refused"` | [emulator](results.tsv) |
+
+### Behaviour
+
+**A program reaches it with its app's name in front** (emulator):
+`Statistics_1Var.ΣX` answered `0` with the Function app active, where `ΣX`
+alone was refused,
+[apps.qualified-names](../topics/apps.md#apps.qualified-names). The bare
+name was not tried with its own app active (unverified).
+
+**It reads 0 before there is data** (emulator), on a reset calculator, so a
+program cannot tell a real 0 from no data by reading it. The Statistics 2Var
+results refuse instead, as [MeanY](statistics-2var/MeanY.md) does.
+
+**It holds the sum** (emulator): with the data `{1,2,2,3,7}` put in `D1` and
+[Do1VStats](statistics-1var/Do1VStats.md) run on `H1`, it answered 15.
+
+**Read through Statistics 2Var it is that app's** (emulator): with
+`{1,2,3,4}` and `{2,3,5,9}` in `C1` and `C2` and
+[Do2VStats](statistics-2var/Do2VStats.md) run on `S1`,
+`Statistics_2Var.ΣX` answered 10, the sum of `C1`, in the batch where
+`Statistics_1Var.ΣX` answered 15. So the app's name in front decides which
+app's value is read. The other statistics of x were not read through
+Statistics 2Var (unverified).
+
+**A program cannot set it** (emulator): assigning 99 was refused, in a call
+whose read of it had answered just before. [Do1VStats](statistics-1var/Do1VStats.md) writes
+it.
+
+The interpreter does not implement it, so `hpprime run` cannot check a program
+that uses it (unverified).
+
+### Related
+
+[Do1VStats](statistics-1var/Do1VStats.md) · [NbItem](statistics-1var/NbItem.md) · [apps.qualified-names](../topics/apps.md#apps.qualified-names)
+
+---
+
+<a name="ΣX2"></a>
+
+## ΣX2
+
+The sum of the squares of the data of the Statistics 1Var data, which Do1VStats writes: 67 for {1,2,2,3,7}.
+
+| | |
+|---|---|
+| Syntax | `Statistics_1Var.ΣX2` → real |
+| Group | statistics-1var |
+| Runs on the PC | no |
+
+### Examples
+
+| Call | Result | Known from |
+|---|---|---|
+| `EXPR("Statistics_1Var.ΣX2")` | `0` | [emulator](results.tsv) |
+| `EXPR("ΣX2")` | *error* | [emulator](results.tsv) |
+| `EXPR("Statistics_1Var.D1:={1,2,2,3,7}"); EXPR("Statistics_1Var.Do1VStats(Statistics_1Var.H1)"); RETURN EXPR("Statistics_1Var.ΣX2");` | `67` | [emulator](results.tsv) |
+| `LOCAL o, r; EXPR("Statistics_1Var.D1:={1,2,2,3,7}"); EXPR("Statistics_1Var.Do1VStats(Statistics_1Var.H1)"); o := EXPR("Statistics_1Var.ΣX2"); IFERR EXPR("Statistics_1Var.ΣX2:=99"); r := EXPR("Statistics_1Var.ΣX2"); THEN r := "refused"; END; IFERR EXPR("Statistics_1Var.ΣX2:=" + STRING(o)); THEN r := r; END; RETURN r;` | `"refused"` | [emulator](results.tsv) |
+
+### Behaviour
+
+**A program reaches it with its app's name in front** (emulator):
+`Statistics_1Var.ΣX2` answered `0` with the Function app active, where `ΣX2`
+alone was refused,
+[apps.qualified-names](../topics/apps.md#apps.qualified-names). The bare
+name was not tried with its own app active (unverified).
+
+**It reads 0 before there is data** (emulator), on a reset calculator, so a
+program cannot tell a real 0 from no data by reading it. The Statistics 2Var
+results refuse instead, as [MeanY](statistics-2var/MeanY.md) does.
+
+**It holds the sum of the squares** (emulator): with the data `{1,2,2,3,7}`
+put in `D1` and [Do1VStats](statistics-1var/Do1VStats.md) run on `H1`, it answered 67, which
+is 1+4+4+9+49.
+
+**A program cannot set it** (emulator): assigning 99 was refused, in a call
+whose read of it had answered just before. [Do1VStats](statistics-1var/Do1VStats.md) writes
+it.
+
+The interpreter does not implement it, so `hpprime run` cannot check a program
+that uses it (unverified).
+
+### Related
+
+[Do1VStats](statistics-1var/Do1VStats.md) · [NbItem](statistics-1var/NbItem.md) · [apps.qualified-names](../topics/apps.md#apps.qualified-names)
+
+---
+
+<a name="σX"></a>
+
+## σX
+
+The population standard deviation of the Statistics 1Var data, which Do1VStats writes: 2.09761769634 for {1,2,2,3,7}.
+
+| | |
+|---|---|
+| Syntax | `Statistics_1Var.σX` → real |
+| Group | statistics-1var |
+| Runs on the PC | no |
+
+### Examples
+
+| Call | Result | Known from |
+|---|---|---|
+| `EXPR("Statistics_1Var.σX")` | `0` | [emulator](results.tsv) |
+| `EXPR("σX")` | *error* | [emulator](results.tsv) |
+| `EXPR("Statistics_1Var.D1:={1,2,2,3,7}"); EXPR("Statistics_1Var.Do1VStats(Statistics_1Var.H1)"); RETURN EXPR("Statistics_1Var.σX");` | `2.09761769634` | [emulator](results.tsv) |
+| `LOCAL o, r; EXPR("Statistics_1Var.D1:={1,2,2,3,7}"); EXPR("Statistics_1Var.Do1VStats(Statistics_1Var.H1)"); o := EXPR("Statistics_1Var.σX"); IFERR EXPR("Statistics_1Var.σX:=99"); r := EXPR("Statistics_1Var.σX"); THEN r := "refused"; END; IFERR EXPR("Statistics_1Var.σX:=" + STRING(o)); THEN r := r; END; RETURN r;` | `"refused"` | [emulator](results.tsv) |
+
+### Behaviour
+
+**A program reaches it with its app's name in front** (emulator):
+`Statistics_1Var.σX` answered `0` with the Function app active, where `σX`
+alone was refused,
+[apps.qualified-names](../topics/apps.md#apps.qualified-names). The bare
+name was not tried with its own app active (unverified).
+
+**It reads 0 before there is data** (emulator), on a reset calculator, so a
+program cannot tell a real 0 from no data by reading it. The Statistics 2Var
+results refuse instead, as [MeanY](statistics-2var/MeanY.md) does.
+
+**It holds the population standard deviation** (emulator): with the data
+`{1,2,2,3,7}` put in `D1` and [Do1VStats](statistics-1var/Do1VStats.md) run on `H1`, it
+answered 2.09761769634, dividing by the count: the square root of 22/5. The
+sample one is [sX](statistics-1var/sX.md).
+
+**A program cannot set it** (emulator): assigning 99 was refused, in a call
+whose read of it had answered just before. [Do1VStats](statistics-1var/Do1VStats.md) writes
+it.
+
+The interpreter does not implement it, so `hpprime run` cannot check a program
+that uses it (unverified).
+
+### Related
+
+[Do1VStats](statistics-1var/Do1VStats.md) · [NbItem](statistics-1var/NbItem.md) · [apps.qualified-names](../topics/apps.md#apps.qualified-names)

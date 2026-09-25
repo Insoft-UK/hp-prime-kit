@@ -314,9 +314,87 @@ EXPORT F() BEGIN RETURN MAX({1,8,2},{2,4,6}); END;
 EXPORT F() BEGIN RETURN LOG(8, 2); END;
 """, 'F()', 3.0),
 
-    ('MOD is the Euclidean remainder, so it is never negative', """
-EXPORT F() BEGIN RETURN MOD(-1, 3); END;
+    ('MOD of a negative number, as on the emulator', """
+EXPORT F() BEGIN RETURN (-9) MOD 4; END;
+""", 'F()', 3.0),
+
+    # The remainder takes the divisor's sign: floored, not Euclidean, as the
+    # emulator answered on 2026-09-24 where HP's help says Euclidean.
+    ('MOD by a negative number takes its sign', """
+EXPORT F() BEGIN RETURN 9 MOD (-4); END;
+""", 'F()', -3.0),
+
+    # Measured on the Virtual Calculator 2.4, build 2025-09-15: the operator
+    # words are written between their operands (docs/commands/arithmetic/
+    # MOD.md, docs/commands/catalog/NTHROOT.md).
+    ('9 MOD 4 answers 1, as on the emulator', """
+EXPORT F() BEGIN RETURN 9 MOD 4; END;
+""", 'F()', 1.0),
+
+    ('MOD in parentheses can be added to', """
+EXPORT F() BEGIN RETURN (9 MOD 4) + 100; END;
+""", 'F()', 101.0),
+
+    ('MOD binds looser than ==, as on the emulator', """
+EXPORT F() BEGIN LOCAL n; n := 4; IF n MOD 2 == 0 THEN RETURN 1; END; RETURN 0; END;
+""", 'F()', 1.0),
+
+    ('3 NTHROOT 8 answers 2, as on the emulator', """
+EXPORT F() BEGIN RETURN 3 NTHROOT 8; END;
 """, 'F()', 2.0),
+
+    # How they bind, measured on the Virtual Calculator on 2026-09-24.
+    ('MOD sits with *, and before +', """
+EXPORT F() BEGIN RETURN 9 MOD 4 + 100; END;
+""", 'F()', 101.0),
+    ('MOD and * go left to right', """
+EXPORT F() BEGIN RETURN 2 * 7 MOD 4 + 9 MOD 4 * 2; END;
+""", 'F()', 4.0),
+    ('^ and a minus sign bind tighter than MOD', """
+EXPORT F() BEGIN RETURN 2^3 MOD 5 + -9 MOD 4; END;
+""", 'F()', 6.0),
+    ('NTHROOT binds tighter than * and +', """
+EXPORT F() BEGIN RETURN 2 * 3 NTHROOT 8 + 19; END;
+""", 'F()', 23.0),
+    ('MOD sits with / too, left to right', """
+EXPORT F() BEGIN RETURN 8 / 2 MOD 3 + 9 MOD 4 / 2; END;
+""", 'F()', 1.5),
+    ('NTHROOT binds tighter than ^', """
+EXPORT F() BEGIN RETURN 2 ^ 3 NTHROOT 8; END;
+""", 'F()', 4.0),
+    ('NTHROOT binds tighter than a minus sign', """
+EXPORT F() BEGIN RETURN -3 NTHROOT 8; END;
+""", 'F()', -2.0),
+    ('8 variables in one LOCAL compile', """
+EXPORT F() BEGIN LOCAL a,b,c,d,f,g,h,j; a := 8; RETURN a; END;
+""", 'F()', 8.0),
+    ('6 initialised variables in one EXPORT compile', """
+EXPORT ZA:=1, ZB:=2, ZC:=3, ZD:=4, ZE:=5, ZF:=6;
+EXPORT F() BEGIN RETURN ZA + ZF; END;
+""", 'F()', 7.0),
+    ('a single = as a statement compares, and assigns nothing', """
+EXPORT F() BEGIN LOCAL za; za := 1; za = 2; RETURN za; END;
+""", 'F()', 1.0),
+    ('i and e can be local names', """
+EXPORT F() BEGIN LOCAL i, e; i := 2; e := 2; RETURN i * 3 + e + 1; END;
+""", 'F()', 9.0),
+    ('two NTHROOT go left to right', """
+EXPORT F() BEGIN RETURN 2 NTHROOT 3 NTHROOT 64; END;
+""", 'F()', 64 ** (1 / 3 ** 0.5)),
+    ('a string indexed answers the character code', """
+EXPORT F() BEGIN LOCAL zs, zi; zs := "abc"; zi := 2; RETURN zs(zi); END;
+""", 'F()', 98.0),
+    ('an odd root of a negative is real', """
+EXPORT F() BEGIN RETURN 3 NTHROOT (-8); END;
+""", 'F()', -2.0),
+
+    # An index of 0 into a list, measured on the emulator on 2026-09-24.
+    ('a list read at 0 answers its last element', """
+EXPORT F() BEGIN LOCAL L, zi; L := {10,20,30}; zi := 0; RETURN L(zi); END;
+""", 'F()', 30.0),
+    ('a list assigned at 0 grows by one', """
+EXPORT F() BEGIN LOCAL L, zi; L := {10,20,30}; zi := 0; L(zi) := 40; RETURN L; END;
+""", 'F()', [10.0, 20.0, 30.0, 40.0]),
 
     ('SIZE of a MATRIX is its dimensions, not its element count', """
 EXPORT F() BEGIN RETURN SIZE([[1,2,3],[4,5,6]]); END;
@@ -413,8 +491,17 @@ EXPORT F() BEGIN RETURN INVERSE([[1,2],[2,4]]); END;
     ('RREF of something that is not a matrix', """
 EXPORT F() BEGIN RETURN RREF({1,2,3}); END;
 """, 'F()'),
-    ('index 0', """
-EXPORT F() BEGIN LOCAL L; L := {1,2}; RETURN L(0); END;
+    ('a matrix read at 0, an error on the emulator', """
+EXPORT F() BEGIN LOCAL M, zi; M := [[1,2],[3,4]]; zi := 0; RETURN M(zi, 1); END;
+""", 'F()'),
+    ('an empty list read at 0, an error on the emulator', """
+EXPORT F() BEGIN LOCAL L, zi; L := {}; zi := 0; RETURN L(zi); END;
+""", 'F()'),
+    ('a string read at 0, an error on the emulator', """
+EXPORT F() BEGIN LOCAL zs, zi; zs := "abc"; zi := 0; RETURN zs(zi); END;
+""", 'F()'),
+    ('an even root of a negative, refused on the emulator', """
+EXPORT F() BEGIN RETURN 2 NTHROOT (-4); END;
 """, 'F()'),
     ('index out of range', """
 EXPORT F() BEGIN LOCAL L; L := {1,2}; RETURN L(5); END;
@@ -460,7 +547,135 @@ EXPORT F() BEGIN RETURN LEFT("abcdef", -1); END;
     ('RIGHT with a negative count', """
 EXPORT F() BEGIN RETURN RIGHT("abcdef", -1); END;
 """, 'F()'),
+
+    # What the calculator refuses to compile, this refuses to load.
+    ('9 variables in one LOCAL, which does not compile', """
+EXPORT F() BEGIN LOCAL a,b,c,d,f,g,h,j,k; RETURN 1; END;
+""", 'F()'),
+    ('a function whose END has no semicolon', """
+EXPORT F() BEGIN RETURN 1; END
+""", 'F()'),
+    ('7 initialised variables in one EXPORT', """
+EXPORT ZA:=1, ZB:=2, ZC:=3, ZD:=4, ZE:=5, ZF:=6, ZG:=7;
+EXPORT F() BEGIN RETURN ZA; END;
+""", 'F()'),
+
+    # The calculator refuses the call forms of its operator words when it
+    # compiles (emulator), so they must not answer here.
+    ('MOD written as a call', """
+EXPORT F() BEGIN RETURN MOD(9, 4); END;
+""", 'F()'),
+    ('NTHROOT written as a call', """
+EXPORT F() BEGIN RETURN NTHROOT(3, 8); END;
+""", 'F()'),
+
+    ('a word it does not know, after an expression', """
+EXPORT F() BEGIN RETURN 9 FOO 4; END;
+""", 'F()'),
+    ('the same word after an assignment', """
+EXPORT F() BEGIN LOCAL z; z := 9 FOO 4; RETURN z; END;
+""", 'F()'),
+
+    # A builtin handed what it was not written for: a Python TypeError here
+    # used to end `hpprime run` with a traceback. HP's own examples hit it.
+    ('CONCAT handed a number', """
+EXPORT F() BEGIN RETURN CONCAT({1,2,3}, 4); END;
+""", 'F()'),
+    ('FLOOR handed a list', """
+EXPORT F() BEGIN RETURN FLOOR({3.2, -3.2}); END;
+""", 'F()'),
+    ('a minus sign before a string', """
+EXPORT F() BEGIN RETURN -"abc"; END;
+""", 'F()'),
 ]
+
+
+def uncovered_stays_local():
+    """A function the interpreter cannot cover must not stop the rest of the
+    file from loading and running: it raises when it is called, and only
+    then."""
+    m = P.Machine()
+    m.load('EXPORT GOOD() BEGIN RETURN 9 MOD 4; END;\n'
+           'EXPORT BAD() BEGIN RETURN 2.5 NTHROOT (-8); END;\n'
+           'EXPORT ODD() BEGIN RETURN 9 FOO 4; END;')
+    if m.call('GOOD') != 1.0:
+        return False, 'GOOD did not answer 1'
+    for name in ('BAD', 'ODD'):
+        try:
+            got = m.call(name)
+            return False, '%s answered %r' % (name, got)
+        except P.Unsupported:
+            pass
+    return True, ''
+
+
+def not_covered_is_not_an_error():
+    """What the calculator has and this does not implement is a case not
+    covered, never a refusal the calculator would make: a name with its
+    app's name in front, which compiles and runs on the calculator
+    (apps.qualified-names), a name on HP's list, and one that starts with a
+    letter outside ASCII. A name nobody has stays undefined."""
+    m = P.Machine()
+    m.load('EXPORT GOOD() BEGIN RETURN 7; END;\n'
+           'EXPORT QREAD() BEGIN RETURN Statistics_1Var.MeanX; END;\n'
+           'EXPORT QSET() BEGIN Statistics_1Var.D1 := {1,2}; RETURN 1; END;\n'
+           'EXPORT QCALL() BEGIN RETURN Spreadsheet.SUM({1,2,3}); END;\n'
+           'EXPORT QSTORE() BEGIN 3 \u25b6 Finance.PV; RETURN 1; END;\n'
+           'EXPORT LISTED() BEGIN RETURN Xmin; END;\n'
+           'EXPORT LCALL() BEGIN RETURN SSS(3,4,5); END;\n'
+           'EXPORT GREEK() BEGIN RETURN \u03a3LIST({1,2,3}); END;\n'
+           'EXPORT NOBODY() BEGIN RETURN ZQNOSUCH; END;')
+    if m.call('GOOD') != 7.0:
+        return False, 'GOOD did not answer 7'
+    for name in ('QREAD', 'QSET', 'QCALL', 'QSTORE', 'LISTED', 'LCALL',
+                 'GREEK'):
+        try:
+            got = m.call(name)
+            return False, '%s answered %r' % (name, got)
+        except P.Unsupported:
+            pass
+        except P.PPLError as e:
+            return False, '%s was called an error: %s' % (name, e)
+    try:
+        m.call('NOBODY')
+        return False, 'NOBODY answered'
+    except P.PPLError:
+        pass
+    except P.Unsupported as e:
+        return False, 'NOBODY was called not covered: %s' % e
+    return True, ''
+
+
+def cli_never_tracebacks():
+    """hpprime run prints one line and exits 1 on what it does not cover,
+    at load time and at run time, and on a --call with something after the
+    expression: never a Python traceback."""
+    import io as _io
+    import tempfile
+    folder = tempfile.mkdtemp()
+    cases = [('EXPORT F() BEGIN RETURN CONCAT({1}, 2); END;', 'F()'),
+             ('EXPORT F() BEGIN RETURN "unterminated; END;', 'F()'),
+             ('EXPORT F() BEGIN RETURN 1; END;', 'F() F()'),
+             ('EXPORT F() BEGIN RETURN \u03c3X; END;', 'F()'),
+             ('EXPORT F() BEGIN RETURN Solve.SOLVE(X^2-4=0,X,1); END;',
+              'F()')]
+    for k, (source, call) in enumerate(cases):
+        path = os.path.join(folder, 'C%d.txt' % k)
+        with _io.open(path, 'w', encoding='utf-8', newline='\n') as f:
+            f.write(source)
+        out = _io.StringIO()
+        saved, sys.stdout = sys.stdout, out
+        try:
+            rc = P.cli([path, '--call', call])
+        except Exception as e:
+            sys.stdout = saved
+            return False, '%r raised %r' % (source, e)
+        finally:
+            sys.stdout = saved
+        if rc != 1 or 'ERROR' not in out.getvalue():
+            return False, '%r gave %r' % (source, out.getvalue())
+    return True, ''
+
 
 
 def evaluate(source, call):
@@ -546,6 +761,22 @@ def main():
     except Exception as e:
         bad += 1
         print('  FAIL  a file with a byte order mark raised: %s' % e)
+
+    for check, what in ((uncovered_stays_local,
+                         'a function not covered leaves the rest of the file '
+                         'running'),
+                        (not_covered_is_not_an_error,
+                         'what the calculator has and this does not cover is '
+                         'not called an error'),
+                        (cli_never_tracebacks,
+                         'hpprime run answers in one line, never a traceback')):
+        good, why = check()
+        if good:
+            ok += 1
+            print('  ok    %s' % what)
+        else:
+            bad += 1
+            print('  FAIL  %s: %s' % (what, why))
 
     print('')
     for name, source, call in ERRORS:

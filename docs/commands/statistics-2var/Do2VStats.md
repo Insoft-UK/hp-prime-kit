@@ -1,10 +1,11 @@
 # Do2VStats
 
-Computes the two-variable statistics, and its data set could not be filled.
+Computes the two-variable statistics of an analysis and writes them into the app's variables; answers 1.
 
 | | |
 |---|---|
 | Syntax | `Do2VStats(Sn)` |
+| Syntax | `Statistics_2Var.Do2VStats(Statistics_2Var.Sn)` |
 | Group | statistics-2var |
 | Runs on the PC | no |
 
@@ -14,35 +15,40 @@ Computes the two-variable statistics, and its data set could not be filled.
 |---|---|---|
 | `EXPR("S1:=[[1,2],[2,4],[3,6]]")` | *error* | [emulator](../results.tsv) |
 | `EXPR("Do2VStats(S1)")` | *error* | [emulator](../results.tsv) |
+| `EXPR("Statistics_2Var.C1:={1,2,3,4}")` | `{1,2,3,4}` | [emulator](../results.tsv) |
+| `EXPR("Statistics_2Var.C2:={2,3,5,9}")` | `{2,3,5,9}` | [emulator](../results.tsv) |
+| `EXPR("Statistics_2Var.Do2VStats(Statistics_2Var.S1)")` | `1` | [emulator](../results.tsv) |
 
 ## Behaviour
 
-**The first row is why the second one cannot mean much** (emulator).
-Assigning a matrix to `S1` is itself refused, and reading `S1` back afterwards
-is refused too, so the app's first data set was never filled and this command
-was asked about nothing.
+**Bare it was refused because another app was active** (emulator): the first
+two rows were taken with the Function app active,
+[apps.reset-leaves-function-active](../../topics/apps.md#apps.reset-leaves-function-active).
+With the app's name in front, under the same condition, it answered 1 once the
+columns held data,
+[apps.qualified-names](../../topics/apps.md#apps.qualified-names).
 
-**That was measured on purpose** (emulator). An earlier batch called this
-command after an assignment without checking whether the assignment worked,
-and drew a conclusion from the refusal. The same mistake in the `function`
-group produced a wrong reading that had to be corrected, so the setup is now
-a row of its own.
+**The data goes in the columns** (emulator): `Statistics_2Var.C1:={1,2,3,4}`
+and `Statistics_2Var.C2:={2,3,5,9}` answered their lists. The first row, a
+matrix assigned to `S1`, was refused with the Function app active, as every
+bare name of this app is, and this entry took it to mean the data could not be
+filled. `S1` is the analysis the command takes; whether it can be assigned at
+all was not tried (unverified).
 
-**`F1` and `S1` behave differently** (emulator). The function app's variable
-accepted an assignment -- storing a number rather than a function, which is
-its own problem -- while this one refuses assignment outright.
+**It writes its results into the app, and answers only 1** (emulator): after
+it ran, [MeanY](MeanY.md) read 4.75, [Corr](Corr.md) 0.959166304663 and
+[CoefDet](CoefDet.md) 0.92, all three refused before, and
+`Statistics_2Var.MeanX` read 2.5.
 
-**So this group is still unresolved** (unverified), and honestly so: three of
-its five names refuse on data sets that could not be filled,
-[residue](residue.md) answers because it needs no data set, and nothing here
-says whether the commands work.
+**On a reset calculator `S1` pairs `C1` as x with `C2` as y** (emulator): the
+means came out 2.5 and 4.75, those of the two columns in that order.
 
-The probe is a way to put data into `S1` at all (unverified), which is
-pressing keys in the Statistics app rather than a batch.
+[Resid](Resid.md), [SetIndep](SetIndep.md) and [SetDepend](SetDepend.md) were
+not tried with the app's name in front (unverified).
 
 The interpreter does not implement it, so `hpprime run` cannot check a program
 that uses it (unverified).
 
 ## Related
 
-[Resid](Resid.md) · [SetIndep](SetIndep.md) · [residue](residue.md)
+[MeanY](MeanY.md) · [Corr](Corr.md) · [residue](residue.md) · [apps.qualified-names](../../topics/apps.md#apps.qualified-names)

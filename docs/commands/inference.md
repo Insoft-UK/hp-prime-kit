@@ -6,7 +6,7 @@ Every entry in this group, in full. Each one is written in its own file, and tha
 
 | | |
 |---|---|
-| [Alpha](#Alpha) | The significance level: refused with the wrong app, set and kept with its own. |
+| [Alpha](#Alpha) | The significance level: refused bare with the wrong app, set and kept with its own. |
 | [AltHyp](#AltHyp) | Which alternative hypothesis the test uses. |
 | [AnovaOneWay](#AnovaOneWay) | One-way analysis of variance over any number of samples. |
 | [Chi2GOF](#Chi2GOF) | The chi-square goodness-of-fit test, refused for the arguments given. |
@@ -46,7 +46,7 @@ Every entry in this group, in full. Each one is written in its own file, and tha
 | [SSerr](#SSerr) | The error sum of squares of an analysis of variance. |
 | [TestScore](#TestScore) | The test statistic, 0 until DoInference put −0.946205374811 in it. |
 | [TestValue](#TestValue) | The hypothesised value the test is measured against. |
-| [Xlist](#Xlist) | The one variable measured that answers with the wrong app active. |
+| [Xlist](#Xlist) | An Inference list that answers `{}` with another app active, as the app's other five lists do. |
 | [Xval](#Xval) | A value of x to predict from a fitted line. |
 | [Ylist](#Ylist) | The second data list, and the one that proved a list can be assigned. |
 | [Yval](#Yval) | A value of y predicted from a fitted line. |
@@ -72,7 +72,7 @@ Every entry in this group, in full. Each one is written in its own file, and tha
 
 ## Alpha
 
-The significance level: refused with the wrong app, set and kept with its own.
+The significance level: refused bare with the wrong app, set and kept with its own.
 
 | | |
 |---|---|
@@ -90,10 +90,11 @@ The significance level: refused with the wrong app, set and kept with its own.
 | `EXPR(" Alpha")` | `0.05` | [emulator](results.tsv) |
 | `EXPR("Alpha:=0.01")` | `0.01` | [emulator](results.tsv) |
 | `EXPR("(Alpha)")` | `0.01` | [emulator](results.tsv) |
+| `EXPR("Inference.Alpha")` | `0.05` | [emulator](results.tsv) |
 
 ### Behaviour
 
-**The five rows are one name under two conditions** (emulator). With the
+**The first five rows are one name under two conditions** (emulator). With the
 Function app active, which is what a reset calculator has,
 [apps.reset-leaves-function-active](../topics/apps.md#apps.reset-leaves-function-active),
 both reading and assigning were refused. With the Inference app selected by
@@ -104,6 +105,10 @@ answered 0.01. Nothing about the name changed between the two batches.
 app in which this has been measured, after
 [SideA](triangle-solver/SideA.md), and the first in which what is written
 is a setting rather than a measurement.
+
+**With its app's name in front it answers from another app** (emulator):
+the last row, `Inference.Alpha`, read 0.05 with the Function app active,
+where `Alpha` alone was refused, [apps.qualified-names](../topics/apps.md#apps.qualified-names).
 
 **It was 0.05 before anything touched it** (emulator). The Inference app
 ships with a worked example loaded, so a program reading this before writing
@@ -1914,7 +1919,7 @@ that uses it (unverified).
 
 ## Xlist
 
-The one variable measured that answers with the wrong app active.
+An Inference list that answers `{}` with another app active, as the app's other five lists do.
 
 | | |
 |---|---|

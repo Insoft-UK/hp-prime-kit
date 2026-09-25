@@ -32,7 +32,8 @@ nothing more. It read `0.00` once Finance was active.
 [TvmIPYR](TvmIPYR.md) was measured from a batch nobody had touched, so
 with the Function app active, and it answered. A program that cannot select
 the Finance app can still compute this value by calling the function with
-its arguments.
+its arguments. [PV](PV.md) was also read as `Finance.PV` from the Function
+app, [apps.qualified-names](../../topics/apps.md#apps.qualified-names); this name was not tried that way (unverified).
 
 **Whether a program can set it is untested** (unverified). [PV](PV.md) took
 `PV:=1000` and kept it with the Finance app active, so a Finance variable can

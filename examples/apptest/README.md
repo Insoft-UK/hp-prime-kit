@@ -11,10 +11,7 @@ blank-based app that has no view of its own, which corrected what this
 repository used to say.
 
 So this is no longer a gap to close. It is still worth running if you have a
-G1, or if you want to settle the one number that is still ambiguous: 11 is
-both `[Num]` and what two published apps use as soft key 6. Press the six
-on-screen soft-key positions in step 3 and the app will tell you what they
-return.
+G1, or a firmware other than 2.4.15515.
 
 ---
 
@@ -57,9 +54,12 @@ The app prints them in order, numbered, so you only have to read the screen.
 
 Two things worth trying while you are there:
 
-- Press the six on-screen soft-key positions at step 3. That is the open
-  question: `[Num]` returns 11, and 11 is also what two published apps use as
-  soft key 6. One measurement settles whether they are the same key.
+- Touch the six labels along the bottom at step 3. The app should go on
+  waiting: they are touch targets and report nothing through `GETKEY`, and
+  what published apps call soft key 6 is the physical `[Num]`, which is why
+  both are 11
+  ([interface.soft-labels-not-keys](../../docs/topics/interface.md#interface.soft-labels-not-keys)).
+  A code there would contradict that fact, and is worth reporting.
 - Leave the app and reopen it. It should draw its own screen again, not
   something else. Then, if the CK brings the folder back to your PC, run
   `hpprime verify APPTEST.hpappdir`: it should report that the calculator

@@ -3,50 +3,82 @@
 Ready to copy. §1 is the one to paste when your assistant cannot read this
 repository; the rest are task prompts that assume it can.
 
-If your assistant *can* read files, do not paste any of this: point it at
-`AGENTS.md` (or `SKILL.md` for Claude Code) and it has the whole thing.
+If your assistant *can* read files, do not paste any of this. Point it at
+[`docs/llms.txt`](../llms.txt), the index of every fact and command entry, and
+at [`AGENTS.md`](../../AGENTS.md) (or [`SKILL.md`](../../SKILL.md) for Claude
+Code) for how to work here.
 
 ---
 
 ## 1. The context block, for a chat with no file access
 
-Paste this before asking for any PPL. It is the smallest set of measured
-facts that stops the usual mistakes.
+Paste this before asking for any PPL. It is the smallest set of facts that
+stops the usual mistakes.
+
+It restates the documentation on purpose, because a chat with no file access
+cannot read it. Every rule ends with the fact or the command entry it comes
+from and how that is known, the way `hpprime lint` cites them. Where this
+block and the documentation differ, the documentation is right: a test holds
+every identifier here to a fact or an entry that exists, with the same label,
+but not the wording around it.
 
 ```
 You are writing PPL for an HP Prime G2 (firmware 2.4). PPL is not Python and
-not BASIC. These are measured facts, not preferences:
+not BASIC. Each rule below ends with where it comes from, [identifier, label]:
+G2 means measured on a physical HP Prime G2, emulator means run on HP's
+Virtual Calculator. Cite the identifier when you rely on a rule.
 
-- Everything is 1-based. L(0) is a run-time error.
-- Assign with :=, compare with ==, not-equal is <>.
+- Indexes start at 1. A 0 is never the first element: for MID and for a
+  matrix it is an error, and a list read at 0 answers its LAST element,
+  silently. Never use 0 as an index. [ppl.one-based, G2]
+- A string indexed like a list answers the character's CODE, a number:
+  "abc" at 2 is 98, not "b". Use MID for text. [ppl.string-index-code,
+  emulator]
+- Assign with :=, compare with ==, not-equal is <>. A single = inside a
+  condition compiles and compares like ==, but write ==.
+  [ppl.equality-operators, emulator]
 - END closes every block. ENDIF, ENDFOR, ENDWHILE do not exist.
-- Every END that closes a function is followed by a semicolon: END;
-- All LOCAL declarations go together at the top of the BEGIN, and one LOCAL
-  statement holds at most 7-8 variables. Use groups of 6.
+  [ppl.no-end-keywords, G2]
+- END is followed by a semicolon: END; A missing one is reported on the
+  line after it. [ppl.end-semicolon, emulator]
+- All LOCAL declarations go together at the top of the BEGIN.
+  [ppl.locals-at-top, G2]
+- One LOCAL statement holds at most 8 variables; 9 does not compile. Use
+  groups of 6. [ppl.local-limit, G2]
 - You cannot index the result of a call: SIZE(M)(1) does not compile.
-  Use d := DIM(M); then d(1).
+  Use d := DIM(M); then d(1). [ppl.index-call, G2]
 - Indexing a global declared in another program has been seen both to fail
   and to work on the same calculator; what separates the cases is not known.
   Copying it to a local first (zn := NAMES; then zn(1)) works either way, so
   prefer that, but do not state it as a rule.
+  [ppl.global-index-other-program, G2]
 - EXPORT makes a function visible outside its file. Exported names are
-  global and collide with each other, so prefix them.
-- Matrices and lists are passed BY VALUE: passing a large one copies it.
-- EXPR("") fails at run time. Check SIZE(s) > 0 first.
+  global and collide with each other and with HP's own names (AREA is the
+  Function app's), so prefix them. [ppl.global-namespace, G2]
+- Matrices are passed BY VALUE: passing a large one copies it.
+  [ppl.matrices-by-value, G2]
+- EXPR("") fails at run time. Check SIZE(s) > 0 first. [ppl.expr-empty, G2]
 - GETKEY returns a key position, not a character. Enter is 30.
+  [interface.getkey-position, G2]
 - LEFT(s,0) and RIGHT(s,0) return the WHOLE string, not an empty one, and
   so does asking for more characters than there are. MID(s,start,0) returns
   an EMPTY one. MID's third argument is a length, not an end position, and
-  with two arguments it runs to the end.
+  with two arguments it runs to the end. [LEFT, G2] [RIGHT, G2] [MID, G2]
 - A function with no RETURN is not silent: it answers with the value of its
-  last bare expression. You cannot make one return nothing by omitting it.
+  last statement that produced one. You cannot make one return nothing by
+  omitting it. [ppl.function-always-answers, G2]
 - On the Home screen a function with no arguments is called WITHOUT
   parentheses: MYFUNC, not MYFUNC(). Inside PPL source the parentheses
   are correct. Tell the user the right form when you tell them to test.
-- TEXTOUT_P takes a 7th argument, the max width in pixels. Without it, text
-  that does not fit is painted over its neighbour with no error.
-- There is no debugger and no console. The compiler says "syntax error" and
-  a line number, nothing else.
+  [ppl.home-no-parentheses, G2]
+- TEXTOUT_P's last argument is the maximum width in pixels. Without it,
+  text that does not fit is painted over its neighbour with no error.
+  [interface.textout-width, G2]
+- The compiler says "syntax error" and a line number, and the line is often
+  not the one to fix: with several bad lines Check names one of them, the
+  first or the last depending on the error. [ppl.check-last-error, emulator]
+- x = 2; as a statement assigns NOTHING: it compares and throws the answer
+  away, with no error. Assign with :=. [ppl.equality-operators, emulator]
 
 Do not invent commands. If you are not sure a command exists, say so instead
 of guessing. If you are not sure of a limit, say you are not sure.
@@ -55,11 +87,16 @@ of guessing. If you are not sure of a limit, say you are not sure.
 For MicroPython on the Prime, add:
 
 ```
-MicroPython on the Prime has math, hpprime, micropython. It does NOT have
-time, __future__, or os/sys as CPython has them. hpprime.eval(ppl_string)
-runs PPL and returns the result, but ONLY numbers and flat lists of numbers
-may cross: a list with a string inside closes the app silently, with no
-traceback. The app entry point is main.py, with its code at module level.
+- MicroPython on the Prime has math, hpprime, micropython. It does NOT have
+  time, __future__, or os/sys as CPython has them. [micropython.modules, G2]
+- hpprime.eval(ppl_string) runs PPL and returns the result.
+  [micropython.eval, G2]
+- Only numbers and flat lists of numbers may cross: a list with a string
+  inside closes the app silently, with no traceback.
+  [micropython.list-with-string-closes-the-app, G2]
+- Every Python app examined has its entry point in main.py, with its code at
+  module level. Whether another name works is not known, so keep that.
+  [apps.main-py, unverified]
 ```
 
 ## 2. Task prompts
@@ -105,18 +142,19 @@ It blocks the guess-and-retry loop, which is what burns round trips here.
 
 ```
 Add an interface to this program: <paste>
-Constraints: the screen is 320x240 and my area is y 0..212; the soft-key row
-is 213..239. Use TEXTOUT_P with its 7th width argument everywhere. Keep all
-the logic that decides WHAT is drawn and WHAT each key does in functions that
-call nothing graphical, so I can test them with `hpprime run`.
+Constraints: the screen is 320x240 and my area is y 0..212; the row of
+labels is 213..239. Pass TEXTOUT_P its width, the last argument, everywhere.
+Keep all the logic that decides WHAT is drawn and WHAT each key does in
+functions that call nothing graphical, so I can test them with `hpprime run`.
 ```
 
 ### Wrap it as an app
 
 ```
 Turn this into an HP Prime app with `hpprime build`. It is a PPL program, so
-the app is blank-based and has no view to rest in: draw the menu on screen
-and read the keys, do not rely on [Num] or [View]. Show me the commands.
+the app is blank-based and has no view to rest in: the Num() and View()
+hooks will not fire, but [Num] and [View] arrive through GETKEY as 11 and 9.
+Draw the menu on screen and read the keys. Show me the commands.
 ```
 
 ### Write a probe

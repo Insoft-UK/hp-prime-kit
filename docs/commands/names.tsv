@@ -1174,4 +1174,4 @@ zeros	cas	cas	Toolbox CAS Solve	zeros(Expr,[Var])	13217
 zip	cas	cas		zip(‘Function’, List1, List2, Default)	13217
 ztrans	cas	cas		ztrans(Expr,[Var],[ZtransVar])	13217
 π	cas	cas			13217
-GET	unknown				notes 2.2
+GET	unknown	other			notes 2.2

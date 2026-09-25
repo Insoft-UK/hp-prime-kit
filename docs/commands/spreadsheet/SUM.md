@@ -1,6 +1,6 @@
 # SUM
 
-Adds up a list, once the Spreadsheet app is active.
+Adds up a list; refused unless the Spreadsheet app is active or named in front of it.
 
 | | |
 |---|---|
@@ -14,10 +14,11 @@ Adds up a list, once the Spreadsheet app is active.
 |---|---|---|
 | `SUM({1,2,3})` | `6` | G2 |
 | `EXPR("SUM({1,2,3})")` | *error* | [emulator](../results.tsv) |
+| `EXPR("Spreadsheet.SUM({1,2,3})")` | `6` | [emulator](../results.tsv) |
 
 ## Behaviour
 
-**The two rows are the same call and differ in one thing: whether the
+**The first two rows are the same call and differ in one thing: whether the
 Spreadsheet was the active app** (G2). With it active, typing this on Home
 answers 6; from a batch with another app active, it is refused. The command
 does not have to be typed in a cell -- selecting the app is enough.
@@ -37,6 +38,11 @@ names under their own menu too and those answered. The rule is about the
 harness can measure these names, provided somebody selects the app first --
 which it cannot do on its own, because it resets the calculator before every
 run.
+
+**Or the call carries the app's name** (emulator): the last row,
+`Spreadsheet.SUM({1,2,3})` from a batch with the Function app active,
+answered 6, [apps.qualified-names](../../topics/apps.md#apps.qualified-names). The other names of the group were not tried that way
+(unverified).
 
 **Only four of the twenty-two answer even then, and the other eighteen split
 into two kinds** (emulator). `STAT1`, `STAT2`, `REGRS` and `AMORT` want a

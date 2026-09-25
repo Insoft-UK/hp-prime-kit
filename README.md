@@ -1,25 +1,89 @@
 # hp-prime-kit
 
-Write programs and apps for the HP Prime on a PC, check them there, and only
-then put them on the calculator. It works the same whether you write the code
-yourself or with an AI assistant.
+A reference for programming the HP Prime in which every claim says how it is
+known, and the tools to write, check and install programs from a PC. It is
+written for a person learning the calculator and for an AI writing PPL beside
+one.
 
 The Prime is programmable and thinly documented. Its compiler reports `syntax
-error` and a line number and nothing else; a Python app that does something it
-dislikes closes with no message. The usual way round that is to paste code into
-the Connectivity Kit, compile, look at the calculator and repeat. An assistant
-does not shorten it: there is little PPL in public code for a model to have
-learned from, so it invents syntax that reads well and does not compile.
-
-This kit replaces that loop. You write the code on the PC, lint it, run it and
-build the binary there, and the platform facts you both work from are ones that
-were measured on a calculator.
-
-Python 3.7 or newer. No dependencies, nothing to install.
+error` and a line number and nothing else; a Python app that meets something
+it cannot handle closes with no message. An assistant does not make that
+easier: there is little PPL in public code for a model to have learned from,
+so it writes syntax that reads well and does not compile, and states limits
+that nobody measured. This reference records what was measured, on a
+calculator or on HP's Virtual Calculator, and says so where nothing was.
 
 ---
 
-## Start
+## The documentation
+
+One entry per PPL name, with its syntax, examples carrying the calculator's
+own answers, how it behaves and what models get wrong; and the facts about
+the platform that no single command owns, from the limits that break
+compilation to the screen, apps, Python, the file formats and getting a
+program onto the calculator.
+
+Every claim carries one of four labels, strongest first
+([format.md](docs/format.md#how-each-claim-is-known)):
+
+| Label | Means |
+|---|---|
+| `G2` | measured on a physical HP Prime G2 |
+| `emulator` | run on HP's Virtual Calculator, with the answer kept in [results.tsv](docs/commands/results.tsv) |
+| `HP help` | stated in the calculator's built-in help |
+| `unverified` | none of those, and it says where it came from |
+
+Where it stands:
+
+- **Entries.** 706 of the 706 names that get an entry have one: every
+  statement, command and Home function, all 179 app functions, all 172 app
+  variables, all 65 variables of Home and the system, and `GET`.
+- **Examples.** Of the 1149 examples, 1128 have the Virtual Calculator's answer
+  on file, 4 were measured by hand on a G2, and 17 have no value to record,
+  with the reason in their entry. None is unrun, and the tests fail if one
+  ever is.
+- **Facts.** 122 facts about the platform: 76 measured on a G2, 26 on the
+  emulator, and 20 unverified, which say so.
+
+### Where a person starts
+
+[The guided path](docs/start/01-setup.md): six steps from an empty folder to a
+program running on the calculator, linking to the facts as it uses them.
+
+| | |
+|---|---|
+| [1. What you are getting into](docs/start/01-setup.md) | the machine, the two languages, program against app, what to install |
+| [2. Your first program](docs/start/02-first-program.md) | empty file to running on the calculator, and what breaks on the way |
+| [3. Asking for data and drawing](docs/start/03-input-screen.md) | `INPUT`, keys, text that fits |
+| [4. Wrapping it as an app](docs/start/04-first-app.md) | the icon, and the byte that decides which screen opens |
+| [5. Moving to Python](docs/start/05-python.md) | the bridge to PPL, and two traps that cost a day each |
+| [6. Working with an AI](docs/start/06-working-with-ai.md) | the loop, and what not to accept from a model |
+
+### Where a model starts
+
+[`docs/llms.txt`](docs/llms.txt): every entry and every fact on one line, with
+its link and a one-line summary, kept under 100,000 bytes so it can be loaded
+whole. A model cites a fact by its identifier, such as `ppl.local-limit`, and a
+command by its name. Whether a name exists at all is in
+[`names.tsv`](docs/commands/names.tsv), HP's own list.
+
+### The reference
+
+| | |
+|---|---|
+| [commands](docs/commands/index.md) | the entries, by name and by group |
+| [ppl.md](docs/topics/ppl.md) | the language: the limits that break compilation, and the restrictions that look reasonable and do not exist |
+| [interface.md](docs/topics/interface.md) | screen, keyboard and touch: `INPUT`, the key map, the touch that arrives twice |
+| [libraries.md](docs/topics/libraries.md) | building an interface: which level a screen needs, and what the published libraries provide |
+| [apps.md](docs/topics/apps.md) | the `.hpappdir`, the hooks, the startup-view byte, and the apps whose functions need them active |
+| [micropython.md](docs/topics/micropython.md) | Python on the calculator, the bridge to PPL, and the call that closes the app |
+| [formats.md](docs/topics/formats.md) | the binary container and the internal number format, both decoded, and what is still not |
+| [deploy.md](docs/topics/deploy.md) | getting it onto the calculator: the emulator folder you can write into, and the two traps of the one you cannot |
+
+## The tools
+
+One command, `hpprime`, [documented here](docs/tools.md). Python 3.7 or
+newer, no dependencies, nothing to install.
 
 ```bash
 git clone https://github.com/JordiRigau/hp-prime-kit
@@ -32,61 +96,23 @@ the short way: `.\hpprime` in PowerShell, `./hpprime` on macOS and Linux, or
 `python hpprime.py` anywhere.
 
 ```bash
-hpprime new CIRCLE                     # a starter that already runs
-hpprime lint CIRCLE.txt                # what the compiler will not explain
+hpprime new CIRCLE                            # a starter that already runs
+hpprime lint CIRCLE.txt                       # what the compiler will not explain
 hpprime run  CIRCLE.txt --call "CIRCAREA(2)"  # run the real file, here
-hpprime write CIRCLE.txt -o CIRCLE.hpprgm  # build the binary
-hpprime install CIRCLE.hpprgm --restart    # into the emulator, and open it
+hpprime write CIRCLE.txt -o CIRCLE.hpprgm     # build the binary
+hpprime install CIRCLE.hpprgm --restart       # into the emulator, and open it
 ```
 
 The last line installs into the emulator and opens it, with nothing to drag. On
-a physical calculator that step is still a drag onto it in the Connectivity Kit
+a physical calculator that step is a drag onto it in the Connectivity Kit
 window. [deploy.md](docs/topics/deploy.md) covers both.
-
-New to the Prime: start at [the guided path](docs/start/01-setup.md), six steps
-from an empty folder to a program running on the calculator.
-
-Working with an AI: point it at [`AGENTS.md`](AGENTS.md) for Cursor, Copilot or
-Codex, or at [`SKILL.md`](SKILL.md) for Claude Code. Both load the same rules.
-If your assistant cannot read files, paste
-[`docs/ai/prompts.md`](docs/ai/prompts.md) §1 instead.
-
-## What is here
-
-The guided path, in order:
-
-| | |
-|---|---|
-| [1. What you are getting into](docs/start/01-setup.md) | the machine, the two languages, program against app, what to install |
-| [2. Your first program](docs/start/02-first-program.md) | empty file to running on the calculator, and what breaks on the way |
-| [3. Asking for data and drawing](docs/start/03-input-screen.md) | `INPUT`, keys, text that fits |
-| [4. Wrapping it as an app](docs/start/04-first-app.md) | the icon, and the byte that decides which screen opens |
-| [5. Moving to Python](docs/start/05-python.md) | the bridge to PPL, and two traps that cost a day each |
-| [6. Working with an AI](docs/start/06-working-with-ai.md) | the loop, and what not to accept from a model |
-
-The reference. Every claim in it says how it is known: measured on a G2, run
-on HP's Virtual Calculator, taken from HP's help, or marked `unverified`. The
-labels and the format are in [format.md](docs/format.md).
-
-| | |
-|---|---|
-| [commands](docs/commands/index.md) | one entry per PPL name, 598 of them: syntax, examples with the calculator's own answers, and what models get wrong. 741 of the 800 examples were run on the Virtual Calculator, and its answers are kept in [results.tsv](docs/commands/results.tsv) |
-| [ppl.md](docs/topics/ppl.md) | the language: the limits that break compilation, the hypotheses that look reasonable and are false, and what each one is known from |
-| [interface.md](docs/topics/interface.md) | screen, keyboard and touch: `INPUT`, the key map, the touch that arrives twice |
-| [libraries.md](docs/topics/libraries.md) | building an interface: which level a screen needs, and what the published libraries provide |
-| [apps.md](docs/topics/apps.md) | the `.hpappdir`, the hooks, the startup-view byte |
-| [micropython.md](docs/topics/micropython.md) | Python on the calculator, the bridge to PPL, and the call that closes the app |
-| [formats.md](docs/topics/formats.md) | the binary container and the internal number format, both decoded, and what is still not |
-| [deploy.md](docs/topics/deploy.md) | getting it onto the calculator: the emulator folder you can write into, and the two traps of the one you cannot |
-
-The tools. One command, `hpprime`, [documented here](docs/tools.md):
 
 | | |
 |---|---|
 | `hpprime doctor` | what works on this machine, and what to do about what does not |
 | `hpprime new` | a starter that already compiles and runs |
-| `hpprime lint` | twelve rules, each naming the fact it comes from, or saying what it comes from instead |
-| `hpprime run` | runs PPL on your PC: the file you install, not a copy of it |
+| `hpprime lint` | each finding names the fact it comes from and how that fact is known, and is an error only as far as the measurement reaches |
+| `hpprime run` | runs PPL on your PC: the file you install, through an interpreter that raises on what it does not cover |
 | `hpprime write` / `read` | the `.hpprgm` binary, both directions |
 | `hpprime build` / `verify` | apps: build the folder, and catch it drifting |
 | `hpprime install` / `pull` | into the emulator, and back out of it |
@@ -95,20 +121,27 @@ The tools. One command, `hpprime`, [documented here](docs/tools.md):
 | `hpprime matrix` | `.hpmat` files: a whole matrix as a file, nothing pasted |
 | `hpprime docs` / `examples` | the documentation held to its format, and its examples run on the Virtual Calculator |
 
-## Running PPL on the PC
-
 If the same calculation exists twice, in PPL for the calculator and in Python
-to develop against, no ordinary test will tell you the two have drifted apart:
-each is consistent with itself and both pass their own tests. Running the real
-PPL and comparing the answers is what surfaces the difference, and the failures
-cluster where one side forgot a case.
-
-There is a runnable example, with a mode that introduces a divergence so you
-can see what one looks like:
+to develop against, no ordinary test will tell you the two have drifted apart.
+Running the real PPL and comparing the answers is what surfaces the
+difference, and there is a runnable example, with a mode that introduces a
+divergence so you can see what one looks like:
 
 ```bash
 python examples/conformance/conformance.py --break
 ```
+
+## Working with an AI
+
+An assistant that can read the repository starts at
+[`docs/llms.txt`](docs/llms.txt), and at the file its tool reads by itself:
+[`AGENTS.md`](AGENTS.md) for Cursor, Copilot or Codex, [`SKILL.md`](SKILL.md)
+for Claude Code. Both say what to read first, the two gates every program goes
+through, what not to claim without evidence, and what only a person can do.
+A chat with no file access gets [`docs/ai/prompts.md`](docs/ai/prompts.md) §1
+pasted in, where every rule names the fact it comes from.
+[Step 6 of the guided path](docs/start/06-working-with-ai.md) is the version
+for the person on the other side.
 
 ## What it does not do
 
@@ -120,35 +153,29 @@ python examples/conformance/conformance.py --break
   computes is the same file in both places; see
   [micropython.md](docs/topics/micropython.md).
 - **Generate a program's compiled block**, which it does not need to. That
-  block is a cache the calculator rebuilds from the source, measured by
-  changing one number in it and watching the calculator put it back, so a
-  program carrying data is generated like any other. How long a large one
+  block is a cache the calculator rebuilds from the source
+  ([formats.block-is-a-cache](docs/topics/formats.md#formats.block-is-a-cache)),
+  so a program carrying data is generated like any other. How long a large one
   takes to compile on arrival has not been measured.
 - **Install on a physical calculator.** That step is a drag onto the
   calculator in the Connectivity Kit window, and the CK's mirror folder is not
   a mailbox. The emulator is different: its folder is a real one, so
   `hpprime install` does the whole job
-  ([evidence](docs/topics/deploy.md#deploy.emulator-folder)).
+  ([deploy.emulator-folder](docs/topics/deploy.md#deploy.emulator-folder)).
 - **Replace testing on the calculator.** It cuts the number of round trips;
-  the last one is still a real Prime. It can compare itself against one:
-  `hpprime compare` runs the same calls in both places and brings the
-  calculator's numbers back as a file.
+  the last one is still a real Prime. `hpprime compare` runs the same calls in
+  both places and brings the calculator's numbers back as a file.
 
 ## Status
 
 Reference firmware: G2, 2.4 revision 15515 (2025-09-15). The examples run on
 the Virtual Calculator 2.4, build 2025-09-15.
 
-The command reference covers every statement, command and Home function, all
-179 app functions, and 130 of the 172 app variables. The other 42 belong to six
-apps and are next. The 65 Home variables, such as `HAngle`, have no entries
-yet.
-
 Both paths have been run on a real G2: a program built from the template this
 repository ships
-([evidence](docs/topics/deploy.md#deploy.writer-on-hardware)),
+([deploy.writer-on-hardware](docs/topics/deploy.md#deploy.writer-on-hardware)),
 and an app built end to end by `hpprime build --ppl`
-([evidence](docs/topics/apps.md#apps.generated-and-verified)).
+([apps.generated-and-verified](docs/topics/apps.md#apps.generated-and-verified)).
 
 ```bash
 python tests/run_all.py     # thirteen suites, none of them needs a calculator
@@ -158,7 +185,7 @@ Open, and listed here so that nobody relies on them:
 
 | | |
 |---|---|
-| G1 | everything here is a G2. Same firmware, different hardware |
+| G1 | everything here was measured on a G2 or its emulator. Same firmware, different hardware |
 | MicroPython speed, and an app's memory limit | not measured. The bridge crossing is 0.2 ms |
 | `.hplist` | lists as files are neither read nor written. Same family as `.hpmat`, with the type byte in the same slot, `0x16` against `0x14`, but every `.hplist` seen here is empty, and the format will not be guessed from those |
 

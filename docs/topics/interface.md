@@ -161,14 +161,24 @@ This is why a picture sized with the wrong form comes out ten times too big,
 and why `GROBW` and `GROBW_P` disagree by a factor of ten on the same grob.
 When you mean pixels, use the `_P` form.
 
-What has not been measured is whether the factor follows a view the program
-sets itself; everything here is the view before anything changes it.
+**All of that is the plot window a reset calculator has, and it moves with
+the window.** The units are the active app's
+[Xmin](../commands/common-plot-view/Xmin.md) to
+[Xmax](../commands/common-plot-view/Xmax.md) and
+[Ymin](../commands/common-plot-view/Ymin.md) to
+[Ymax](../commands/common-plot-view/Ymax.md), −15.9 to 15.9 by
+−10.9 to 10.9 there. With `Xmin` set to 0, `C→PX(0,0)` answered
+`{1,109}`; with `Ymax` set to 0, `{160,0}`. A program that draws in units
+draws somewhere else once anything has changed the window, which the `_P`
+forms never do.
 
 **Evidence.** On the Virtual Calculator 2.4, build 2025-09-15:
 `C→PX(0,0)` answers `{160,109}` and `C→PX(1,1)` answers `{170,99}`;
 `PX→C(0,0)` answers `{-16,10.9}` and `PX→C(100,50)` answers `{-6,5.9}`;
 a grob made `DIMGROB(G4,10,5,0)` measures 100 through `GROBW_P`
-([results.tsv](../commands/results.tsv)).
+([results.tsv](../commands/results.tsv)). The window's rows were measured on
+the same build on 2026-09-24, with the Function app active and each value
+put back inside its row.
 
 <a name="interface.offscreen-grob"></a>
 ## Drawing straight onto the screen shows the work
@@ -426,25 +436,38 @@ From Python the same principle, with `keyboard()` and `GETKEY()`.
 `WAIT(-1)` did not, in a program called from another one.
 
 <a name="interface.wait-minus-one"></a>
-## Whether WAIT(-1) waits is contradicted by two measurements
+## WAIT(-1) waits for a key, though one program on a G2 saw it not wait
 
 | | |
 |---|---|
 | Identifier | `interface.wait-minus-one` |
 | Kind | rule |
-| Known from | unverified |
+| Known from | emulator |
 
-In one program `WAIT(-1)` did not wait: a results screen flashed past and the
-form came straight back. In two published apps `WAIT(-1)` is the event loop,
-returning a number for a key, a list for a touch, and −1 every 60 s. The
-likeliest explanation is a key still pending in the buffer -- the one that had
-just accepted an `INPUT` -- but that is a hypothesis. `WAIT(-1)` would use
-less battery than
-[interface.drain-then-wait](#interface.drain-then-wait) and delivers touches
-in the same place; if you use it, check it yourself.
+In a program run from Home, `WAIT(-1)` waits for a key and answers its code,
+as [GETKEY](../commands/io/GETKEY.md) numbers keys: 42 for the key `1`. It
+waited straight after the `[Enter]` that started the program, so that key did
+not make it return, and it waited after the keyboard had been drained. Only
+`1` was pressed during the waits: whether other keys, or an `[Enter]`
+pressed while it waits, end it the same way was not tried. In two
+published apps it is the event loop, answering a number for a key, a list
+for a touch and −1 every 60 s (unverified: read from those apps, not run
+here).
 
-**Evidence.** The two readings above, which disagree. What would settle it:
-the same program run with and without a key pressed just before the call.
+One program on a G2 saw it not wait: a results screen flashed past and the
+form came straight back. What differed there is not known -- that program was
+called from another, just after an `INPUT` -- so it stays unexplained, and
+[interface.drain-then-wait](#interface.drain-then-wait) is still the loop
+whose behaviour nothing contradicts.
+
+**Evidence.** Measured on the Virtual Calculator 2.4, build 2025-09-15, on
+2026-09-24, in the batch program itself, each call timed with `TICKS`: the
+first answered `{42,17619}`, 42 after 17.6 seconds, and the second, after a
+`GETKEY` loop had drained the keyboard, `{42,13951}`
+([results.tsv](../commands/results.tsv)). The person pressing the keys
+reported pressing `[Enter]` to start the program, seeing it wait, and then
+pressing only `1`. The G2
+reading is from a program in daily use, and was not repeated.
 
 <a name="interface.mouse-lists"></a>
 ## MOUSE returns lists inside lists

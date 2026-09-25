@@ -42,21 +42,27 @@ import io, os, re, sys
 
 # Variables per LOCAL statement. Measured on a G2, firmware 2.4.15515,
 # against programs that compile on that same calculator: 8 declared in one
-# statement compiles; the functions that failed declared 13, 16 and 18.
-# 13 and more is an error; 9 to 12 has not been measured either way, and 7-8
+# statement compiles; the functions that failed declared 13, 16 and 18. On
+# the Virtual Calculator 2.4, build 2025-09-15, on 2026-09-24, 9, 10, 11 and
+# 12 failed too. So 9 and more is an error, 13 and more known from the G2 and
+# 9 to 12 from the emulator; and 7-8
 # is the risky band.
 LOCAL_SAFE = 6
 LOCAL_MAX = 8                   # the most seen to compile
-LOCAL_FAILS = 13                # the fewest seen to fail
+LOCAL_FAILS = 9                 # the fewest seen to fail
+LOCAL_FAILS_G2 = 13             # the fewest seen to fail on the G2
 
 # Initialised variables in one EXPORT: seven on one line failed on a G2.
-# Where the limit lies between two and seven has not been measured.
+# Two, four and six compiled on the Virtual Calculator on 2026-09-24, so
+# fewer than seven is not flagged; three and five were not tried.
 EXPORT_FAILS = 7
 
-# ENDIF, ENDFOR and ENDWHILE were measured to fail. The others are not PPL
-# names either, but nobody has compiled them.
+# ENDIF, ENDFOR and ENDWHILE were measured to fail on a G2, ENDCASE and
+# ENDFUNC on the Virtual Calculator on 2026-09-24. ENDPROC is not a PPL name
+# either, but nobody has compiled it.
 BAD_BLOCK_ENDS = ('ENDIF', 'ENDFOR', 'ENDWHILE')
-UNMEASURED_BLOCK_ENDS = ('ENDCASE', 'ENDPROC', 'ENDFUNC')
+BAD_BLOCK_ENDS_EMULATOR = ('ENDCASE', 'ENDFUNC')
+UNMEASURED_BLOCK_ENDS = ('ENDPROC',)
 KEYWORDS = set("""IF THEN ELSE END FOR FROM TO DOWNTO STEP DO WHILE REPEAT
 UNTIL CASE DEFAULT BREAK CONTINUE RETURN LOCAL EXPORT BEGIN AND OR NOT
 IFTE""".split())
@@ -152,6 +158,7 @@ FACTS = {
     'textout-width': 'interface.textout-width',
     'end-semicolon': 'ppl.end-semicolon',
     'export-clash': 'ppl.global-namespace',
+    'equality-statement': 'ppl.equality-operators',
 }
 
 NO_FACT = {
@@ -168,6 +175,7 @@ NO_FACT = {
 # seen to refuse. tests/test_lint.py holds every rule to that.
 MEASURED = ('G2', 'emulator')
 UNVERIFIED = 'unverified'
+EMULATOR = 'emulator'
 
 _LABELS = {}
 
@@ -388,14 +396,32 @@ def check_source(path, text):
                 found.append(Finding(path, num, 'ERROR', 'single-end',
                                      '%s does not exist in PPL: every block '
                                      'closes with END' % bad))
+        for bad in BAD_BLOCK_ENDS_EMULATOR:
+            if re.search(r'\b%s\b' % bad, up):
+                found.append(Finding(path, num, 'ERROR', 'single-end',
+                                     '%s does not exist in PPL: every block '
+                                     'closes with END' % bad, EMULATOR))
         for bad in UNMEASURED_BLOCK_ENDS:
             if re.search(r'\b%s\b' % bad, up):
                 found.append(Finding(path, num, 'WARN', 'single-end',
                                      '%s is not a PPL name: every block '
-                                     'closes with END. ENDIF, ENDFOR and '
-                                     'ENDWHILE were measured to fail; %s '
-                                     'has not been' % (bad, bad),
-                                     UNVERIFIED))
+                                     'closes with END. ENDIF, ENDFOR, '
+                                     'ENDWHILE, ENDCASE and ENDFUNC were '
+                                     'measured to fail; %s has not been'
+                                     % (bad, bad), UNVERIFIED))
+
+        # ---- a single = as a statement ------------------------------------
+        # `a = 2;` compiles and assigns nothing: it compares and throws the
+        # answer away (emulator, 2026-09-24). Inside a condition a single =
+        # compares, and that is fine; a line that starts with a keyword is
+        # not this case.
+        m = re.match(r'^([A-Za-z_]\w*)(\s*\([^()]*\))?\s*=(?![=>])', s)
+        if m and m.group(1).upper() not in KEYWORDS:
+            found.append(Finding(path, num, 'WARN', 'equality-statement',
+                                 '%s = ... as a statement compares and '
+                                 'throws the answer away: nothing is '
+                                 'assigned, and no error is raised. Assign '
+                                 'with :=' % m.group(1)))
 
         # ---- indexing the result of a call --------------------------------
         # What was measured is a call: SIZE(M)(1) does not compile. A
@@ -414,11 +440,12 @@ def check_source(path, text):
                                      'd := DIM(M); d(1)' % name))
             elif not kind:
                 found.append(Finding(path, num, 'WARN', 'index-call',
-                                     '%s(...)(...): if %s is a function, its '
-                                     'result cannot be indexed here, so store '
-                                     'it first; if it is a list, this is '
-                                     'nested indexing. This file does not say '
-                                     'which' % (name, name), UNVERIFIED))
+                                     '%s(...)(...): if %s is a function -- '
+                                     'this file\'s or another program\'s -- '
+                                     'its result cannot be indexed here, so '
+                                     'store it first; if it is a list, this '
+                                     'is nested indexing. This file does not '
+                                     'say which' % (name, name), EMULATOR))
 
         # ---- index 0 into a list or matrix --------------------------------
         # A 0 passed to a function is an argument, not an index: to one of
@@ -428,17 +455,21 @@ def check_source(path, text):
         # and C→PX(0,0) is correct code.
         #
         # What was measured to fail is MID("abcdef", 0, 2), a 0 where a
-        # position was expected (ppl.one-based). An index of 0 into a list or
-        # a matrix has not been measured, so this is a warning.
+        # position was expected (ppl.one-based). A list read at 0 does not
+        # fail: it answers its last element, and assigning to it appends;
+        # a matrix read at 0 fails (emulator, 2026-09-24). So on a list the
+        # code runs and the hazard is a Python habit getting the last element
+        # for the first: a warning, known from the emulator.
         for m in re.finditer(NOT_NAME + r'(%s)\s*\(\s*0\s*[,)]' % NAME, raw):
             name = m.group(1)
             if name.upper() not in KEYWORDS and name not in functions \
                     and name.lower() not in known_names():
                 found.append(Finding(path, num, 'WARN', 'one-based',
-                                     'index 0 into %s: PPL lists and matrices '
-                                     'start at 1. What 0 does on a list or a '
-                                     'matrix has not been measured' % name,
-                                     UNVERIFIED))
+                                     'index 0 into %s: positions count from '
+                                     '1. A list read at 0 answers its LAST '
+                                     'element and one assigned at 0 grows by '
+                                     'one; a matrix read at 0 is an error'
+                                     % name, EMULATOR))
 
         # ---- LOCAL: how many variables, and where -------------------------
         if re.match(r'^LOCAL\b', up):
@@ -447,38 +478,25 @@ def check_source(path, text):
             if nv >= LOCAL_FAILS:
                 found.append(Finding(path, num, 'ERROR', 'local-limit',
                                      '%d variables in one LOCAL; %d and more '
-                                     'have failed to compile, and the most '
-                                     'seen to compile is %d. Split it into '
-                                     'several LOCAL statements of %d'
+                                     'do not compile, and %d does. Split it '
+                                     'into several LOCAL statements of %d'
                                      % (nv, LOCAL_FAILS, LOCAL_MAX,
-                                        LOCAL_SAFE)))
-            elif nv > LOCAL_MAX:
-                found.append(Finding(path, num, 'WARN', 'local-limit',
-                                     '%d variables in one LOCAL: the most '
-                                     'seen to compile is %d and the fewest '
-                                     'seen to fail is %d, and nothing between '
-                                     'has been measured. Split it into '
-                                     'several LOCAL statements of %d'
-                                     % (nv, LOCAL_MAX, LOCAL_FAILS,
-                                        LOCAL_SAFE), UNVERIFIED))
+                                        LOCAL_SAFE),
+                                     None if nv >= LOCAL_FAILS_G2
+                                     else EMULATOR))
             elif nv > LOCAL_SAFE:
                 found.append(Finding(path, num, 'WARN', 'local-limit',
-                                     '%d variables in one LOCAL: this is the '
-                                     'limit (7-8 depending on firmware). '
-                                     'Groups of %d are safe'
+                                     '%d variables in one LOCAL: 8 is the '
+                                     'most that compiles. Groups of %d are '
+                                     'safe'
                                      % (nv, LOCAL_SAFE)))
-            # What was measured is a LOCAL half way down a function. One at
-            # the top of a block nested inside it has not been.
+            # A LOCAL half way down a function does not compile (G2). One at
+            # the top of a block nested inside it, after code, compiles and
+            # works (emulator, 2026-09-24), so it is not flagged.
             if in_body and seen_code and depth <= body_depth:
                 found.append(Finding(path, num, 'ERROR', 'local-first',
                                      'LOCAL after code: every local goes '
                                      'together at the top of the BEGIN'))
-            elif in_body and seen_code:
-                found.append(Finding(path, num, 'WARN', 'local-first',
-                                     'LOCAL after code, inside a block: one '
-                                     'half way down a function does not '
-                                     'compile, and one inside a nested block '
-                                     'has not been measured', UNVERIFIED))
         elif in_body and not up.startswith('BEGIN'):
             seen_code = True
 
@@ -492,15 +510,6 @@ def check_source(path, text):
                                      'several variables with initial values '
                                      'in one EXPORT: one declaration per '
                                      'line'))
-            elif len(chunks) > 1 and valued:
-                found.append(Finding(path, num, 'WARN', 'export-multiple',
-                                     '%d variables in one EXPORT, %d with '
-                                     'initial values: %d on one line failed '
-                                     'to compile, and fewer has not been '
-                                     'measured. One declaration per line '
-                                     'avoids the question'
-                                     % (len(chunks), len(valued),
-                                        EXPORT_FAILS), UNVERIFIED))
 
         # ---- exported names, to cross-check between files -----------------
         m = re.match(r'^EXPORT\s+([A-Za-z_]\w*)', s, re.I)
@@ -559,13 +568,14 @@ def check_source(path, text):
             body_depth = depth
         if in_body and depth <= 0:
             in_body = False
-        # END without its semicolon. What was measured is a block's END,
-        # inside a function; a function's own last END has not been.
+        # END without its semicolon, a block's or a function's own: neither
+        # compiles, the function's measured at the end of the file and with
+        # another function after it (emulator, 2026-09-24).
         if re.match(r'^END\s*$', s) and was_in_body and not in_body:
-            found.append(Finding(path, num, 'WARN', 'end-semicolon',
-                                 'END without ; closing a function: a '
-                                 'block\'s END was measured to need it, a '
-                                 'function\'s has not been', UNVERIFIED))
+            found.append(Finding(path, num, 'ERROR', 'end-semicolon',
+                                 'END without ; closing a function: in PPL '
+                                 'it is END;, and without it the program '
+                                 'does not compile'))
         elif re.match(r'^END\s*$', s):
             found.append(Finding(path, num, 'ERROR', 'end-semicolon',
                                  'END without ; at the end: in PPL it is '

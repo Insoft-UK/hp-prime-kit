@@ -1,6 +1,6 @@
 # Xlist
 
-The one variable measured that answers with the wrong app active.
+An Inference list that answers `{}` with another app active, as the app's other five lists do.
 
 | | |
 |---|---|

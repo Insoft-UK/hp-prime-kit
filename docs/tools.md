@@ -59,56 +59,62 @@ believed, and how that finding is known, in [format.md](format.md)'s words.
 
 ```
 prog.txt:5: ERROR: index-call: cannot index the result of a call (SIZE(...)(...)): store it first, d := DIM(M); d(1) [ppl.index-call, G2]
-prog.txt:9: WARN: one-based: index 0 into L: PPL lists and matrices start at 1. What 0 does on a list or a matrix has not been measured [ppl.one-based, unverified]
+prog.txt:9: WARN: one-based: index 0 into L: positions count from 1. A list read at 0 answers its LAST element and one assigned at 0 grows by one; a matrix read at 0 is an error [ppl.one-based, emulator]
 ```
 
 A rule is an error only as far as its measurement reaches. What was measured
-for `index-call` is `SIZE(M)(1)`, so a call indexed where it is produced is an
-error, labelled `G2`; a name the file does not define, which may be a
-function or a list, is a warning labelled `unverified`; and a list indexed
-twice, `L(2)(1)`, is not flagged at all. The same split runs through the rest.
-`local-limit` is an error from 13 variables, which failed, and a warning from
-9 to 12, which nobody has run. `export-multiple` is an error from 7
-initialised variables. `local-first` is an error for a `LOCAL` half way down a
-function, and a warning for one inside a nested block. `end-semicolon` is an
-error for a block's `END` and a warning for a function's. `single-end` is an
-error for `ENDIF`, `ENDFOR` and `ENDWHILE`. `one-based` is only ever a
-warning: what failed was `MID` with a 0, and an index of 0 into a list or a
-matrix has not been measured. A 0 passed to a function the file defines is an
+for `index-call` is a call indexed where it is produced -- `SIZE(M)(1)`, and a
+program's own function, in its file or another -- so that is an error; a
+name the file does not define, which may be a function or a list, is a
+warning, since the file cannot say which; and a list indexed twice,
+`L(2)(1)`, is not flagged at all. The same split runs through the rest.
+`local-limit` is an error from 9 variables and a warning at 7 and 8, which
+compile. `export-multiple` is an error from 7 initialised variables, and 2 to
+6 are not flagged, since 2, 4 and 6 compiled. `local-first` is an error for a
+`LOCAL` half way down a function; one inside a nested block compiles and is
+not flagged. `end-semicolon` is an error for a block's `END` and for a
+function's own. `single-end` is an error for `ENDIF`, `ENDFOR`, `ENDWHILE`,
+`ENDCASE` and `ENDFUNC`, and a warning labelled `unverified` for `ENDPROC`,
+which nobody has compiled. `one-based` is a warning,
+labelled `emulator`: a list read at 0 does not fail, it answers its last
+element, which is the hazard for anybody expecting the first, and a matrix
+read at 0 does fail. The linter cannot tell a list from a matrix by its
+name, so it warns on both. A 0 passed to a function the file defines is an
 argument, and is not flagged. When somebody measures one of these cases, it
 becomes an error with its evidence. `tests/test_lint.py` fails on an error
 whose label is not `G2` or `emulator`.
 
-Twelve rules, and each one says where it comes from. Ten name a fact in
+Thirteen rules, and each one says where it comes from. Eleven name a fact in
 [docs/topics/](topics/ppl.md), every one of them measured on a G2 or on the
 emulator: too many variables in one `LOCAL` (`local-limit`), indexing the
 result of a call (`index-call`), `ENDIF` and friends (`single-end`), index 0
 (`one-based`), a `LOCAL` after code (`local-first`), several initialised
 variables in one `EXPORT` (`export-multiple`), an `END` without its semicolon
 (`end-semicolon`), `EXPR` without a guard (`expr-empty`), duplicate exported
-names (`export-clash`, with `--set`), and `TEXTOUT_P` without its width
-(`textout-width`).
+names (`export-clash`, with `--set`), `TEXTOUT_P` without its width
+(`textout-width`), and a single `=` as a statement (`equality-statement`).
 
-There were thirteen. A rule called `equality` flagged a single `=` in a
-condition as an error, and on 2026-09-12 the calculator settled it: `IF a = 2
-THEN` compiles and compares, exactly as `==` does. The rule was removed
-rather than softened, because a linter that flags legal, correct code is
-worse than one rule short. `ppl.equality-operators` holds the measurement,
-and the one question it leaves open -- what a bare `=` does as a statement,
-where `a = 2;` might silently do nothing in place of `a := 2;` -- is waiting
-for a measurement rather than for a rule.
+A rule called `equality` once flagged a single `=` in a condition as an
+error, and on 2026-09-12 the calculator settled it: `IF a = 2 THEN` compiles
+and compares, exactly as `==` does. The rule was removed rather than softened,
+because a linter that flags legal, correct code is worse than one rule short.
+As a statement it is another matter, measured on 2026-09-24: `za = 2;`
+compiles and assigns nothing. `equality-statement` warns on that, and only
+on a line that starts with the name, so a condition is never flagged.
+`ppl.equality-operators` holds both measurements.
 
 `unbalanced` names no fact, because an unclosed block is something the
 compiler reports itself and no fact about the platform is involved.
 
-The twelfth, `unknown-name`, knows every PPL name. A call to a name that is
+The thirteenth, `unknown-name`, knows every PPL name. A call to a name that is
 not on the documentation's [list of names](commands/names.tsv), and that the
 program does not define, is flagged: the command a model invents, `STRLEN(s)`
 for `SIZE(s)`, caught before the calculator answers *syntax error*. It knows
 the calculator's own variables too (`A` to `Z`, `L0` to `L9`, `M0` to `M9`,
 `G0` to `G9`, `Z0` to `Z9`), and it compares the calculator's names without
-regard to case, so that it never flags a spelling the calculator might accept.
-Whether the calculator itself ignores case in its names has not been measured.
+regard to case, so that it never flags a spelling the calculator accepts:
+the calculator reads a command's name in any case,
+[ppl.names-ignore-case](topics/ppl.md#ppl.names-ignore-case).
 It names no fact either: it comes from the list of names, which is an
 inventory rather than something measured about the platform.
 `tests/test_lint.py` fails if any rule names a fact no topic page defines, or
@@ -166,7 +172,33 @@ cause: a tool that hangs with no output is worse than one that refuses.
 
 What it does not cover raises, and never an invented result. If you need a
 command, add it to `BUILTINS` with its case in `tests/test_interp.py`, and
-measure it on the calculator first.
+measure it on the calculator first. These rules keep that promise where it
+used to leak:
+
+- A statement ends at `;`, at the keyword that closes its block, or at the
+  end of the file. A word it cannot read after an expression makes that
+  statement raise "not covered" when it is reached; it is never read as the
+  next statement. That is how `9 MOD 4 + 100` once answered 9. The rest of
+  the file still loads and runs.
+- `MOD` and `NTHROOT` are written between their operands and bind as the
+  emulator showed: `MOD` like `*` and `/`, left to right, with the sign of its
+  divisor, and `NTHROOT` tighter than everything, `^` and a minus sign
+  included. `MOD(9,4)` and `NTHROOT(3,8)` are refused, as the calculator
+  refuses them. The entries, [MOD](commands/arithmetic/MOD.md) and
+  [NTHROOT](commands/catalog/NTHROOT.md), have the rows.
+- A list read at 0 answers its last element and one assigned at 0 grows, as
+  on the emulator; an empty list, a string and a matrix read at 0 are errors
+  ([ppl.one-based](topics/ppl.md#ppl.one-based)). A string indexed answers
+  the character's code ([ppl.string-index-code](topics/ppl.md#ppl.string-index-code)).
+- A name the calculator has and this does not implement, `Xmin` or `SSS`,
+  raises "not covered", and so does a name with its app's name in front,
+  `Statistics_1Var.MeanX`, which the calculator compiles and runs
+  ([apps.qualified-names](topics/apps.md#apps.qualified-names)). Only a name
+  that is on no list and that the program does not define is undefined.
+- A builtin handed something it was not written for, `CONCAT` given a number
+  or `FLOOR` a list, raises "not covered", naming it. The run prints one line
+  and exits 1, never a Python traceback. So does a `--call` with anything
+  after its expression.
 
 That promise is checked against a source outside this repository.
 `tests/hp_examples.txt` holds the worked examples from HP's own built-in help,
@@ -376,7 +408,9 @@ hpprime examples LEFT RIGHT            # these entries' examples, one batch
 hpprime examples --all                 # every entry's examples
 hpprime examples LEFT --probe 'LEFT=LEFT("abc", -2)'   # and a call no entry states
 hpprime examples --collect             # read a batch you did not wait for
+hpprime examples --collect --replace   # and let different answers replace stored rows
 hpprime examples --relabel             # HP help or unverified -> emulator where it agrees
+hpprime examples --compile probes.txt  # does each of these programs compile?
 ```
 
 Runs the documentation's examples on the Virtual Calculator and keeps what it
@@ -406,6 +440,52 @@ Your part is three steps in that emulator, and the command prints them and
 waits: compile `HPKDOC` once (`Check` in its editor, since a program copied as
 a file is not live on Home until then), run it from Home, and close the
 window.
+
+What is stored is the evidence, so nothing replaces it or loses it without a
+word:
+
+- A row `results.tsv` already holds is not replaced by a different answer.
+  The report shows the stored answer as `KEPT`, the command exits 1, and
+  `--collect --replace` lets the new one in. Which of the two is right is
+  yours to settle: an app active in one run and not in the other has done
+  this. The same answer again is written, with the new date.
+- A `--probe` whose entry and call already have a row is refused before the
+  emulator opens, unless `--replace` is given, since collecting it would
+  replace that row.
+- An answer whose cells cannot be read costs its own row, not the batch. When
+  only the number is unreadable, the row is kept from its text, which is the
+  answer as an entry writes it; otherwise the report says `UNREADABLE` and
+  nothing is stored for that call. The two infinities are read
+  ([formats.number-infinity](topics/formats.md#formats.number-infinity)).
+- A row carries the day `M9.hpmat` was written, which is when the emulator
+  closed after running the batch, not the day it was prepared.
+
+Whether something compiles is a question a batch cannot ask: a program that
+does not compile takes the whole batch with it. `--compile` takes a file of
+small programs, each headed by the fact or entry it answers and its name:
+
+```
+[ppl.local-limit] ZQL09
+EXPORT ZQL09()
+BEGIN
+  LOCAL za,zb,zc,zd,zf,zg,zh,zj,zk;
+  RETURN 1;
+END;
+```
+
+They go on `Prime_1` with `HPKDOC` and two controls: `ZCOK`, which compiles,
+and `ZCBAD`, which uses `ENDIF` and does not
+([ppl.no-end-keywords](topics/ppl.md#ppl.no-end-keywords)). You press
+`Check` on each, in the order printed, whatever it says, then run `HPKDOC`
+and close the window. The emulator writes a compiled block into a program's
+file once it compiles
+([deploy.emulator-folder](topics/deploy.md#deploy.emulator-folder)), so the
+file says whether it did. **If `ZCOK` has no block, or `ZCBAD` has one, the
+method did not work and nothing is concluded or stored.** Otherwise each
+program's answer, `*compiles*` or `*does not compile*`, is stored under its
+fact with the source as its call. `--probe` calls in the same run go into
+`HPKDOC`, which is how a program that compiled is then run: a zero-argument
+one as `EXPR("NAME")`.
 
 ## docs
 

@@ -1,6 +1,6 @@
 # Alpha
 
-The significance level: refused with the wrong app, set and kept with its own.
+The significance level: refused bare with the wrong app, set and kept with its own.
 
 | | |
 |---|---|
@@ -18,10 +18,11 @@ The significance level: refused with the wrong app, set and kept with its own.
 | `EXPR(" Alpha")` | `0.05` | [emulator](../results.tsv) |
 | `EXPR("Alpha:=0.01")` | `0.01` | [emulator](../results.tsv) |
 | `EXPR("(Alpha)")` | `0.01` | [emulator](../results.tsv) |
+| `EXPR("Inference.Alpha")` | `0.05` | [emulator](../results.tsv) |
 
 ## Behaviour
 
-**The five rows are one name under two conditions** (emulator). With the
+**The first five rows are one name under two conditions** (emulator). With the
 Function app active, which is what a reset calculator has,
 [apps.reset-leaves-function-active](../../topics/apps.md#apps.reset-leaves-function-active),
 both reading and assigning were refused. With the Inference app selected by
@@ -32,6 +33,10 @@ answered 0.01. Nothing about the name changed between the two batches.
 app in which this has been measured, after
 [SideA](../triangle-solver/SideA.md), and the first in which what is written
 is a setting rather than a measurement.
+
+**With its app's name in front it answers from another app** (emulator):
+the last row, `Inference.Alpha`, read 0.05 with the Function app active,
+where `Alpha` alone was refused, [apps.qualified-names](../../topics/apps.md#apps.qualified-names).
 
 **It was 0.05 before anything touched it** (emulator). The Inference app
 ships with a worked example loaded, so a program reading this before writing

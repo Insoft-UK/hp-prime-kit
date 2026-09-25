@@ -1,6 +1,6 @@
 # Solve
 
-Refused in five forms, with and without its own app active.
+Refused in six forms: with and without its own app active, and with its app's name in front.
 
 | | |
 |---|---|
@@ -17,6 +17,7 @@ Refused in five forms, with and without its own app active.
 | `EXPR("Solve(X^2-4=0)")` | *error* | [emulator](../results.tsv) |
 | `EXPR("Solve( )")` | *error* | [emulator](../results.tsv) |
 | `EXPR("Solve")` | *error* | [emulator](../results.tsv) |
+| `EXPR("Solve.Solve(X^2-4=0,X,1)")` | *error* | [emulator](../results.tsv) |
 
 ## Behaviour
 
@@ -29,6 +30,11 @@ app active, which is what a reset calculator has,
 [apps.reset-leaves-function-active](../../topics/apps.md#apps.reset-leaves-function-active).
 Five refusals across both conditions is a firm negative rather than an
 untested name.
+
+**A sixth form, with the app's name in front, was refused too** (emulator):
+the last row, `Solve.Solve(X^2-4=0,X,1)` with the Function app active, where
+[SOLVE](SOLVE-var.md) with the same arguments answered 2, [apps.qualified-names](../../topics/apps.md#apps.qualified-names). So a program
+solving an equation in this app calls `Solve.SOLVE`.
 
 **That makes it the exception to the app rule** (emulator).
 Selecting the app unblocked `SSS`, `SUM`, `ROOT` and `LinSolve`; here it
@@ -51,9 +57,9 @@ written, or a command reading app state. The third is now unlikely, and the
 first is odd for a word like this, so a menu name is what remains
 (unverified).
 
-**A name clash waits** (HP help): the app variable `SOLVE` differs from this
-only in case, so its entry, when it is written, takes the file name
-`SOLVE-var.md`, the way [Root](../function/Root-var.md) does.
+**Its name differs from [SOLVE](SOLVE-var.md) only in case** (HP help), so
+that entry takes the file name `SOLVE-var.md`, the way
+[Root](../function/Root-var.md) does.
 
 The interpreter does not implement it, so `hpprime run` cannot check a program
 that uses it (unverified).

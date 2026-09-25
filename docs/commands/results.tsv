@@ -5,12 +5,21 @@
 %	%(100,25)	25	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 %CHANGE	%CHANGE(20,25)	25	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-12
 %TOTAL	%TOTAL(20,5)	25	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-12
+AAngle	EXPR("AAngle")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+AAngle	LOCAL o, r; o := EXPR("AAngle"); EXPR("AAngle:=0"); IFERR r := {EXPR("AAngle"), SIN(90)}; THEN r := "refused"; END; EXPR("AAngle:=" + STRING(o)); RETURN r;	{0,0.893996663601}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+AAngle	LOCAL o, r; o := EXPR("AAngle"); EXPR("AAngle:=1"); IFERR r := {EXPR("AAngle"), SIN(90)}; THEN r := "refused"; END; EXPR("AAngle:=" + STRING(o)); RETURN r;	{1,0.893996663601}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+AAngle	LOCAL o, r; o := EXPR("AAngle"); EXPR("AAngle:=2"); IFERR r := {EXPR("AAngle"), SIN(90)}; THEN r := "refused"; END; EXPR("AAngle:=" + STRING(o)); RETURN r;	{2,1}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+AAngle	LOCAL o, r; o := EXPR("AAngle"); EXPR("AAngle:=2"); r := EXPR("AAngle"); EXPR("AAngle:=" + STRING(o)); RETURN r;	2	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
 AAS	EXPR("AAS(30,60,10)")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 AAS	EXPR("AAS(40,60,10)")	{13.4729635533,15.3208888624,80}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-14
 ABS	ABS(-3.14)	3.14	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 ABS	ABS([[1,2],[3,4]])	5.47722557505	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 abscissa	EXPR("abscissa(point(3,4))")	3	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 Accrued	EXPR("Accrued")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-15
+AComplex	EXPR("AComplex")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+AComplex	LOCAL o, r; o := EXPR("AComplex"); EXPR("AComplex:=1"); IFERR r := {EXPR("AComplex"), EXPR("(-4)^0.5")}; THEN r := "refused"; END; EXPR("AComplex:=" + STRING(o)); RETURN r;	"refused"	2	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+AComplex	LOCAL o, r; o := EXPR("AComplex"); EXPR("AComplex:=1"); r := EXPR("AComplex"); EXPR("AComplex:=" + STRING(o)); RETURN r;	1	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+AComplex	LOCAL o, r; o := EXPR("AComplex"); EXPR("AComplex:=2"); IFERR r := {EXPR("AComplex"), EXPR("(-4)^0.5")}; THEN r := "refused"; END; EXPR("AComplex:=" + STRING(o)); RETURN r;	{2,2*}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
 ACOS	ACOS(0.5)	1.0471975512	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 ACOSH	ACOSH(2)	1.31695789692	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 ACOT	ACOT(1)	0.785398163397	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
@@ -24,14 +33,29 @@ ADDROW	ADDROW([[1,2],[3,4]],[[5,6]],3)	*error*		Virtual Calculator 2.4, build 20
 ADDROW	ADDROW([[1,2],[3,4]],{5,6},2)	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-12
 ADDROW	ADDROW([[1,2],[3,4]],{5,6},3)	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-12
 ADDROW	M1 := [[1,2],[3,4]]; ADDROW(M1,{5,6},3); RETURN M1;	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-12
+ADigits	EXPR("ADigits")	4	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+ADigits	LOCAL f, d, r; f := EXPR("AFormat"); d := EXPR("ADigits"); EXPR("AFormat:=2"); EXPR("ADigits:=2"); IFERR r := STRING(1/3); THEN r := "refused"; END; EXPR("ADigits:=" + STRING(d)); EXPR("AFormat:=" + STRING(f)); RETURN r;	"0.33"	2	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+ADigits	LOCAL o, r; o := EXPR("ADigits"); EXPR("ADigits:=2"); IFERR r := {EXPR("ADigits"), STRING(1/3)}; THEN r := "refused"; END; EXPR("ADigits:=" + STRING(o)); RETURN r;	{2,"0.333333333333"}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+ADigits	LOCAL o, r; o := EXPR("ADigits"); EXPR("ADigits:=3"); r := EXPR("ADigits"); EXPR("ADigits:=" + STRING(o)); RETURN r;	3	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
 affix	EXPR("affix(point(3,4))")	3+4*	3	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
+AFiles	EXPR(" AFiles")	{}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+AFiles	EXPR("AFiles")	{}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+AFilesB	EXPR("AFilesB")	{}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+AFormat	EXPR("AFormat")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+AFormat	LOCAL o, r; o := EXPR("AFormat"); EXPR("AFormat:=1"); IFERR r := {EXPR("AFormat"), STRING(1/3)}; THEN r := "refused"; END; EXPR("AFormat:=" + STRING(o)); RETURN r;	{1,"0.333333333333"}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+AFormat	LOCAL o, r; o := EXPR("AFormat"); EXPR("AFormat:=2"); IFERR r := {EXPR("AFormat"), STRING(1/3)}; THEN r := "refused"; END; EXPR("AFormat:=" + STRING(o)); RETURN r;	{2,"0.3333"}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+AFormat	LOCAL o; o := EXPR("AFormat"); EXPR("AFormat:=" + STRING(o)); RETURN EXPR("AFormat");	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
 ALOG	ALOG(3)	1000	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
+ALOG	EXPR("ALOG(2)")	100	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+ALOG	EXPR("Alog(2)")	100	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+ALOG	EXPR("alog(2)")	100	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
 ALPHA	EXPR("ALPHA")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 Alpha	EXPR(" Alpha")	0.05	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-14
 Alpha	EXPR("(Alpha)")	0.01	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-14
 Alpha	EXPR("Alpha")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-14
 Alpha	EXPR("Alpha:=0.01")	0.01	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-14
 Alpha	EXPR("Alpha:=0.05")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-14
+Alpha	EXPR("Inference.Alpha")	0.05	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
 AltHyp	EXPR("AltHyp")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-14
 altitude	EXPR("altitude(point(0,0),point(4,0),point(0,3))")	line(y=4/3*x)	8	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 AMORT	EXPR("AMORT(12,5,-1000,85.6)")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-14
@@ -44,13 +68,24 @@ AngleA	EXPR(" AngleA")	−1	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-1
 AngleA	EXPR("(AngleA)")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-14
 AngleA	EXPR("AngleA")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-14
 AngleA	EXPR("AngleA:=30")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-14
+AngleA	EXPR("Triangle_Solver.AngleA")	−1	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+AngleA	EXPR("ZQREAD()")	−1	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
 AngleB	EXPR("  AngleB")	53.1301023542	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-14
 AngleB	EXPR(" AngleB")	−1	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-14
 AngleC	EXPR("  AngleC")	90	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-14
 AngleC	EXPR(" AngleC")	−1	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-14
+ANote	EXPR("ANote")	""	2	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+ANote	LOCAL o; o := EXPR("ANote"); EXPR("ANote:=" + STRING(o)); RETURN EXPR("ANote");	""	2	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
 AnovaOneWay	EXPR("AnovaOneWay({1,2,3},{4,5,6})")	{13.5,0.021311641129,1,13.5,13.5,4,4,1}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 AnovaOneWay	EXPR("AnovaOneWay({1,2,3},{4,5,6},{7,8,9},{10,11,12})")	{45,0.000023559647,3,135,45,8,8,1}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
+Ans	EXPR(" Ans")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+Ans	EXPR("2+3")	5	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+Ans	EXPR("Ans")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
 Apps	EXPR("Apps")	{"Función","Solucionador","Var 1 estadística","Var 2 estadística","Inferencia","Paramétrica","Polar","Secuencia","Finanzas","Solucionador lineal","Solucionador  (cut at 160 characters)	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-14
+apps.qualified-names	EXPORT ZQREAD()\nBEGIN\n  RETURN Triangle_Solver.AngleA;\nEND;\n	*compiles*		Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+apps.qualified-names	EXPORT ZQSTAT()\nBEGIN\n  Statistics_1Var.D1 := {1,2,2,3,7};\n  Statistics_1Var.Do1VStats(Statistics_1Var.H1);\n  RETURN Statistics_1Var.MeanX;\nEND;\n	*compiles*		Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+AProgram	EXPR("AProgram")	""	2	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+AProgram	LOCAL o; o := EXPR("AProgram"); EXPR("AProgram:=" + STRING(o)); RETURN EXPR("AProgram");	""	2	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
 ARC	DIMGROB(G1,20,20,0); RETURN ARC(G1,10,10,5);	1	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-12
 ARC_P	DIMGROB_P(G1,20,20,0); RETURN ARC_P(G1,10,10,5);	1	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-12
 arcLen	EXPR("arcLen(X^2,0,1)")	1	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
@@ -68,8 +103,19 @@ ASIN	ASIN(0.5)	0.523598775598	0	Virtual Calculator 2.4, build 2025-09-15	2026-09
 ASINH	ASINH(1)	0.88137358702	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 ATAN	ATAN(1)	0.785398163397	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 ATANH	ATANH(0.5)	0.549306144334	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
+AVars	EXPR(" AVars")	{}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+AVars	EXPR("AVars")	{}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
 AVERAGE	EXPR("AVERAGE({1,2,3})")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 AVERAGE	EXPR("AVERAGE({2,4,6})")	4	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-14
+Axes	EXPR("Axes")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+Axes	LOCAL o; o := EXPR("Axes"); EXPR("Axes:=" + STRING(o)); RETURN EXPR("Axes");	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+Base	EXPR("Base")	3	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+Base	EXPR("STRING(R→B(255))")	"#FFh"	2	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+Base	LOCAL o, r; o := EXPR("Base"); EXPR("Base:=0"); IFERR r := {EXPR("Base"), STRING(R→B(255))}; THEN r := "refused"; END; EXPR("Base:=" + STRING(o)); RETURN r;	{0,"#11111111b"}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+Base	LOCAL o, r; o := EXPR("Base"); EXPR("Base:=1"); IFERR r := {EXPR("Base"), STRING(R→B(255))}; THEN r := "refused"; END; EXPR("Base:=" + STRING(o)); RETURN r;	{1,"#377o"}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+Base	LOCAL o, r; o := EXPR("Base"); EXPR("Base:=2"); IFERR r := {EXPR("Base"), STRING(R→B(255))}; THEN r := "refused"; END; EXPR("Base:=" + STRING(o)); RETURN r;	{2,"#255d"}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+Base	LOCAL o, r; o := EXPR("Base"); EXPR("Base:=3"); r := EXPR("Base"); EXPR("Base:=" + STRING(o)); RETURN r;	3	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+Base	LOCAL o, r; o := EXPR("Base"); EXPR("Base:=3"); r := {EXPR("Base"), STRING(R→B(255))}; EXPR("Base:=" + STRING(o)); RETURN r;	{3,"#FFh"}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
 BEG	EXPR(" BEG")	1.00	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-15
 BEG	EXPR("BEG")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-15
 Beta	Beta(2,3)	1/12	8	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
@@ -80,6 +126,9 @@ bisector	EXPR("bisector(point(0,0),point(4,0),point(0,4))")	line(y=x)	8	Virtual 
 BITAND	BITAND(12, 10)	8	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-12
 BITNOT	BITNOT(12)	549755813875	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-12
 BITOR	BITOR(12, 10)	14	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-12
+Bits	EXPR("Bits")	32	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+Bits	LOCAL o, r; o := EXPR("Bits"); EXPR("Bits:=16"); r := EXPR("Bits"); EXPR("Bits:=" + STRING(o)); RETURN r;	16	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+Bits	LOCAL o, r; o := EXPR("Bits"); EXPR("Bits:=8"); r := {EXPR("Bits"), STRING(R→B(300))}; EXPR("Bits:=" + STRING(o)); RETURN r;	{8,"#FFh"}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
 BITSL	BITSL(1)	2	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-12
 BITSL	BITSL(1, 3)	8	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-12
 BITSR	BITSR(8)	4	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-12
@@ -145,12 +194,21 @@ circle	EXPR("circle(point(0,0),point(2,0))")	circle(point(1,0),1)	8	Virtual Calc
 circumcircle	EXPR("circumcircle(point(0,0),point(3,0),point(0,4))")	circle(point(3/2,2),5/2)	8	Virtual Calculator 2.4, build 2025-09-15	2026-09-14
 ClearCell	EXPR("ClearCell( )")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-14
 ClearCell	EXPR("ClearCell()")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-13
+CoefDet	EXPR("CoefDet")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+CoefDet	EXPR("Statistics_2Var.C1:={1,2,3,4}"); EXPR("Statistics_2Var.C2:={2,3,5,9}"); EXPR("Statistics_2Var.Do2VStats(Statistics_2Var.S1)"); RETURN EXPR("Statistics_2Var.CoefDet");	0.92	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+CoefDet	EXPR("Statistics_2Var.CoefDet")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+CoefDet	LOCAL o, r; EXPR("Statistics_2Var.C1:={1,2,3,4}"); EXPR("Statistics_2Var.C2:={2,3,5,9}"); EXPR("Statistics_2Var.Do2VStats(Statistics_2Var.S1)"); o := EXPR("Statistics_2Var.CoefDet"); IFERR EXPR("Statistics_2Var.CoefDet:=99"); r := EXPR("Statistics_2Var.CoefDet"); THEN r := "refused"; END; IFERR EXPR("Statistics_2Var.CoefDet:=" + STRING(o)); THEN r := r; END; RETURN r;	"refused"	2	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
 coefDet	EXPR("coefDet")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-14
 Col	EXPR("Col")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-14
+Col	EXPR("Spreadsheet.Col")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+Col	LOCAL o, r; o := EXPR("Spreadsheet.Col"); IFERR EXPR("Spreadsheet.Col:=2"); r := EXPR("Spreadsheet.Col"); THEN r := "refused"; END; IFERR EXPR("Spreadsheet.Col:=" + STRING(o)); THEN r := r; END; RETURN r;	"refused"	2	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
 COLNORM	COLNORM([[1,2],[3,4]])	6	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 COLOR	EXPR("COLOR")	COLOR	8	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 ColWidth	EXPR("(ColWidth)")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-14
+ColWidth	EXPR("ColWidth")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-25
 ColWidth	EXPR("ColWidth:=40")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-14
+ColWidth	EXPR("Spreadsheet.ColWidth")	−1	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+ColWidth	LOCAL o, r; o := EXPR("Spreadsheet.ColWidth"); IFERR EXPR("Spreadsheet.ColWidth:=40"); r := EXPR("Spreadsheet.ColWidth"); THEN r := "refused"; END; IFERR EXPR("Spreadsheet.ColWidth:=" + STRING(o)); THEN r := r; END; RETURN r;	40	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
 COMB	COMB(5,2)	10	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 CONCAT	CONCAT(1,2,3,4)	{1,2,3,4}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 CONCAT	CONCAT({1,2,3},4)	{1,2,3,4}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
@@ -178,6 +236,10 @@ ContribMat	EXPR("ContribMat")	[[0]]	4	Virtual Calculator 2.4, build 2025-09-15	2
 CONVERT	CONVERT(2_m, 1_ft)	6.56167979003_ft	9	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 coordinates	EXPR("coordinates(point(3,4))")	[3,4]	4	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 CopyVar	EXPR("CopyVar(L1,L2)")	{}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
+Corr	EXPR("Corr")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+Corr	EXPR("Statistics_2Var.C1:={1,2,3,4}"); EXPR("Statistics_2Var.C2:={2,3,5,9}"); EXPR("Statistics_2Var.Do2VStats(Statistics_2Var.S1)"); RETURN EXPR("Statistics_2Var.Corr");	0.959166304663	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+Corr	EXPR("Statistics_2Var.Corr")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+Corr	LOCAL o, r; EXPR("Statistics_2Var.C1:={1,2,3,4}"); EXPR("Statistics_2Var.C2:={2,3,5,9}"); EXPR("Statistics_2Var.Do2VStats(Statistics_2Var.S1)"); o := EXPR("Statistics_2Var.Corr"); IFERR EXPR("Statistics_2Var.Corr:=99"); r := EXPR("Statistics_2Var.Corr"); THEN r := "refused"; END; IFERR EXPR("Statistics_2Var.Corr:=" + STRING(o)); THEN r := r; END; RETURN r;	"refused"	2	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
 corr	EXPR("corr")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-14
 COS	COS(1)	0.540302305868	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 COSH	COSH(1)	1.54308063482	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
@@ -193,11 +255,16 @@ CritVal1	EXPR("CritVal1")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-1
 CritVal2	EXPR("CritVal2")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-14
 CROSS	CROSS([1,2,3],[4,5,6])	[−3,6,−3]	4	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 CSC	CSC(1)	1.18839510578	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
+Cursor	EXPR("Cursor")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+Cursor	LOCAL o; o := EXPR("Cursor"); EXPR("Cursor:=" + STRING(o)); RETURN EXPR("Cursor");	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
 C→PX	C→PX(0,0)	{160,109}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-12
 C→PX	C→PX(1)	{0,0}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-12
 C→PX	C→PX(1,1)	{170,99}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-12
 C→PX	C→PX(10)	{0,0}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-12
 DataType	EXPR("DataType")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-14
+Date	EXPR("Date")	2026.0924	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+Date	EXPR("TYPE(Date)")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+Date	LOCAL o; o := EXPR("Date"); EXPR("Date:=" + STRING(o)); RETURN EXPR("Date");	2026.0924	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
 Date360	EXPR("Date360")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-15
 DATEADD	DATEADD(2026.0101,30)	2026.0131	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-12
 DateDays	EXPR("DateDays(1.012024,12.312024)")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-13
@@ -206,7 +273,10 @@ DateOne	EXPR("DateOne")	2017.0101	0	Virtual Calculator 2.4, build 2025-09-15	202
 DateTwo	EXPR("DateTwo")	2017.0101	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-15
 DAYOFWEEK	DAYOFWEEK(2026.0912)	6	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-12
 DDAYS	DDAYS(2026.0101,2026.0201)	31	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-12
+DelAFiles	EXPR("DelAFiles")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+DelAVars	EXPR("DelAVars")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-24
 DELCOL	DELCOL([[1,2,3],[4,5,6]],2)	[[1,3],[4,6]]	4	Virtual Calculator 2.4, build 2025-09-15	2026-09-12
+DelHVars	LOCAL q, a, b; q := CHAR(34); EXPR("ZQ:=5"); a := SIZE(EXPR("HVars")); EXPR("DelHVars(" + q + "ZQ" + q + ")"); b := SIZE(EXPR("HVars")); RETURN {a, b};	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-24
 DelInstruction	EXPR("DelInstruction")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-14
 DELROW	DELROW([[1,2],[3,4]],1)	[[3,4]]	4	Virtual Calculator 2.4, build 2025-09-15	2026-09-12
 Depreciate	EXPR("Depreciate(\"SL\",1000,100,5)")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-13
@@ -231,10 +301,15 @@ DiscPayback	EXPR("DiscPayback")	*error*		Virtual Calculator 2.4, build 2025-09-1
 distance	EXPR("distance(point(0,0),point(3,4))")	5	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 Dividend	EXPR("Dividend")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-15
 Do1VStats	EXPR("Do1VStats(H1)")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-14
+Do1VStats	EXPR("Statistics_1Var.D1:={1,2,2,3,7}")	{1,2,2,3,7}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+Do1VStats	EXPR("Statistics_1Var.Do1VStats(Statistics_1Var.H1)")	1	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
 Do2VStats	EXPR("Do2VStats(S1)")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-14
 Do2VStats	EXPR("S1")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-14
 Do2VStats	EXPR("S1:=[[1,2],[2,4],[3,6]]")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-14
 Do2VStats	EXPR("S1:=[[1,2],[2,4],[3,6]]"); RETURN EXPR("Do2VStats(S1)");	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-13
+Do2VStats	EXPR("Statistics_2Var.C1:={1,2,3,4}")	{1,2,3,4}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+Do2VStats	EXPR("Statistics_2Var.C2:={2,3,5,9}")	{2,3,5,9}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+Do2VStats	EXPR("Statistics_2Var.Do2VStats(Statistics_2Var.S1)")	1	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
 DoInference	EXPR(" DoInference( )")	1	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-14
 DoInference	EXPR("DoInference")	1	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-14
 DoInference	EXPR("DoInference()")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-14
@@ -252,6 +327,8 @@ EIGENVAL	EIGENVAL([[1,2],[3,4]])	[5.37228132327,−0.372281323269]	4	Virtual Cal
 EIGENVV	EIGENVV([[1,2],[3,4]])	{[[0.415973557919,−0.83696500723],[0.909376709132,0.574275723826]],[[5.37228132327,0],[0,−0.372281323269]]}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 element	EXPR("element(segment(point(0,0),point(4,0)),0.5)")	point(2,0)	8	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 ellipse	EXPR("ellipse(point(-1,0),point(1,0),point(0,1))")	plotparam((√2+√2)/2*COS(t)+*SIN(t),t,0,6.28318530718)	8	Virtual Calculator 2.4, build 2025-09-15	2026-09-14
+Entry	EXPR("Entry")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+Entry	LOCAL o, r; o := EXPR("Entry"); EXPR("Entry:=2"); r := EXPR("Entry"); EXPR("Entry:=" + STRING(o)); RETURN r;	2	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
 EQ	EQ(1,1)	1	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 equation	EXPR("equation(line(point(0,0),point(1,1)))")	"Error: entrada no válida"	2	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 equation	EXPR("equation(segment(point(0,0),point(4,0)))")	y=0	8	Virtual Calculator 2.4, build 2025-09-15	2026-09-14
@@ -309,12 +386,19 @@ Gamma	Gamma(5)	24	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 GEOMETRIC	GEOMETRIC(0.5,3)	0.125	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 geometric_cdf	geometric_cdf(0.5,3)	0.875	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 geometric_icdf	geometric_icdf(0.5,0.5)	1	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
+GET	EXPR("GET")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+GET	EXPR("GET(1)")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+GET	EXPR("GET(QPI(0.5))")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-24
 GETBASE	EXPR("GETBASE(#12h)")	#4h	1	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 GETBITS	GETBITS(12)	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-12
 GETKEY	GETKEY	−1	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-12
 GETPIX	DIMGROB(G1,10,5,0); RETURN GETPIX(G1,0,0);	#FF000000h	1	Virtual Calculator 2.4, build 2025-09-15	2026-09-12
 GETPIX_P	DIMGROB_P(G1,10,10,0); RETURN GETPIX_P(G1,0,0);	#0h	1	Virtual Calculator 2.4, build 2025-09-15	2026-09-12
 GF	EXPR("GF(2,3)")	"GF(2,v^3+v+1,[v,k,g],undef)"	2	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
+GridDots	EXPR("GridDots")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+GridDots	LOCAL o; o := EXPR("GridDots"); EXPR("GridDots:=" + STRING(o)); RETURN EXPR("GridDots");	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+GridLines	EXPR("GridLines")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+GridLines	LOCAL o; o := EXPR("GridLines"); EXPR("GridLines:=" + STRING(o)); RETURN EXPR("GridLines");	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
 GROBH	DIMGROB_P(G1,100,50,0); RETURN GROBH(G1);	5	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-12
 GROBH_P	DIMGROB_P(G1,100,50,0); RETURN GROBH_P(G1);	50	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-12
 GROBW	DIMGROB_P(G1,100,50,0); RETURN GROBW(G1);	10	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-12
@@ -322,12 +406,44 @@ GROBW_P	DIMGROB_P(G1,100,50,0); RETURN GROBW_P(G1);	100	0	Virtual Calculator 2.4
 GSize	EXPR(" GSize")	12.00	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-15
 GSize	EXPR("GSize")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-15
 half_line	EXPR("half_line(point(0,0),point(3,4))")	half_line(point(0,0),point(3,4))	8	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
+HAngle	EXPR("HAngle")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
 HAngle	HAngle	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
+HAngle	LOCAL o, r; o := EXPR("HAngle"); EXPR("HAngle:=1"); r := EXPR("HAngle"); EXPR("HAngle:=" + STRING(o)); RETURN r;	1	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+HAngle	LOCAL o, r; o := EXPR("HAngle"); EXPR("HAngle:=1"); r := {EXPR("HAngle"), SIN(90)}; EXPR("HAngle:=" + STRING(o)); RETURN r;	{1,1}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+HAngle	LOCAL o, r; o := EXPR("HAngle"); EXPR("HAngle:=2"); IFERR r := {EXPR("HAngle"), SIN(100)}; THEN r := "refused"; END; EXPR("HAngle:=" + STRING(o)); RETURN r;	{2,1}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+HComplex	EXPR("(-4)^0.5")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+HComplex	EXPR("HComplex")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+HComplex	LOCAL o, r; o := EXPR("HComplex"); EXPR("HComplex:=1"); IFERR r := {EXPR("HComplex"), EXPR("2 NTHROOT (-4)"), EXPR("3 NTHROOT (-8)")}; THEN r := "refused"; END; EXPR("HComplex:=" + STRING(o)); RETURN r;	{1,2*,−2}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+HComplex	LOCAL o, r; o := EXPR("HComplex"); EXPR("HComplex:=1"); r := EXPR("HComplex"); EXPR("HComplex:=" + STRING(o)); RETURN r;	1	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+HComplex	LOCAL o, r; o := EXPR("HComplex"); EXPR("HComplex:=1"); r := {EXPR("HComplex"), EXPR("(-4)^0.5")}; EXPR("HComplex:=" + STRING(o)); RETURN r;	{1,2*}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+HDigits	EXPR("HDigits")	8	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+HDigits	LOCAL f, d, r; f := EXPR("HFormat"); d := EXPR("HDigits"); EXPR("HFormat:=1"); EXPR("HDigits:=2"); r := STRING(1/3); EXPR("HDigits:=" + STRING(d)); EXPR("HFormat:=" + STRING(f)); RETURN r;	"0.33"	2	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+HDigits	LOCAL o, r; o := EXPR("HDigits"); EXPR("HDigits:=2"); r := {EXPR("HDigits"), STRING(1/3)}; EXPR("HDigits:=" + STRING(o)); RETURN r;	{2,"0.333333333333"}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+HDigits	LOCAL o, r; o := EXPR("HDigits"); EXPR("HDigits:=5"); r := EXPR("HDigits"); EXPR("HDigits:=" + STRING(o)); RETURN r;	5	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
 Heaviside	EXPR("Heaviside(1)")	1	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 hessenberg	hessenberg([[1,2],[3,4]])	{[[1,0],[0,1]],[[1,2],[3,4]]}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
+HFormat	EXPR("HFormat")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+HFormat	LOCAL o, r; o := EXPR("HFormat"); EXPR("HFormat:=1"); r := {EXPR("HFormat"), STRING(1/3)}; EXPR("HFormat:=" + STRING(o)); RETURN r;	{1,"0.33333333"}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+HFormat	LOCAL o; o := EXPR("HFormat"); EXPR("HFormat:=" + STRING(o)); RETURN EXPR("HFormat");	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
 hilbert	hilbert(3)	[[1,0.5,0.333333333333],[0.5,0.333333333333,0.25],[0.333333333333,0.25,0.2]]	4	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
+Hmax	EXPR("Hmax")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+Hmax	EXPR("Statistics_1Var.D1:={1,2,2,3,7}"); EXPR("Statistics_1Var.Do1VStats(Statistics_1Var.H1)"); RETURN EXPR("Statistics_1Var.Hmax");	24	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+Hmax	EXPR("Statistics_1Var.Hmax")	24	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+Hmax	LOCAL o, r; o := EXPR("Statistics_1Var.Hmax"); IFERR EXPR("Statistics_1Var.Hmax:=20"); r := EXPR("Statistics_1Var.Hmax"); THEN r := "refused"; END; IFERR EXPR("Statistics_1Var.Hmax:=" + STRING(o)); THEN r := r; END; RETURN r;	20	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+Hmin	EXPR("Hmin")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+Hmin	EXPR("Statistics_1Var.D1:={1,2,2,3,7}"); EXPR("Statistics_1Var.Do1VStats(Statistics_1Var.H1)"); RETURN EXPR("Statistics_1Var.Hmin");	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+Hmin	EXPR("Statistics_1Var.Hmin")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+Hmin	LOCAL o, r; o := EXPR("Statistics_1Var.Hmin"); IFERR EXPR("Statistics_1Var.Hmin:=-1"); r := EXPR("Statistics_1Var.Hmin"); THEN r := "refused"; END; IFERR EXPR("Statistics_1Var.Hmin:=" + STRING(o)); THEN r := r; END; RETURN r;	−1	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
 HMS→	HMS→(1.3)	1.3	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-12
 homothety	EXPR("homothety(point(0,0),2,point(1,1))")	point(2,2)	8	Virtual Calculator 2.4, build 2025-09-15	2026-09-14
+HSeparator	EXPR("HSeparator")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+HSeparator	LOCAL o, r; o := EXPR("HSeparator"); EXPR("HSeparator:=1"); r := {EXPR("HSeparator"), STRING(1234.5)}; EXPR("HSeparator:=" + STRING(o)); RETURN r;	{1,"1234.5"}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+HSeparator	LOCAL o; o := EXPR("HSeparator"); EXPR("HSeparator:=" + STRING(o)); RETURN EXPR("HSeparator");	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+HVars	EXPR("HVars")	{}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+Hwidth	EXPR("Hwidth")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+Hwidth	EXPR("Statistics_1Var.D1:={1,2,2,3,7}"); EXPR("Statistics_1Var.Do1VStats(Statistics_1Var.H1)"); RETURN EXPR("Statistics_1Var.Hwidth");	1	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+Hwidth	EXPR("Statistics_1Var.Hwidth")	1	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+Hwidth	LOCAL o, r; o := EXPR("Statistics_1Var.Hwidth"); IFERR EXPR("Statistics_1Var.Hwidth:=2"); r := EXPR("Statistics_1Var.Hwidth"); THEN r := "refused"; END; IFERR EXPR("Statistics_1Var.Hwidth:=" + STRING(o)); THEN r := r; END; RETURN r;	2	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
 hyperbola	EXPR("hyperbola(point(-1,0),point(1,0),point(0,1))")	{plotparam(*SINH(t),t,−3,3),plotparam(-(*SINH(t)),t,−3,3)}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-14
 HypT1mean	EXPR("HypT1mean({1,2,3,4,5})")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 HypT1mean	EXPR("HypT1mean({2,4,6,8,10})")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-14
@@ -352,6 +468,20 @@ IFERR	LOCAL z; z := 0; IFERR z := MID("abcdef", 2, 3); THEN z := -1; END; RETURN
 IFTE	EXPR("IFTE(1<2,10,20)")	10	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 ihermite	ihermite([[1,2],[3,4]])	{[[−2,1],[3,−1]],[[1,0],[0,2]]}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 IM	IM(3+4*i)	4	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
+ImageDisplay	EXPR("ImageDisplay")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+ImageDisplay	LOCAL o; o := EXPR("ImageDisplay"); EXPR("ImageDisplay:=" + STRING(o)); RETURN EXPR("ImageDisplay");	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+ImageName	EXPR("ImageName")	""	2	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+ImageName	LOCAL o; o := EXPR("ImageName"); EXPR("ImageName:=" + STRING(o)); RETURN EXPR("ImageName");	""	2	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+ImageOpacity	EXPR("ImageOpacity")	75	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+ImageOpacity	LOCAL o, r; o := EXPR("ImageOpacity"); IFERR EXPR("ImageOpacity:=50"); r := EXPR("ImageOpacity"); THEN r := "refused"; END; EXPR("ImageOpacity:=" + STRING(o)); RETURN r;	50	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+ImageXmax	EXPR("ImageXmax")	30	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+ImageXmax	LOCAL o; o := EXPR("ImageXmax"); EXPR("ImageXmax:=" + STRING(o)); RETURN EXPR("ImageXmax");	30	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+ImageXmin	EXPR("ImageXmin")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+ImageXmin	LOCAL o; o := EXPR("ImageXmin"); EXPR("ImageXmin:=" + STRING(o)); RETURN EXPR("ImageXmin");	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+ImageYmax	EXPR("ImageYmax")	20	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+ImageYmax	LOCAL o; o := EXPR("ImageYmax"); EXPR("ImageYmax:=" + STRING(o)); RETURN EXPR("ImageYmax");	20	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+ImageYmin	EXPR("ImageYmin")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+ImageYmin	LOCAL o; o := EXPR("ImageYmin"); EXPR("ImageYmin:=" + STRING(o)); RETURN EXPR("ImageYmin");	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
 incircle	EXPR("incircle(point(0,0),point(3,0),point(0,4))")	circle(point(1,1),1)	8	Virtual Calculator 2.4, build 2025-09-15	2026-09-14
 InfType	EXPR("InfType")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-14
 INSERT	INSERT({1,2,3},2,9)	{1,9,2,3}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
@@ -406,6 +536,10 @@ jordan	jordan([[1,2],[3,4]])	{[[2.74456264654,−8.74456264654],[6,6]],[[5.37228
 JordanBlock	JordanBlock(2,3)	[[2,1,0],[0,2,1],[0,0,2]]	4	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 l1norm	l1norm([1,2,3])	6	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 l2norm	l2norm([1,2,3])	√14	8	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
+Labels	EXPR("Labels")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+Labels	LOCAL o; o := EXPR("Labels"); EXPR("Labels:=" + STRING(o)); RETURN EXPR("Labels");	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+Language	EXPR("Language")	5	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+Language	LOCAL o; o := EXPR("Language"); EXPR("Language:=" + STRING(o)); RETURN EXPR("Language");	5	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
 LEFT	LEFT("MOMOGUMBO", 3)	"MOM"	2	Virtual Calculator 2.4, build 2025-09-15	2026-09-11
 LEFT	LEFT("abcdef", -1)	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-11
 LEFT	LEFT("abcdef", 0)	"abcdef"	2	Virtual Calculator 2.4, build 2025-09-15	2026-09-11
@@ -447,8 +581,14 @@ LOG	LOG({8,27,10000},{2,3,10})	{3,3,4}	6	Virtual Calculator 2.4, build 2025-09-1
 LOWER	LOWER("ABC")	"abc"	2	Virtual Calculator 2.4, build 2025-09-15	2026-09-12
 LQ	LQ([[1,2],[3,4]])	{[[−2.2360679775,−2.22044604925ᴇ−16],[−4.9193495505,0.894427191]],[[−0.4472135955,−0.894427191],[0.894427191,−0.4472135955]],[[1,0],[0,1]]}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 LSolution	EXPR("LSolution")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-14
+LSolution	EXPR("Linear_Solver.LSolution")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+LSolution	EXPR("Linear_Solver.LSystem:=[[2,1,5],[1,-1,1]]"); RETURN EXPR("Linear_Solver.LSolution");	{2,1}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+LSolution	LOCAL o, r; EXPR("Linear_Solver.LSystem:=[[2,1,5],[1,-1,1]]"); o := EXPR("Linear_Solver.LSolution"); IFERR EXPR("Linear_Solver.LSolution:={5,6}"); r := EXPR("Linear_Solver.LSolution"); THEN r := "refused"; END; IFERR EXPR("Linear_Solver.LSolution:=" + STRING(o)); THEN r := r; END; RETURN r;	"refused"	2	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
 LSQ	LSQ([[1,2],[3,4]],[[1],[2]])	[[0],[0.5]]	4	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 LSystem	EXPR("LSystem")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-14
+LSystem	EXPR("Linear_Solver.LSystem")	[[0,0,0,0],[0,0,0,0],[0,0,0,0]]	4	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+LSystem	EXPR("Linear_Solver.LSystem:=[[2,1,5],[1,-1,1]]")	[[2,1,5],[1,−1,1]]	4	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+LSystem	LOCAL o, r; o := EXPR("Linear_Solver.LSystem"); IFERR EXPR("Linear_Solver.LSystem:=[[1,1,3],[1,-1,1]]"); r := EXPR("Linear_Solver.LSystem"); THEN r := "refused"; END; IFERR EXPR("Linear_Solver.LSystem:=" + STRING(o)); THEN r := r; END; RETURN r;	[[1,1,3],[1,−1,1]]	4	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
 LU	LU([[1,2],[3,4]])	{[[1,0],[0.333333333333,1]],[[3,4],[0,0.666666666667]],[[0,1],[1,0]]}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 Macaulay	EXPR("Macaulay")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-15
 MAKELIST	MAKELIST(X^2,X,1,5)	{1,4,9,16,25}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
@@ -463,13 +603,29 @@ MAX	MAX({1,8,2})	8	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 MAX	MAX({1,8,2},{2,4,6})	{2,8,6}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 maxnorm	maxnorm([1,2,3])	3	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 MAXREAL	MAXREAL	9.99999999999ᴇ499	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
+MaxVal	EXPR("MaxVal")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+MaxVal	EXPR("Statistics_1Var.D1:={1,2,2,3,7}"); EXPR("Statistics_1Var.Do1VStats(Statistics_1Var.H1)"); RETURN EXPR("Statistics_1Var.MaxVal");	7	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+MaxVal	EXPR("Statistics_1Var.MaxVal")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+MaxVal	LOCAL o, r; EXPR("Statistics_1Var.D1:={1,2,2,3,7}"); EXPR("Statistics_1Var.Do1VStats(Statistics_1Var.H1)"); o := EXPR("Statistics_1Var.MaxVal"); IFERR EXPR("Statistics_1Var.MaxVal:=99"); r := EXPR("Statistics_1Var.MaxVal"); THEN r := "refused"; END; IFERR EXPR("Statistics_1Var.MaxVal:=" + STRING(o)); THEN r := r; END; RETURN r;	"refused"	2	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
 MeanX	EXPR("  MeanX")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-14
 MeanX	EXPR(" MeanX")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-14
 MeanX	EXPR("MeanX")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-14
+MeanX	EXPR("Statistics_1Var.D1:={1,2,2,3,7}"); EXPR("Statistics_1Var.Do1VStats(Statistics_1Var.H1)"); RETURN EXPR("Statistics_1Var.MeanX");	3	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+MeanX	EXPR("Statistics_1Var.MeanX")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+MeanX	EXPR("Statistics_2Var.C1:={1,2,3,4}"); EXPR("Statistics_2Var.C2:={2,3,5,9}"); EXPR("Statistics_2Var.Do2VStats(Statistics_2Var.S1)"); RETURN EXPR("Statistics_2Var.MeanX");	2.5	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+MeanX	EXPR("ZQSTAT()")	3	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+MeanX	LOCAL o, r; EXPR("Statistics_1Var.D1:={1,2,2,3,7}"); EXPR("Statistics_1Var.Do1VStats(Statistics_1Var.H1)"); o := EXPR("Statistics_1Var.MeanX"); IFERR EXPR("Statistics_1Var.MeanX:=99"); r := EXPR("Statistics_1Var.MeanX"); THEN r := "refused"; END; IFERR EXPR("Statistics_1Var.MeanX:=" + STRING(o)); THEN r := r; END; RETURN r;	"refused"	2	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
 MeanY	EXPR("MeanY")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-14
+MeanY	EXPR("Statistics_2Var.C1:={1,2,3,4}"); EXPR("Statistics_2Var.C2:={2,3,5,9}"); EXPR("Statistics_2Var.Do2VStats(Statistics_2Var.S1)"); RETURN EXPR("Statistics_2Var.MeanY");	4.75	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+MeanY	EXPR("Statistics_2Var.MeanY")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+MeanY	LOCAL o, r; EXPR("Statistics_2Var.C1:={1,2,3,4}"); EXPR("Statistics_2Var.C2:={2,3,5,9}"); EXPR("Statistics_2Var.Do2VStats(Statistics_2Var.S1)"); o := EXPR("Statistics_2Var.MeanY"); IFERR EXPR("Statistics_2Var.MeanY:=99"); r := EXPR("Statistics_2Var.MeanY"); THEN r := "refused"; END; IFERR EXPR("Statistics_2Var.MeanY:=" + STRING(o)); THEN r := r; END; RETURN r;	"refused"	2	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
 Mean₁	EXPR("Mean₁")	0.461368	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-14
 Mean₂	EXPR("Mean₂")	0.522851	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-14
 median_line	EXPR("median_line(point(0,0),point(4,0),point(0,3))")	line(y=3/4*x)	8	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
+MedVal	EXPR("MedVal")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+MedVal	EXPR("Statistics_1Var.D1:={1,2,2,3,7}"); EXPR("Statistics_1Var.Do1VStats(Statistics_1Var.H1)"); RETURN EXPR("Statistics_1Var.MedVal");	2	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+MedVal	EXPR("Statistics_1Var.MedVal")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+MedVal	LOCAL o, r; EXPR("Statistics_1Var.D1:={1,2,2,3,7}"); EXPR("Statistics_1Var.Do1VStats(Statistics_1Var.H1)"); o := EXPR("Statistics_1Var.MedVal"); IFERR EXPR("Statistics_1Var.MedVal:=99"); r := EXPR("Statistics_1Var.MedVal"); THEN r := "refused"; END; IFERR EXPR("Statistics_1Var.MedVal:=" + STRING(o)); THEN r := r; END; RETURN r;	"refused"	2	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
 MEMORY	EXPR("MEMORY")	{#356B000:64h,#86B6D58000:64h}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 Method	EXPR("Method")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-14
 MID	MID("MOMOGUMBO", 3, 5)	"MOGUM"	2	Virtual Calculator 2.4, build 2025-09-15	2026-09-11
@@ -486,16 +642,35 @@ MIN	MIN(8/3,11/4)	2.66666666667	0	Virtual Calculator 2.4, build 2025-09-15	2026-
 MIN	MIN({1,8,2})	1	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 MIN	MIN({1,8,2},{2,4,6})	{1,4,2}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 MINREAL	MINREAL	1ᴇ−499	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
+MinVal	EXPR("MinVal")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+MinVal	EXPR("Statistics_1Var.D1:={1,2,2,3,7}"); EXPR("Statistics_1Var.Do1VStats(Statistics_1Var.H1)"); RETURN EXPR("Statistics_1Var.MinVal");	1	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+MinVal	EXPR("Statistics_1Var.MinVal")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+MinVal	LOCAL o, r; EXPR("Statistics_1Var.D1:={1,2,2,3,7}"); EXPR("Statistics_1Var.Do1VStats(Statistics_1Var.H1)"); o := EXPR("Statistics_1Var.MinVal"); IFERR EXPR("Statistics_1Var.MinVal:=99"); r := EXPR("Statistics_1Var.MinVal"); THEN r := "refused"; END; IFERR EXPR("Statistics_1Var.MinVal:=" + STRING(o)); THEN r := r; END; RETURN r;	"refused"	2	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
 MIRR	EXPR(" MIRR")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-15
 MIRR	EXPR("MIRR")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-15
 mkisom	mkisom([1,2],1)	[[0.540302305868,−0.841470984808],[0.841470984808,0.540302305868]]	4	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 MKSA	MKSA(2_m)	2_m	9	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 MKSA	TYPE(2_m)	9	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 MOD	9 MOD 4	1	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
+MOD	EXPR("(-9) MOD 4")	3	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+MOD	EXPR("-9 MOD 4")	3	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+MOD	EXPR("100 + 9 MOD 4")	101	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+MOD	EXPR("2 * 7 MOD 4")	2	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+MOD	EXPR("2^3 MOD 5")	3	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+MOD	EXPR("8 / 2 MOD 3")	1	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+MOD	EXPR("9 MOD (-4)")	−3	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+MOD	EXPR("9 MOD 4 * 2")	2	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+MOD	EXPR("9 MOD 4 + 100")	101	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+MOD	EXPR("9 MOD 4 / 2")	0.5	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+MOD	EXPR("9 MOD 4 == 1")	1	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
 Modified	EXPR("Modified")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-15
 MOUSE	MOUSE	{{},{}}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-12
 MS	EXPR("MS")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-14
 MSerr	EXPR("MSerr")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-14
+NbItem	EXPR("NbItem")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+NbItem	EXPR("Statistics_1Var.D1:={1,2,2,3,7}"); EXPR("Statistics_1Var.Do1VStats(Statistics_1Var.H1)"); RETURN EXPR("Statistics_1Var.NbItem");	5	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+NbItem	EXPR("Statistics_1Var.NbItem")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+NbItem	LOCAL o, r; EXPR("Statistics_1Var.D1:={1,2,2,3,7}"); EXPR("Statistics_1Var.Do1VStats(Statistics_1Var.H1)"); o := EXPR("Statistics_1Var.NbItem"); IFERR EXPR("Statistics_1Var.NbItem:=99"); r := EXPR("Statistics_1Var.NbItem"); THEN r := "refused"; END; IFERR EXPR("Statistics_1Var.NbItem:=" + STRING(o)); THEN r := r; END; RETURN r;	"refused"	2	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
 NbPmt	EXPR(" NbPmt")	0.00	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-15
 NbPmt	EXPR("NbPmt")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-15
 NEG	EXPR("NEG 5")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-13
@@ -503,16 +678,56 @@ NEG	EXPR("NEG(5)")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 NewValue	EXPR("NewValue")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-15
 NFV	EXPR(" NFV")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-15
 NFV	EXPR("NFV")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-15
+Nmax	EXPR("Nmax")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+Nmax	LOCAL o, r; o := EXPR("Nmax"); IFERR EXPR("Nmax:=20"); r := EXPR("Nmax"); THEN r := "refused"; END; EXPR("Nmax:=" + STRING(o)); RETURN r;	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+Nmin	EXPR("Nmin")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+Nmin	LOCAL o, r; o := EXPR("Nmin"); IFERR EXPR("Nmin:=2"); r := EXPR("Nmin"); THEN r := "refused"; END; EXPR("Nmin:=" + STRING(o)); RETURN r;	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-24
 NomInt	EXPR("NomInt")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-15
 NORMALD	NORMALD(0)	0.398942280401	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 NORMALD	NORMALD(1,2,3)	0.12098536226	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 NORMALD_CDF	NORMALD_CDF(0)	0.5	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 NORMALD_ICDF	NORMALD_ICDF(0.5)	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
+Notes	EXPR("Notes")	{}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
 NPV	EXPR(" NPV")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-15
 NPV	EXPR("NPV")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-15
+NTHROOT	EXPR("-3 NTHROOT 8")	−2	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+NTHROOT	EXPR("2 * 3 NTHROOT 8")	4	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+NTHROOT	EXPR("2 NTHROOT (-4)")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+NTHROOT	EXPR("2 NTHROOT 3 NTHROOT 64")	11.0356646359	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+NTHROOT	EXPR("2 ^ 3 NTHROOT 8")	4	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+NTHROOT	EXPR("3 NTHROOT (-8)")	−2	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+NTHROOT	EXPR("3 NTHROOT 8 + 19")	21	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
 NTHROOT	EXPR("3 NTHROOT 8")	2	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 NTHROOT	EXPR("NTHROOT(3,8)")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-13
+NumIndep	EXPR("NumIndep")	{}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+NumIndep	LOCAL o; o := EXPR("NumIndep"); EXPR("NumIndep:=" + STRING(o)); RETURN EXPR("NumIndep");	{}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+NumStart	EXPR("NumStart")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+NumStart	LOCAL o, r; o := EXPR("NumStart"); EXPR("NumStart:=5"); r := EXPR("NumStart"); EXPR("NumStart:=" + STRING(o)); RETURN r;	5	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+NumStep	EXPR("NumStep")	0.1	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+NumStep	LOCAL o, r; o := EXPR("NumStep"); EXPR("NumStep:=0.5"); r := EXPR("NumStep"); EXPR("NumStep:=" + STRING(o)); RETURN r;	0.5	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+NumType	EXPR("NumType")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+NumType	LOCAL o, r; o := EXPR("NumType"); EXPR("NumType:=1"); r := EXPR("NumType"); EXPR("NumType:=" + STRING(o)); RETURN r;	1	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+NumXStart	EXPR("Advanced_Graphing.NumXStart")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
 NumXStart	EXPR("NumXStart")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-14
+NumXStart	LOCAL o, r; o := EXPR("Advanced_Graphing.NumXStart"); IFERR EXPR("Advanced_Graphing.NumXStart:=1"); r := EXPR("Advanced_Graphing.NumXStart"); THEN r := "refused"; END; IFERR EXPR("Advanced_Graphing.NumXStart:=" + STRING(o)); THEN r := r; END; RETURN r;	1	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+NumXStep	EXPR("Advanced_Graphing.NumXStep")	0.1	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+NumXStep	EXPR("NumXStep")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+NumXStep	LOCAL o, r; o := EXPR("Advanced_Graphing.NumXStep"); IFERR EXPR("Advanced_Graphing.NumXStep:=0.5"); r := EXPR("Advanced_Graphing.NumXStep"); THEN r := "refused"; END; IFERR EXPR("Advanced_Graphing.NumXStep:=" + STRING(o)); THEN r := r; END; RETURN r;	0.5	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+NumXZoom	EXPR("Advanced_Graphing.NumXZoom")	2	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+NumXZoom	EXPR("NumXZoom")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+NumXZoom	LOCAL o, r; o := EXPR("Advanced_Graphing.NumXZoom"); IFERR EXPR("Advanced_Graphing.NumXZoom:=4"); r := EXPR("Advanced_Graphing.NumXZoom"); THEN r := "refused"; END; IFERR EXPR("Advanced_Graphing.NumXZoom:=" + STRING(o)); THEN r := r; END; RETURN r;	4	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+NumYStart	EXPR("Advanced_Graphing.NumYStart")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+NumYStart	EXPR("NumYStart")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+NumYStart	LOCAL o, r; o := EXPR("Advanced_Graphing.NumYStart"); IFERR EXPR("Advanced_Graphing.NumYStart:=1"); r := EXPR("Advanced_Graphing.NumYStart"); THEN r := "refused"; END; IFERR EXPR("Advanced_Graphing.NumYStart:=" + STRING(o)); THEN r := r; END; RETURN r;	1	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+NumYStep	EXPR("Advanced_Graphing.NumYStep")	0.1	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+NumYStep	EXPR("NumYStep")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+NumYStep	LOCAL o, r; o := EXPR("Advanced_Graphing.NumYStep"); IFERR EXPR("Advanced_Graphing.NumYStep:=0.5"); r := EXPR("Advanced_Graphing.NumYStep"); THEN r := "refused"; END; IFERR EXPR("Advanced_Graphing.NumYStep:=" + STRING(o)); THEN r := r; END; RETURN r;	0.5	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+NumYZoom	EXPR("Advanced_Graphing.NumYZoom")	2	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+NumYZoom	EXPR("NumYZoom")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+NumYZoom	LOCAL o, r; o := EXPR("Advanced_Graphing.NumYZoom"); IFERR EXPR("Advanced_Graphing.NumYZoom:=4"); r := EXPR("Advanced_Graphing.NumYZoom"); THEN r := "refused"; END; IFERR EXPR("Advanced_Graphing.NumYZoom:=" + STRING(o)); THEN r := r; END; RETURN r;	4	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+NumZoom	EXPR("NumZoom")	2	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+NumZoom	LOCAL o, r; o := EXPR("NumZoom"); EXPR("NumZoom:=2"); r := EXPR("NumZoom"); EXPR("NumZoom:=" + STRING(o)); RETURN r;	2	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+NumZoom	LOCAL o, r; o := EXPR("NumZoom"); IFERR EXPR("NumZoom:=4"); r := EXPR("NumZoom"); THEN r := "refused"; END; EXPR("NumZoom:=" + STRING(o)); RETURN r;	4	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
 NUS	EXPR(" NUS")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-15
 NUS	EXPR("NUS")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-15
 n₁	EXPR("n₁")	50	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-14
@@ -548,6 +763,8 @@ plotfield	EXPR("plotfield(X,X)")	"plotfield(X,X) \n Error: valor de argumento in
 plotfunc	EXPR("plotfunc(X^2)")	plotparam(X+*X^2,X,−15.9,15.9)	8	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 plotimplicit	EXPR("plotimplicit(X^2+Y^2-1)")	{}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-14
 plotlist	EXPR("plotlist([[1,2],[3,4]])")	segment(point(1,2),point(3,4))	8	Virtual Calculator 2.4, build 2025-09-15	2026-09-14
+PlotMethod	EXPR("PlotMethod")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+PlotMethod	LOCAL o; o := EXPR("PlotMethod"); EXPR("PlotMethod:=" + STRING(o)); RETURN EXPR("PlotMethod");	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
 plotode	EXPR("plotode(X,X,0)")	"plotode(X,X,0) \n Error: valor de argumento incorrecto"	2	Virtual Calculator 2.4, build 2025-09-15	2026-09-14
 plotparam	EXPR("plotparam(t,t,0,1)")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-14
 plotpolar	EXPR("plotpolar(X,X,0,1)")	plotparam(X*COS(X)+*X*SIN(X),X,0,1)	8	Virtual Calculator 2.4, build 2025-09-15	2026-09-14
@@ -566,6 +783,48 @@ polygon	EXPR("polygon(point(0,0),point(1,0),point(0,1))")	polygon(point(0,0),poi
 POLYROOT	POLYROOT([1,0,-4])	{−2.82353141256,−0.552220307199-1.1052954935*,−0.552220307199+1.1052954935*,0.927972026959}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 Pooled	EXPR("Pooled")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-14
 POS	POS({3,5,7},5)	2	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
+ppl.check-last-error	EXPORT ZQTWO()\nBEGIN\n  LOCAL za;\n  za := za + ;\n  za := 1;\n  za := za + 1;\n  za := za + 1;\n  za := za + 1;\n  za := za + 1;\n  za := za + 1;\n  za := za + 1;\n  za := za + ;\n  RETURN za;\nEND;\n	*does not compile*		Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+ppl.end-semicolon	EXPORT ZQFE()\nBEGIN\n  RETURN 5;\nEND\n	*does not compile*		Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+ppl.end-semicolon	EXPR("ZQFE")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+ppl.end-semicolon	EXPR("ZQFE2")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+ppl.end-semicolon	ZQG()\nBEGIN\n  RETURN 6;\nEND\nEXPORT ZQFE2()\nBEGIN\n  RETURN ZQG();\nEND;\n	*does not compile*		Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+ppl.equality-operators	EXPORT ZQEQ()\nBEGIN\n  LOCAL za;\n  za := 1;\n  za = 2;\n  RETURN za;\nEND;\n	*compiles*		Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+ppl.equality-operators	EXPR("ZQEQ")	1	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+ppl.export-initialised	EXPORT ZQX2A:=1, ZQX2B:=2;\nEXPORT ZQX2()\nBEGIN\n  RETURN ZQX2A + ZQX2B;\nEND;\n	*compiles*		Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+ppl.export-initialised	EXPORT ZQX4A:=1, ZQX4B:=2, ZQX4C:=3, ZQX4D:=4;\nEXPORT ZQX4()\nBEGIN\n  RETURN ZQX4A + ZQX4D;\nEND;\n	*compiles*		Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+ppl.export-initialised	EXPORT ZQX6A:=1, ZQX6B:=2, ZQX6C:=3, ZQX6D:=4, ZQX6E:=5, ZQX6F:=6;\nEXPORT ZQX6()\nBEGIN\n  RETURN ZQX6A + ZQX6F;\nEND;\n	*compiles*		Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+ppl.export-initialised	EXPR("ZQX6")	7	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+ppl.global-namespace	EXPORT AREA(zr)\nBEGIN\n  RETURN 3.14159265359 * zr * zr;\nEND;\n	*compiles*		Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+ppl.global-namespace	EXPR("AREA(2)")	12.5663706144	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+ppl.i-e-as-locals	EXPORT ZQLE()\nBEGIN\n  LOCAL e;\n  e := 2;\n  RETURN e + 1;\nEND;\n	*compiles*		Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+ppl.i-e-as-locals	EXPORT ZQLI()\nBEGIN\n  LOCAL i;\n  i := 2;\n  RETURN i * 3;\nEND;\n	*compiles*		Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+ppl.i-e-as-locals	EXPR("ZQLE")	3	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+ppl.i-e-as-locals	EXPR("ZQLI")	6	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+ppl.index-call	EXPORT ZQIX1()\nBEGIN\n  RETURN ZQLST()(2);\nEND;\n	*does not compile*		Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+ppl.index-call	EXPORT ZQLST()\nBEGIN\n  RETURN {10,20,30};\nEND;\n	*compiles*		Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+ppl.index-call	EXPR("ZQIX1")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+ppl.index-call	EXPR("ZQIX2")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+ppl.index-call	ZQF()\nBEGIN\n  RETURN {10,20,30};\nEND;\n\nEXPORT ZQIX2()\nBEGIN\n  RETURN ZQF()(2);\nEND;\n	*does not compile*		Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+ppl.local-limit	EXPORT ZQL09()\nBEGIN\n  LOCAL za,zb,zc,zd,zf,zg,zh,zj,zk;\n  RETURN 9;\nEND;\n	*does not compile*		Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+ppl.local-limit	EXPORT ZQL10()\nBEGIN\n  LOCAL za,zb,zc,zd,zf,zg,zh,zj,zk,zl;\n  RETURN 10;\nEND;\n	*does not compile*		Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+ppl.local-limit	EXPORT ZQL11()\nBEGIN\n  LOCAL za,zb,zc,zd,zf,zg,zh,zj,zk,zl,zm;\n  RETURN 11;\nEND;\n	*does not compile*		Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+ppl.local-limit	EXPORT ZQL12()\nBEGIN\n  LOCAL za,zb,zc,zd,zf,zg,zh,zj,zk,zl,zm,zn;\n  RETURN 12;\nEND;\n	*does not compile*		Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+ppl.local-limit	EXPR("ZQL12")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+ppl.locals-at-top	EXPORT ZQNB()\nBEGIN\n  LOCAL za;\n  za := 1;\n  IF za == 1 THEN\n    LOCAL zb;\n    zb := 2;\n    za := za + zb;\n  END;\n  RETURN za;\nEND;\n	*compiles*		Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+ppl.locals-at-top	EXPR("ZQNB")	3	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+ppl.locals-initialised-one-line	EXPORT ZQI3()\nBEGIN\n  LOCAL za := 1, zb := 2, zc := 3;\n  RETURN za + zb + zc;\nEND;\n	*compiles*		Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+ppl.locals-initialised-one-line	EXPR("ZQI3")	6	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+ppl.no-end-keywords	EXPORT ZQEC()\nBEGIN\n  LOCAL za;\n  za := 1;\n  CASE\n    IF za == 1 THEN RETURN 7; END;\n  ENDCASE;\n  RETURN 0;\nEND;\n	*does not compile*		Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+ppl.no-end-keywords	EXPORT ZQEF()\nBEGIN\n  RETURN 8;\nENDFUNC;\n	*does not compile*		Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+ppl.one-based	EXPORT ZQL0()\nBEGIN\n  LOCAL zl;\n  zl := {10,20,30};\n  RETURN zl(0);\nEND;\n	*compiles*		Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+ppl.one-based	EXPR("ZQL0")	30	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+ppl.one-based	LOCAL zl, zi; zl := {10,20,30}; zi := 0; RETURN zl(zi);	30	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+ppl.one-based	LOCAL zl, zi; zl := {10,20,30}; zi := 0; zl(zi) := 40; RETURN zl;	{10,20,30,40}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+ppl.one-based	LOCAL zl, zi; zl := {}; zi := 0; RETURN zl(zi);	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+ppl.one-based	LOCAL zm, zi; zm := [[1,2],[3,4]]; zi := 0; RETURN zm(zi);	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+ppl.one-based	LOCAL zm, zi; zm := [[1,2],[3,4]]; zi := 0; RETURN zm(zi, 1);	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+ppl.one-based	LOCAL zs, zi; zs := "abc"; zi := 0; RETURN zs(zi);	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+ppl.one-based	LOCAL zs, zi; zs := "abc"; zi := 2; RETURN zs(zi);	98	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
 PPYR	EXPR(" PPYR")	12.00	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-15
 PPYR	EXPR("PPYR")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-15
 PredX	EXPR("PredX(1,2,3)")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-13
@@ -579,10 +838,12 @@ Prob	EXPR("Prob")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-14
 ProbList	EXPR(" ProbList")	{}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-15
 ProbList	EXPR("ProbList")	{}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-14
 Profit	EXPR("Profit")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-15
+Programs	EXPR("Programs")	{"HPKDOC"}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
 projection	EXPR("projection(segment(point(0,0),point(4,0)),point(2,3))")	point(2,0)	8	Virtual Calculator 2.4, build 2025-09-15	2026-09-14
 Psi	Psi(1,1)	π^2/6	8	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 PV	EXPR(" PV")	0.00	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-15
 PV	EXPR("(PV)")	1000.00	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-15
+PV	EXPR("Finance.PV")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
 PV	EXPR("PV")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-15
 PV	EXPR("PV:=1000")	1000.00	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-15
 PX→C	PX→C(0,0)	{−16,10.9}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-12
@@ -596,6 +857,14 @@ quadrilateral	EXPR("quadrilateral(point(0,0),point(2,0),point(2,2),point(0,2))")
 QuadSolve	EXPR("QuadSolve(1,-3,2)")	{1,2}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 Quantity	EXPR("Quantity")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-15
 QUOTE	EXPR("QUOTE(1+2)")	1+2	8	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
+Q₁	EXPR("Q₁")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+Q₁	EXPR("Statistics_1Var.D1:={1,2,2,3,7}"); EXPR("Statistics_1Var.Do1VStats(Statistics_1Var.H1)"); RETURN EXPR("Statistics_1Var.Q₁");	1.5	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+Q₁	EXPR("Statistics_1Var.Q₁")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+Q₁	LOCAL o, r; EXPR("Statistics_1Var.D1:={1,2,2,3,7}"); EXPR("Statistics_1Var.Do1VStats(Statistics_1Var.H1)"); o := EXPR("Statistics_1Var.Q₁"); IFERR EXPR("Statistics_1Var.Q₁:=99"); r := EXPR("Statistics_1Var.Q₁"); THEN r := "refused"; END; IFERR EXPR("Statistics_1Var.Q₁:=" + STRING(o)); THEN r := r; END; RETURN r;	"refused"	2	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+Q₃	EXPR("Q₃")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+Q₃	EXPR("Statistics_1Var.D1:={1,2,2,3,7}"); EXPR("Statistics_1Var.Do1VStats(Statistics_1Var.H1)"); RETURN EXPR("Statistics_1Var.Q₃");	5	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+Q₃	EXPR("Statistics_1Var.Q₃")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+Q₃	LOCAL o, r; EXPR("Statistics_1Var.D1:={1,2,2,3,7}"); EXPR("Statistics_1Var.Do1VStats(Statistics_1Var.H1)"); o := EXPR("Statistics_1Var.Q₃"); IFERR EXPR("Statistics_1Var.Q₃:=99"); r := EXPR("Statistics_1Var.Q₃"); THEN r := "refused"; END; IFERR EXPR("Statistics_1Var.Q₃:=" + STRING(o)); THEN r := r; END; RETURN r;	"refused"	2	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
 radius	EXPR("radius(circle(point(0,0),point(1,0)))")	1/2	8	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 RANDINT	TYPE(RANDINT(1,6))	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 RANDMAT	SIZE(RANDMAT(2,3))	{2,3}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
@@ -605,6 +874,8 @@ RANDSEED	RANDSEED(1); A := RANDOM(); RANDSEED(1); RETURN A - RANDOM();	0	0	Virtu
 RANK	RANK([[1,2],[3,4]])	2	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 RE	RE((3,4))	3	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 RE	RE(3+4*i)	3	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
+Recenter	EXPR("Recenter")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+Recenter	LOCAL o; o := EXPR("Recenter"); EXPR("Recenter:=" + STRING(o)); RETURN EXPR("Recenter");	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
 reciprocation	EXPR("reciprocation(circle(point(0,0),point(2,0)),point(3,0))")	line(x=3/2)	8	Virtual Calculator 2.4, build 2025-09-15	2026-09-14
 RECT	DIMGROB(G1,10,5,0); RETURN RECT(G1,0,0,4,4,RGB(0,255,0));	1	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-12
 RECT	RECT()	1	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-12
@@ -652,6 +923,12 @@ rotation	EXPR("rotation(point(0,0),1,point(1,0))")	point(e^())	8	Virtual Calc
 ROUND	ROUND(7.8676,-2)	7.9	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 ROUND	ROUND(7.8676,2)	7.87	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 ROUND	ROUND({22/6,7/6,13/6},{-3,3,4})	{3.67,1.167,2.1667}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
+Row	EXPR("Row")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+Row	EXPR("Spreadsheet.Row")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+Row	LOCAL o, r; o := EXPR("Spreadsheet.Row"); IFERR EXPR("Spreadsheet.Row:=3"); r := EXPR("Spreadsheet.Row"); THEN r := "refused"; END; IFERR EXPR("Spreadsheet.Row:=" + STRING(o)); THEN r := r; END; RETURN r;	"refused"	2	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+RowHeight	EXPR("RowHeight")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+RowHeight	EXPR("Spreadsheet.RowHeight")	−1	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+RowHeight	LOCAL o, r; o := EXPR("Spreadsheet.RowHeight"); IFERR EXPR("Spreadsheet.RowHeight:=30"); r := EXPR("Spreadsheet.RowHeight"); THEN r := "refused"; END; IFERR EXPR("Spreadsheet.RowHeight:=" + STRING(o)); THEN r := r; END; RETURN r;	30	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
 ROWNORM	ROWNORM([[1,2],[3,4]])	7	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 RREF	RREF([[1,-2,1],[3,4,-1]])	[[1,0,0.2],[0,1,−0.4]]	4	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 RREF	RREF({[[-2,2,1],[1,4,0]],[[1,3,1],[3,6,9]]})	{[[1,0,−0.4],[0,1,0.1]],[[1,0,7],[0,1,−2]]}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
@@ -664,14 +941,28 @@ SAS	EXPR("SAS(3,60,4)")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-0
 SCALE	SCALE([[1,2],[3,4]],2,1)	[[2,4],[3,4]]	4	Virtual Calculator 2.4, build 2025-09-15	2026-09-12
 SCALEADD	SCALEADD([[1,2],[3,4]],2,1,2)	[[1,2],[5,8]]	4	Virtual Calculator 2.4, build 2025-09-15	2026-09-12
 SCHUR	SCHUR([[1,2],[3,4]])	{[[0.415973557919,0.909376709132],[0.909376709132,−0.415973557919]],[[5.37228132327,1],[5.55111512313ᴇ−17,−0.372281323269]]}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
+sCov	EXPR("Statistics_2Var.C1:={1,2,3,4}"); EXPR("Statistics_2Var.C2:={2,3,5,9}"); EXPR("Statistics_2Var.Do2VStats(Statistics_2Var.S1)"); RETURN EXPR("Statistics_2Var.sCov");	3.83333333333	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+sCov	EXPR("Statistics_2Var.sCov")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+sCov	EXPR("sCov")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+sCov	LOCAL o, r; EXPR("Statistics_2Var.C1:={1,2,3,4}"); EXPR("Statistics_2Var.C2:={2,3,5,9}"); EXPR("Statistics_2Var.Do2VStats(Statistics_2Var.S1)"); o := EXPR("Statistics_2Var.sCov"); IFERR EXPR("Statistics_2Var.sCov:=99"); r := EXPR("Statistics_2Var.sCov"); THEN r := "refused"; END; IFERR EXPR("Statistics_2Var.sCov:=" + STRING(o)); THEN r := r; END; RETURN r;	"refused"	2	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
 SEC	SEC(1)	1.85081571768	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 segment	EXPR("segment(point(0,0),point(3,4))")	segment(point(0,0),point(3,4))	8	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 SemiAnnual	EXPR("SemiAnnual")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-15
 SeqPlot	EXPR("SeqPlot")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-14
+SeqPlot	EXPR("Sequence.SeqPlot")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+SeqPlot	LOCAL o, r; o := EXPR("Sequence.SeqPlot"); IFERR EXPR("Sequence.SeqPlot:=1"); r := EXPR("Sequence.SeqPlot"); THEN r := "refused"; END; IFERR EXPR("Sequence.SeqPlot:=" + STRING(o)); THEN r := r; END; RETURN r;	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
 SERIAL	EXPR("SERIAL")	"(not stored)"	2	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 serrInter	EXPR("serrInter")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-14
 serrLine	EXPR("serrLine")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-14
 serrSlope	EXPR("serrSlope")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-14
+serrX	EXPR("Statistics_1Var.D1:={1,2,2,3,7}"); EXPR("Statistics_1Var.Do1VStats(Statistics_1Var.H1)"); RETURN EXPR("Statistics_1Var.serrX");	1.04880884817	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+serrX	EXPR("Statistics_1Var.serrX")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+serrX	EXPR("serrX")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+serrX	LOCAL o, r; EXPR("Statistics_1Var.D1:={1,2,2,3,7}"); EXPR("Statistics_1Var.Do1VStats(Statistics_1Var.H1)"); o := EXPR("Statistics_1Var.serrX"); IFERR EXPR("Statistics_1Var.serrX:=99"); r := EXPR("Statistics_1Var.serrX"); THEN r := "refused"; END; IFERR EXPR("Statistics_1Var.serrX:=" + STRING(o)); THEN r := r; END; RETURN r;	"refused"	2	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+serrY	EXPR("Statistics_2Var.C1:={1,2,3,4}"); EXPR("Statistics_2Var.C2:={2,3,5,9}"); EXPR("Statistics_2Var.Do2VStats(Statistics_2Var.S1)"); RETURN EXPR("Statistics_2Var.serrY");	1.54784796842	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+serrY	EXPR("Statistics_2Var.serrY")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+serrY	EXPR("serrY")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+serrY	LOCAL o, r; EXPR("Statistics_2Var.C1:={1,2,3,4}"); EXPR("Statistics_2Var.C2:={2,3,5,9}"); EXPR("Statistics_2Var.Do2VStats(Statistics_2Var.S1)"); o := EXPR("Statistics_2Var.serrY"); IFERR EXPR("Statistics_2Var.serrY:=99"); r := EXPR("Statistics_2Var.serrY"); THEN r := "refused"; END; IFERR EXPR("Statistics_2Var.serrY:=" + STRING(o)); THEN r := r; END; RETURN r;	"refused"	2	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
 SETBASE	SETBASE(12, 2)	#14o	1	Virtual Calculator 2.4, build 2025-09-15	2026-09-12
 SETBITS	SETBITS(12)	#Ch	1	Virtual Calculator 2.4, build 2025-09-15	2026-09-12
 SetDate	EXPR("SetDate")	2017.0101	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-15
@@ -688,6 +979,8 @@ SideB	EXPR("SideB:=4")	4	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-14
 SideC	EXPR(" SideC")	−1	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-14
 SideC	EXPR("SideC:=5")	5	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-14
 SIGN	SIGN(2)	1	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
+Signed	EXPR("Signed")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+Signed	LOCAL o, r; o := EXPR("Signed"); EXPR("Signed:=1"); r := EXPR("Signed"); EXPR("Signed:=" + STRING(o)); RETURN r;	1	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
 SignedArea	EXPR("  SignedArea")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-14
 SignedArea	EXPR("SignedArea")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-14
 similarity	EXPR("similarity(point(0,0),2,0,point(1,1))")	point(2,2)	8	Virtual Calculator 2.4, build 2025-09-15	2026-09-14
@@ -712,11 +1005,15 @@ SOLVE	EXPR("SOLVE( )")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09
 SOLVE	EXPR("SOLVE(E1,X)")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-14
 SOLVE	EXPR("SOLVE(X^2-4=0,X)")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-14
 SOLVE	EXPR("SOLVE(X^2-4=0,X,1)")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-14
+SOLVE	EXPR("Solve.SOLVE")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+SOLVE	EXPR("Solve.SOLVE(X^2-4=0,X,1)")	2	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+SOLVE	LOCAL r; IFERR EXPR("Solve.SOLVE:=2"); r := EXPR("Solve.SOLVE"); THEN r := "refused"; END; RETURN r;	"refused"	2	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
 Solve	EXPR("Solve")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 Solve	EXPR("Solve( )")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-14
 Solve	EXPR("Solve(2*X+1=7,X)")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-14
 Solve	EXPR("Solve(X^2-4=0)")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-14
 Solve	EXPR("Solve(X^2-4=0,X)")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-13
+Solve	EXPR("Solve.Solve(X^2-4=0,X,1)")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-25
 Solve2×2	EXPR("Solve2×2")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-14
 Solve2×2	EXPR("Solve2×2( )")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-14
 Solve3×3	EXPR("Solve3×3")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-14
@@ -733,6 +1030,15 @@ SSA	EXPR("SSA(3,5,30)")	{5.9884394141,56.4426902381,93.5573097619}	6	Virtual Cal
 SSerr	EXPR("SSerr")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-14
 SSS	EXPR("SSS(3,4,5)")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 SSS	EXPR("SSS(6,8,10)")	{36.8698976458,53.1301023542,90}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-14
+SSS	EXPR("Triangle_Solver.SSS(3,4,5)")	{0.643501108793,0.927295218002,1.57079632679}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+ssX	EXPR("Statistics_1Var.D1:={1,2,2,3,7}"); EXPR("Statistics_1Var.Do1VStats(Statistics_1Var.H1)"); RETURN EXPR("Statistics_1Var.ssX");	22	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+ssX	EXPR("Statistics_1Var.ssX")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+ssX	EXPR("ssX")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+ssX	LOCAL o, r; EXPR("Statistics_1Var.D1:={1,2,2,3,7}"); EXPR("Statistics_1Var.Do1VStats(Statistics_1Var.H1)"); o := EXPR("Statistics_1Var.ssX"); IFERR EXPR("Statistics_1Var.ssX:=99"); r := EXPR("Statistics_1Var.ssX"); THEN r := "refused"; END; IFERR EXPR("Statistics_1Var.ssX:=" + STRING(o)); THEN r := r; END; RETURN r;	"refused"	2	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+ssY	EXPR("Statistics_2Var.C1:={1,2,3,4}"); EXPR("Statistics_2Var.C2:={2,3,5,9}"); EXPR("Statistics_2Var.Do2VStats(Statistics_2Var.S1)"); RETURN EXPR("Statistics_2Var.ssY");	28.75	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+ssY	EXPR("Statistics_2Var.ssY")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+ssY	EXPR("ssY")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+ssY	LOCAL o, r; EXPR("Statistics_2Var.C1:={1,2,3,4}"); EXPR("Statistics_2Var.C2:={2,3,5,9}"); EXPR("Statistics_2Var.Do2VStats(Statistics_2Var.S1)"); o := EXPR("Statistics_2Var.ssY"); IFERR EXPR("Statistics_2Var.ssY:=99"); r := EXPR("Statistics_2Var.ssY"); THEN r := "refused"; END; IFERR EXPR("Statistics_2Var.ssY:=" + STRING(o)); THEN r := r; END; RETURN r;	"refused"	2	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
 STAT1	EXPR("STAT1(A1:A5)")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 STAT1	EXPR("STAT1({2,4,6,8,10})")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-14
 STAT2	EXPR("STAT2(A1:A5)")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-13
@@ -752,6 +1058,7 @@ SUB	SUB([[1,2,3],[4,5,6]],{1,1},{2,2})	[[1,2],[4,5]]	4	Virtual Calculator 2.4, b
 SUBGROB	DIMGROB(G1,10,5,0); SUBGROB(G1,0,0,4,4,G3); RETURN GROBW_P(G3);	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-12
 SUBGROB_P	DIMGROB_P(G1,10,10,0); SUBGROB_P(G1,0,0,4,4,G3); RETURN GROBW_P(G3);	4	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-12
 SUM	EXPR("SUM({1,2,3})")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-13
+SUM	EXPR("Spreadsheet.SUM({1,2,3})")	6	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
 SUPPRESS	EXPR("SUPPRESS({1,2,3},2)")	{1,3}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 suppress	suppress({1,2,3},2)	{1,3}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 SVD	SIZE(SVD([[1,2],[3,4]]))	3	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
@@ -759,6 +1066,14 @@ SVD	SVD([[1,2],[3,4]])	{[[0.914514295677,0.404553584834],[−0.404553584834,0.91
 SVL	SVL([[1,2],[3,4]])	[0.365966190626,5.46498570422]	4	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 SWAPCOL	SWAPCOL([[1,2],[3,4]],1,2)	[[2,1],[4,3]]	4	Virtual Calculator 2.4, build 2025-09-15	2026-09-12
 SWAPROW	SWAPROW([[1,2],[3,4]],1,2)	[[3,4],[1,2]]	4	Virtual Calculator 2.4, build 2025-09-15	2026-09-12
+sX	EXPR("Statistics_1Var.D1:={1,2,2,3,7}"); EXPR("Statistics_1Var.Do1VStats(Statistics_1Var.H1)"); RETURN EXPR("Statistics_1Var.sX");	2.34520787991	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+sX	EXPR("Statistics_1Var.sX")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+sX	EXPR("sX")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+sX	LOCAL o, r; EXPR("Statistics_1Var.D1:={1,2,2,3,7}"); EXPR("Statistics_1Var.Do1VStats(Statistics_1Var.H1)"); o := EXPR("Statistics_1Var.sX"); IFERR EXPR("Statistics_1Var.sX:=99"); r := EXPR("Statistics_1Var.sX"); THEN r := "refused"; END; IFERR EXPR("Statistics_1Var.sX:=" + STRING(o)); THEN r := r; END; RETURN r;	"refused"	2	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+sY	EXPR("Statistics_2Var.C1:={1,2,3,4}"); EXPR("Statistics_2Var.C2:={2,3,5,9}"); EXPR("Statistics_2Var.Do2VStats(Statistics_2Var.S1)"); RETURN EXPR("Statistics_2Var.sY");	3.09569593683	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+sY	EXPR("Statistics_2Var.sY")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+sY	EXPR("sY")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+sY	LOCAL o, r; EXPR("Statistics_2Var.C1:={1,2,3,4}"); EXPR("Statistics_2Var.C2:={2,3,5,9}"); EXPR("Statistics_2Var.Do2VStats(Statistics_2Var.S1)"); o := EXPR("Statistics_2Var.sY"); IFERR EXPR("Statistics_2Var.sY:=99"); r := EXPR("Statistics_2Var.sY"); THEN r := "refused"; END; IFERR EXPR("Statistics_2Var.sY:=" + STRING(o)); THEN r := r; END; RETURN r;	"refused"	2	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
 s₁	EXPR("s₁")	0.2776	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-14
 s₂	EXPR("s₂")	0.2943	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-14
 TAN	TAN(1)	1.55740772465	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
@@ -770,8 +1085,19 @@ TestValue	EXPR("TestValue")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09
 TEVAL	TEVAL(1+1)	0_s	9	Virtual Calculator 2.4, build 2025-09-15	2026-09-12
 TEXTOUT	DIMGROB_P(G9,512,22,0); RETURN TEXTOUT("abc",G9,0,0,2);	182	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-12
 TEXTOUT_P	DIMGROB_P(G9,512,22,0); RETURN TEXTOUT_P("abc",G9,0,0,2);	19	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-12
+Theme	EXPR("Theme")	{#1:64h,#5:64h}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+Theme	LOCAL o; o := EXPR("Theme"); EXPR("Theme:=" + STRING(o)); RETURN EXPR("Theme");	{#1:64h,#5:64h}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
 TICKS	TICKS	120274	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-12
+Time	EXPR("TYPE(Time)")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+Time	EXPR("Time")	14°35′00″	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+Time	LOCAL o; o := EXPR("Time"); EXPR("Time:=" + STRING(o)); RETURN EXPR("Time");	14°35′00″	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
 TimeMarket	EXPR("TimeMarket")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-15
+Tmax	EXPR("Tmax")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+Tmax	LOCAL o, r; o := EXPR("Tmax"); IFERR EXPR("Tmax:=5"); r := EXPR("Tmax"); THEN r := "refused"; END; EXPR("Tmax:=" + STRING(o)); RETURN r;	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+Tmin	EXPR("Tmin")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+Tmin	LOCAL o, r; o := EXPR("Tmin"); IFERR EXPR("Tmin:=1"); r := EXPR("Tmin"); THEN r := "refused"; END; EXPR("Tmin:=" + STRING(o)); RETURN r;	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+TOff	EXPR("TOff")	#493E0:30h	1	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+TOff	LOCAL o, r; o := EXPR("TOff"); EXPR("TOff:=300"); r := EXPR("TOff"); EXPR("TOff:=" + STRING(o)); RETURN r;	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-24
 Total	EXPR("Total")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-15
 TotalCF	EXPR(" TotalCF")	0.00	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-15
 TotalCF	EXPR("TotalCF")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-15
@@ -786,6 +1112,8 @@ TRN	TRN([[1+2*i,3],[4,5]])	[[1+2*,4],[3,5]]	4	Virtual Calculator 2.4, build 2
 TRN	TRN([[1,2],[3,4]])	[[1,3],[2,4]]	4	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 TRN	TRN({[[5,2],[1,3]],[[2,9],[7,8]]})	{[[5,1],[2,3]],[[2,7],[9,8]]}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 TRUNCATE	TRUNCATE(7.8676,2)	7.86	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
+Tstep	EXPR("Tstep")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+Tstep	LOCAL o, r; o := EXPR("Tstep"); IFERR EXPR("Tstep:=0.5"); r := EXPR("Tstep"); THEN r := "refused"; END; EXPR("Tstep:=" + STRING(o)); RETURN r;	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-24
 TvmFV	EXPR("TvmFV(12,5,-1000,0)")	1051.16189788	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 TvmIPYR	EXPR("TvmIPYR(12,-1000,0,1051.16)")	4.9998186967	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 TvmNbPmt	EXPR("TvmNbPmt(5,-1000,0,1051.16)")	11.9995657754	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
@@ -812,13 +1140,27 @@ valuation	TYPE(valuation(X^2+X))	0	0	Virtual Calculator 2.4, build 2025-09-15	20
 VariableCost	EXPR("VariableCost")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-15
 VERSION	EXPR("VERSION")	"(not stored)"	2	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 Volatility	EXPR("Volatility")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-15
+WAIT	LOCAL t, r, zk; REPEAT zk := GETKEY; UNTIL zk < 0; t := TICKS; r := WAIT(-1); RETURN {r, TICKS - t};	{42,13951}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+WAIT	LOCAL t, r; t := TICKS; r := WAIT(-1); RETURN {r, TICKS - t};	{42,17619}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
 WHILE	LOCAL z; z := 0; WHILE z < 4 DO z := z + 1; END; RETURN z;	4	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-12
 WHILE	LOCAL z; z := 9; WHILE z < 4 DO z := z + 1; END; RETURN z;	9	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-12
 Xlist	EXPR("  Xlist")	{}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-14
 Xlist	EXPR(" Xlist")	{}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-14
 Xlist	EXPR("Xlist")	{}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-14
+Xmax	EXPR("Xmax")	15.9	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+Xmax	LOCAL o, r; o := EXPR("Xmax"); IFERR EXPR("Xmax:=5"); r := EXPR("Xmax"); THEN r := "refused"; END; EXPR("Xmax:=" + STRING(o)); RETURN r;	5	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+Xmin	EXPR("C→PX(0,0)")	{160,109}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+Xmin	EXPR("Function.Xmin")	−15.9	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+Xmin	EXPR("Xmin")	−15.9	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+Xmin	LOCAL o, r; o := EXPR("Xmin"); EXPR("Xmin:=0"); IFERR r := {EXPR("Xmin"), C→PX(0,0)}; THEN r := "refused"; END; EXPR("Xmin:=" + STRING(o)); RETURN r;	{0,{1,109}}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+Xmin	LOCAL o, r; o := EXPR("Xmin"); IFERR EXPR("Xmin:=-5"); r := EXPR("Xmin"); THEN r := "refused"; END; EXPR("Xmin:=" + STRING(o)); RETURN r;	−5	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+XPON	EXPR("xpon(1000)")	3	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
 XPON	XPON(123.45)	2	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
+Xtick	EXPR("Xtick")	1	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+Xtick	LOCAL o, r; o := EXPR("Xtick"); IFERR EXPR("Xtick:=2"); r := EXPR("Xtick"); THEN r := "refused"; END; EXPR("Xtick:=" + STRING(o)); RETURN r;	2	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
 Xval	EXPR("Xval")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-14
+Xzoom	EXPR("Xzoom")	2	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+Xzoom	LOCAL o, r; o := EXPR("Xzoom"); IFERR EXPR("Xzoom:=3"); r := EXPR("Xzoom"); THEN r := "refused"; END; EXPR("Xzoom:=" + STRING(o)); RETURN r;	3	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
 x₁	EXPR("x₁")	21	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-14
 x₂	EXPR("x₂")	26	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-14
 YieldBond	EXPR("YieldBond")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-15
@@ -826,7 +1168,16 @@ Ylist	EXPR(" Ylist")	{}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-15
 Ylist	EXPR("(Ylist)")	{1,2,3}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-14
 Ylist	EXPR("Ylist")	{}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-14
 Ylist	EXPR("Ylist:={1,2,3}")	{1,2,3}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-14
+Ymax	EXPR("Ymax")	10.9	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+Ymax	LOCAL o, r; o := EXPR("Ymax"); EXPR("Ymax:=0"); IFERR r := {EXPR("Ymax"), C→PX(0,0)}; THEN r := "refused"; END; EXPR("Ymax:=" + STRING(o)); RETURN r;	{0,{160,0}}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+Ymax	LOCAL o, r; o := EXPR("Ymax"); IFERR EXPR("Ymax:=3"); r := EXPR("Ymax"); THEN r := "refused"; END; EXPR("Ymax:=" + STRING(o)); RETURN r;	3	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+Ymin	EXPR("Ymin")	−10.9	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+Ymin	LOCAL o, r; o := EXPR("Ymin"); IFERR EXPR("Ymin:=-3"); r := EXPR("Ymin"); THEN r := "refused"; END; EXPR("Ymin:=" + STRING(o)); RETURN r;	−3	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+Ytick	EXPR("Ytick")	1	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+Ytick	LOCAL o, r; o := EXPR("Ytick"); IFERR EXPR("Ytick:=2"); r := EXPR("Ytick"); THEN r := "refused"; END; EXPR("Ytick:=" + STRING(o)); RETURN r;	2	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
 Yval	EXPR("Yval")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-14
+Yzoom	EXPR("Yzoom")	2	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+Yzoom	LOCAL o, r; o := EXPR("Yzoom"); IFERR EXPR("Yzoom:=3"); r := EXPR("Yzoom"); THEN r := "refused"; END; EXPR("Yzoom:=" + STRING(o)); RETURN r;	3	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-24
 Zeta	Zeta(2)	π^2/6	8	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 zoomauto	EXPR("zoomauto")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-14
 zoombox	EXPR("zoombox")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-14
@@ -837,14 +1188,51 @@ zoominteger	EXPR("zoominteger")	*error*		Virtual Calculator 2.4, build 2025-09-1
 zoomout	EXPR("zoomout")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-14
 µ₀	EXPR("µ₀")	0.5	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-14
 ΔLIST	ΔLIST({1,4,9})	{3,5}	6	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
+θmax	EXPR("θmax")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+θmax	LOCAL o, r; o := EXPR("θmax"); IFERR EXPR("θmax:=5"); r := EXPR("θmax"); THEN r := "refused"; END; EXPR("θmax:=" + STRING(o)); RETURN r;	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+θmin	EXPR("θmin")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+θmin	LOCAL o, r; o := EXPR("θmin"); IFERR EXPR("θmin:=1"); r := EXPR("θmin"); THEN r := "refused"; END; EXPR("θmin:=" + STRING(o)); RETURN r;	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+θstep	EXPR("θstep")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-24
+θstep	LOCAL o, r; o := EXPR("θstep"); IFERR EXPR("θstep:=0.5"); r := EXPR("θstep"); THEN r := "refused"; END; EXPR("θstep:=" + STRING(o)); RETURN r;	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-24
 μ₀	EXPR(" μ₀")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-14
 μ₀	EXPR("μ₀")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-14
 ΠLIST	ΠLIST({1,2,3,4})	24	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
 π₀	EXPR("π₀")	0.5	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-14
 Σ	EXPR("Σ(X,X,1,4)")	10	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
+σCov	EXPR("Statistics_2Var.C1:={1,2,3,4}"); EXPR("Statistics_2Var.C2:={2,3,5,9}"); EXPR("Statistics_2Var.Do2VStats(Statistics_2Var.S1)"); RETURN EXPR("Statistics_2Var.σCov");	2.875	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+σCov	EXPR("Statistics_2Var.σCov")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+σCov	EXPR("σCov")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+σCov	LOCAL o, r; EXPR("Statistics_2Var.C1:={1,2,3,4}"); EXPR("Statistics_2Var.C2:={2,3,5,9}"); EXPR("Statistics_2Var.Do2VStats(Statistics_2Var.S1)"); o := EXPR("Statistics_2Var.σCov"); IFERR EXPR("Statistics_2Var.σCov:=99"); r := EXPR("Statistics_2Var.σCov"); THEN r := "refused"; END; IFERR EXPR("Statistics_2Var.σCov:=" + STRING(o)); THEN r := r; END; RETURN r;	"refused"	2	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
 ΣLIST	ΣLIST({1,2,3,4})	10	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-13
+ΣX	EXPR("Statistics_1Var.D1:={1,2,2,3,7}"); EXPR("Statistics_1Var.Do1VStats(Statistics_1Var.H1)"); RETURN EXPR("Statistics_1Var.ΣX");	15	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+ΣX	EXPR("Statistics_1Var.ΣX")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+ΣX	EXPR("Statistics_2Var.C1:={1,2,3,4}"); EXPR("Statistics_2Var.C2:={2,3,5,9}"); EXPR("Statistics_2Var.Do2VStats(Statistics_2Var.S1)"); RETURN EXPR("Statistics_2Var.ΣX");	10	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
 ΣX	EXPR("ΣX")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-14
+ΣX	LOCAL o, r; EXPR("Statistics_1Var.D1:={1,2,2,3,7}"); EXPR("Statistics_1Var.Do1VStats(Statistics_1Var.H1)"); o := EXPR("Statistics_1Var.ΣX"); IFERR EXPR("Statistics_1Var.ΣX:=99"); r := EXPR("Statistics_1Var.ΣX"); THEN r := "refused"; END; IFERR EXPR("Statistics_1Var.ΣX:=" + STRING(o)); THEN r := r; END; RETURN r;	"refused"	2	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+σX	EXPR("Statistics_1Var.D1:={1,2,2,3,7}"); EXPR("Statistics_1Var.Do1VStats(Statistics_1Var.H1)"); RETURN EXPR("Statistics_1Var.σX");	2.09761769634	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+σX	EXPR("Statistics_1Var.σX")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
 σX	EXPR("σX")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-14
+σX	LOCAL o, r; EXPR("Statistics_1Var.D1:={1,2,2,3,7}"); EXPR("Statistics_1Var.Do1VStats(Statistics_1Var.H1)"); o := EXPR("Statistics_1Var.σX"); IFERR EXPR("Statistics_1Var.σX:=99"); r := EXPR("Statistics_1Var.σX"); THEN r := "refused"; END; IFERR EXPR("Statistics_1Var.σX:=" + STRING(o)); THEN r := r; END; RETURN r;	"refused"	2	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+ΣX2	EXPR("Statistics_1Var.D1:={1,2,2,3,7}"); EXPR("Statistics_1Var.Do1VStats(Statistics_1Var.H1)"); RETURN EXPR("Statistics_1Var.ΣX2");	67	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+ΣX2	EXPR("Statistics_1Var.ΣX2")	0	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+ΣX2	EXPR("ΣX2")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+ΣX2	LOCAL o, r; EXPR("Statistics_1Var.D1:={1,2,2,3,7}"); EXPR("Statistics_1Var.Do1VStats(Statistics_1Var.H1)"); o := EXPR("Statistics_1Var.ΣX2"); IFERR EXPR("Statistics_1Var.ΣX2:=99"); r := EXPR("Statistics_1Var.ΣX2"); THEN r := "refused"; END; IFERR EXPR("Statistics_1Var.ΣX2:=" + STRING(o)); THEN r := r; END; RETURN r;	"refused"	2	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+ΣXY	EXPR("Statistics_2Var.C1:={1,2,3,4}"); EXPR("Statistics_2Var.C2:={2,3,5,9}"); EXPR("Statistics_2Var.Do2VStats(Statistics_2Var.S1)"); RETURN EXPR("Statistics_2Var.ΣXY");	59	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+ΣXY	EXPR("Statistics_2Var.ΣXY")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+ΣXY	EXPR("ΣXY")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+ΣXY	LOCAL o, r; EXPR("Statistics_2Var.C1:={1,2,3,4}"); EXPR("Statistics_2Var.C2:={2,3,5,9}"); EXPR("Statistics_2Var.Do2VStats(Statistics_2Var.S1)"); o := EXPR("Statistics_2Var.ΣXY"); IFERR EXPR("Statistics_2Var.ΣXY:=99"); r := EXPR("Statistics_2Var.ΣXY"); THEN r := "refused"; END; IFERR EXPR("Statistics_2Var.ΣXY:=" + STRING(o)); THEN r := r; END; RETURN r;	"refused"	2	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+ΣY	EXPR("Statistics_2Var.C1:={1,2,3,4}"); EXPR("Statistics_2Var.C2:={2,3,5,9}"); EXPR("Statistics_2Var.Do2VStats(Statistics_2Var.S1)"); RETURN EXPR("Statistics_2Var.ΣY");	19	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+ΣY	EXPR("Statistics_2Var.ΣY")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+ΣY	EXPR("ΣY")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+ΣY	LOCAL o, r; EXPR("Statistics_2Var.C1:={1,2,3,4}"); EXPR("Statistics_2Var.C2:={2,3,5,9}"); EXPR("Statistics_2Var.Do2VStats(Statistics_2Var.S1)"); o := EXPR("Statistics_2Var.ΣY"); IFERR EXPR("Statistics_2Var.ΣY:=99"); r := EXPR("Statistics_2Var.ΣY"); THEN r := "refused"; END; IFERR EXPR("Statistics_2Var.ΣY:=" + STRING(o)); THEN r := r; END; RETURN r;	"refused"	2	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+σY	EXPR("Statistics_2Var.C1:={1,2,3,4}"); EXPR("Statistics_2Var.C2:={2,3,5,9}"); EXPR("Statistics_2Var.Do2VStats(Statistics_2Var.S1)"); RETURN EXPR("Statistics_2Var.σY");	2.68095132369	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+σY	EXPR("Statistics_2Var.σY")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+σY	EXPR("σY")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+σY	LOCAL o, r; EXPR("Statistics_2Var.C1:={1,2,3,4}"); EXPR("Statistics_2Var.C2:={2,3,5,9}"); EXPR("Statistics_2Var.Do2VStats(Statistics_2Var.S1)"); o := EXPR("Statistics_2Var.σY"); IFERR EXPR("Statistics_2Var.σY:=99"); r := EXPR("Statistics_2Var.σY"); THEN r := "refused"; END; IFERR EXPR("Statistics_2Var.σY:=" + STRING(o)); THEN r := r; END; RETURN r;	"refused"	2	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+ΣY2	EXPR("Statistics_2Var.C1:={1,2,3,4}"); EXPR("Statistics_2Var.C2:={2,3,5,9}"); EXPR("Statistics_2Var.Do2VStats(Statistics_2Var.S1)"); RETURN EXPR("Statistics_2Var.ΣY2");	119	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+ΣY2	EXPR("Statistics_2Var.ΣY2")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+ΣY2	EXPR("ΣY2")	*error*		Virtual Calculator 2.4, build 2025-09-15	2026-09-25
+ΣY2	LOCAL o, r; EXPR("Statistics_2Var.C1:={1,2,3,4}"); EXPR("Statistics_2Var.C2:={2,3,5,9}"); EXPR("Statistics_2Var.Do2VStats(Statistics_2Var.S1)"); o := EXPR("Statistics_2Var.ΣY2"); IFERR EXPR("Statistics_2Var.ΣY2:=99"); r := EXPR("Statistics_2Var.ΣY2"); THEN r := "refused"; END; IFERR EXPR("Statistics_2Var.ΣY2:=" + STRING(o)); THEN r := r; END; RETURN r;	"refused"	2	Virtual Calculator 2.4, build 2025-09-15	2026-09-25
 σ₁	EXPR("σ₁")	0.2887	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-14
 σ₂	EXPR("σ₂")	0.2887	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-14
 →HMS	→HMS(1.5)	1°30′00″	0	Virtual Calculator 2.4, build 2025-09-15	2026-09-12

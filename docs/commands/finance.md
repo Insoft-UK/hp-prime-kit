@@ -79,7 +79,7 @@ Every entry in this group, in full. Each one is written in its own file, and tha
 | [OldValue](#OldValue) | The old value of a percentage change. |
 | [PMT](#PMT) | The payment, which needs the Finance app to be read. |
 | [PPYR](#PPYR) | Payments per year, 12 once the Finance app is active. |
-| [PV](#PV) | The present value: needs the Finance app, and a program can set it. |
+| [PV](#PV) | The present value: refused bare unless the Finance app is active, and a program can set it. |
 | [Payback](#Payback) | The payback period, refused with or without the Finance app. |
 | [PercentChange](#PercentChange) | How far the new value is from the old one, as a percentage of the old. |
 | [PercentMargin](#PercentMargin) | The difference between cost and price, over the cost. |
@@ -2126,7 +2126,8 @@ nothing more. It read `0.00` once Finance was active.
 [TvmFV](finance/TvmFV.md) was measured from a batch nobody had touched, so
 with the Function app active, and it answered. A program that cannot select
 the Finance app can still compute this value by calling the function with
-its arguments.
+its arguments. [PV](finance/PV.md) was also read as `Finance.PV` from the Function
+app, [apps.qualified-names](../topics/apps.md#apps.qualified-names); this name was not tried that way (unverified).
 
 **Whether a program can set it is untested** (unverified). [PV](finance/PV.md) took
 `PV:=1000` and kept it with the Finance app active, so a Finance variable can
@@ -2440,7 +2441,8 @@ nothing more. It read `0.00` once Finance was active.
 [TvmIPYR](finance/TvmIPYR.md) was measured from a batch nobody had touched, so
 with the Function app active, and it answered. A program that cannot select
 the Finance app can still compute this value by calling the function with
-its arguments.
+its arguments. [PV](finance/PV.md) was also read as `Finance.PV` from the Function
+app, [apps.qualified-names](../topics/apps.md#apps.qualified-names); this name was not tried that way (unverified).
 
 **Whether a program can set it is untested** (unverified). [PV](finance/PV.md) took
 `PV:=1000` and kept it with the Finance app active, so a Finance variable can
@@ -3214,7 +3216,8 @@ nothing more. It read `0.00` once Finance was active.
 [TvmNbPmt](finance/TvmNbPmt.md) was measured from a batch nobody had touched, so
 with the Function app active, and it answered. A program that cannot select
 the Finance app can still compute this value by calling the function with
-its arguments.
+its arguments. [PV](finance/PV.md) was also read as `Finance.PV` from the Function
+app, [apps.qualified-names](../topics/apps.md#apps.qualified-names); this name was not tried that way (unverified).
 
 **Whether a program can set it is untested** (unverified). [PV](finance/PV.md) took
 `PV:=1000` and kept it with the Finance app active, so a Finance variable can
@@ -3392,7 +3395,8 @@ nothing more. It read `0.00` once Finance was active.
 [TvmPMT](finance/TvmPMT.md) was measured from a batch nobody had touched, so
 with the Function app active, and it answered. A program that cannot select
 the Finance app can still compute this value by calling the function with
-its arguments.
+its arguments. [PV](finance/PV.md) was also read as `Finance.PV` from the Function
+app, [apps.qualified-names](../topics/apps.md#apps.qualified-names); this name was not tried that way (unverified).
 
 **Whether a program can set it is untested** (unverified). [PV](finance/PV.md) took
 `PV:=1000` and kept it with the Finance app active, so a Finance variable can
@@ -3456,7 +3460,7 @@ that uses it (unverified).
 
 ## PV
 
-The present value: needs the Finance app, and a program can set it.
+The present value: refused bare unless the Finance app is active, and a program can set it.
 
 | | |
 |---|---|
@@ -3473,6 +3477,7 @@ The present value: needs the Finance app, and a program can set it.
 | `EXPR(" PV")` | `0.00` | [emulator](results.tsv) |
 | `EXPR("PV:=1000")` | `1000.00` | [emulator](results.tsv) |
 | `EXPR("(PV)")` | `1000.00` | [emulator](results.tsv) |
+| `EXPR("Finance.PV")` | `0` | [emulator](results.tsv) |
 
 ### Behaviour
 
@@ -3491,11 +3496,16 @@ nothing more. It read `0.00` once Finance was active.
 [TvmPV](finance/TvmPV.md) was measured from a batch nobody had touched, so
 with the Function app active, and it answered. A program that cannot select
 the Finance app can still compute this value by calling the function with
-its arguments.
+its arguments, or read it as `Finance.PV`, below.
 
 **A program can set it, and the value stays** (emulator). With the Finance app
 active, `PV:=1000` answered `1000.00` and a later read in the same pass
 answered `1000.00`. That is the only assignment measured in this app.
+
+**With the app's name in front it answers from another app** (emulator):
+`Finance.PV` read `0` with the Function app active, where `PV` alone was
+refused, [apps.qualified-names](../topics/apps.md#apps.qualified-names). It came back as `0`, not `0.00`: the two decimals follow the
+app that is active, not the app the variable belongs to.
 
 The interpreter does not implement it, so `hpprime run` cannot check a program
 that uses it (unverified).

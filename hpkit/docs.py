@@ -61,6 +61,9 @@ FACT_ID = re.compile(r'^[a-z][a-z0-9]*(\.[a-z0-9][a-z0-9-]*)+$')
 # app function against Root the app variable, and four more pairs. This
 # filesystem cannot hold ROOT.md and Root.md in one folder, so the variable's
 # entry keeps its real name in the title and takes this suffix on the file.
+# Two more pairs are both variables, the capital Greek sigma against the small
+# one in the X and Y statistics, which fold together the same way; there the
+# small sigma takes it.
 # The suffix is declared once here rather than invented per file, and nothing
 # else changes: the index and the group pages already link with the title as
 # the text and the file name as the path.

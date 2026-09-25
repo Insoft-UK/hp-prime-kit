@@ -107,14 +107,15 @@ HP's list and that the file does not define, and makes it an error with
 refuses it too, because it raises on anything it does not cover.
 
 It writes Python in PPL's clothes. Zero-based indexing is the classic case:
-positions count from 1, a 0 in `MID` is an error, and what a 0 does to a list
-has not been measured, which is why the linter warns on it rather than letting
-it pass ([ppl.one-based](../topics/ppl.md#ppl.one-based)).
+positions count from 1, and `L(0)` does not fail: it answers the list's last
+element, silently, where the model meant the first. That is why the linter
+warns on it ([ppl.one-based](../topics/ppl.md#ppl.one-based)).
 
 It fixes the same thing three times. If the error does not move after a fix,
 the hypothesis is false and the fix was not merely too small. Say so, and
 change tack: measure a program that already works instead of reasoning about
-the syntax. The line the calculator names is the last bad one, not the first
+the syntax. The line the calculator names is one bad line among possibly
+several, and not always the first
 ([ppl.check-last-error](../topics/ppl.md#ppl.check-last-error)).
 
 ## Let it use the tools

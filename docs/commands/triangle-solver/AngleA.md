@@ -16,10 +16,12 @@ The angle opposite side A, which DoSolve writes rather than reads.
 | `EXPR("  AngleA")` | `36.8698976458` | [emulator](../results.tsv) |
 | `EXPR("AngleA")` | *error* | [emulator](../results.tsv) |
 | `EXPR("AngleA:=30")` | *error* | [emulator](../results.tsv) |
+| `EXPR("Triangle_Solver.AngleA")` | `−1` | [emulator](../results.tsv) |
+| `EXPR("ZQREAD()")` | `−1` | [emulator](../results.tsv) |
 
 ## Behaviour
 
-**The last two rows are the same calls with another app active** (emulator),
+**The third and fourth rows are the same calls with another app active** (emulator),
 and they are the clearest evidence here that the app rule can reach
 a variable, not only a function. It does not reach every one: most of the
 Finance app's variables answer from any app,
@@ -52,6 +54,12 @@ wrong and nothing raises.
 app active and refused for that reason. Whether setting an angle and leaving
 a side unknown makes `DoSolve` solve the other way round is the obvious next
 row, and this documentation does not have it.
+
+**With its app's name in front it answers from another app** (emulator):
+in the last two rows, with the Function app active, `Triangle_Solver.AngleA`
+read −1, and so did `ZQREAD`, a program whose source returns
+`Triangle_Solver.AngleA`, [apps.qualified-names](../../topics/apps.md#apps.qualified-names). Assigning it that way was not tried
+(unverified).
 
 The interpreter does not implement it, so `hpprime run` cannot check a program
 that uses it (unverified).

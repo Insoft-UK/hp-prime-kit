@@ -6,11 +6,134 @@ Every entry in this group, in full. Each one is written in its own file, and tha
 
 | | |
 |---|---|
-| [Do2VStats](#Do2VStats) | Computes the two-variable statistics, and its data set could not be filled. |
+| [CoefDet](#CoefDet) | The coefficient of determination of the Statistics 2Var data, which Do2VStats writes: refused until the app has data. |
+| [Corr](#Corr) | The correlation coefficient of the Statistics 2Var data, which Do2VStats writes: refused until the app has data. |
+| [Do2VStats](#Do2VStats) | Computes the two-variable statistics of an analysis and writes them into the app's variables; answers 1. |
+| [MeanY](#MeanY) | The mean of the second column of the Statistics 2Var data, which Do2VStats writes: refused until the app has data. |
 | [Resid](#Resid) | The residuals of a fit, refused on an empty data set. |
 | [SetDepend](#SetDepend) | Points a data set's dependent column, refused on a reset calculator. |
 | [SetIndep](#SetIndep) | Points a data set's independent column, refused on a reset calculator. |
 | [residue](#residue) | The residue of a function, which reports its own failure as text. |
+| [sCov](#sCov) | The sample covariance of the Statistics 2Var data, which Do2VStats writes: refused until the app has data. |
+| [sY](#sY) | The sample standard deviation of the second column of the Statistics 2Var data, which Do2VStats writes: refused until the app has data. |
+| [serrY](#serrY) | The standard error of the mean of the second column of the Statistics 2Var data, which Do2VStats writes: refused until the app has data. |
+| [ssY](#ssY) | The sum of the squared deviations of the second column of the Statistics 2Var data, which Do2VStats writes: refused until the app has data. |
+| [ΣXY](#ΣXY) | The sum of the products of the pairs of the Statistics 2Var data, which Do2VStats writes: refused until the app has data. |
+| [ΣY](#ΣY) | The sum of the second column of the Statistics 2Var data, which Do2VStats writes: refused until the app has data. |
+| [ΣY2](#ΣY2) | The sum of the squares of the second column of the Statistics 2Var data, which Do2VStats writes: refused until the app has data. |
+| [σCov](#σCov) | The population covariance of the Statistics 2Var data, which Do2VStats writes: refused until the app has data. |
+| [σY](#σY) | The population standard deviation of the second column of the Statistics 2Var data, which Do2VStats writes: refused until the app has data. |
+
+---
+
+<a name="CoefDet"></a>
+
+## CoefDet
+
+The coefficient of determination of the Statistics 2Var data, which Do2VStats writes: refused until the app has data.
+
+| | |
+|---|---|
+| Syntax | `Statistics_2Var.CoefDet` → real |
+| Group | statistics-2var |
+| Runs on the PC | no |
+
+### Examples
+
+| Call | Result | Known from |
+|---|---|---|
+| `EXPR("CoefDet")` | *error* | [emulator](results.tsv) |
+| `EXPR("Statistics_2Var.CoefDet")` | *error* | [emulator](results.tsv) |
+| `EXPR("Statistics_2Var.C1:={1,2,3,4}"); EXPR("Statistics_2Var.C2:={2,3,5,9}"); EXPR("Statistics_2Var.Do2VStats(Statistics_2Var.S1)"); RETURN EXPR("Statistics_2Var.CoefDet");` | `0.92` | [emulator](results.tsv) |
+| `LOCAL o, r; EXPR("Statistics_2Var.C1:={1,2,3,4}"); EXPR("Statistics_2Var.C2:={2,3,5,9}"); EXPR("Statistics_2Var.Do2VStats(Statistics_2Var.S1)"); o := EXPR("Statistics_2Var.CoefDet"); IFERR EXPR("Statistics_2Var.CoefDet:=99"); r := EXPR("Statistics_2Var.CoefDet"); THEN r := "refused"; END; IFERR EXPR("Statistics_2Var.CoefDet:=" + STRING(o)); THEN r := r; END; RETURN r;` | `"refused"` | [emulator](results.tsv) |
+
+### Behaviour
+
+**A program reaches it with its app's name in front, once there is data**
+(emulator): with the Function app active, `Statistics_2Var.CoefDet` was
+refused on a reset calculator and answered 0.92 once `C1` and `C2` held data
+and [Do2VStats](statistics-2var/Do2VStats.md) had run on `S1`; `CoefDet` alone was refused,
+[apps.qualified-names](../topics/apps.md#apps.qualified-names). The bare
+name was not tried with its own app active (unverified).
+
+**Before there is data it is refused, not 0** (emulator), unlike the
+Statistics 1Var results, which read 0, as [MeanX](statistics-1var/MeanX.md)
+does. A program reading it should catch the error.
+
+**It holds the coefficient of determination** (emulator): with `{1,2,3,4}` in
+`C1` and `{2,3,5,9}` in `C2`, and [Do2VStats](statistics-2var/Do2VStats.md) run on `S1`, it
+answered 0.92, the square of [Corr](statistics-2var/Corr.md). That is what a straight-line fit
+gives; which fit `S1` had was not read (unverified).
+
+**A program cannot set it** (emulator): assigning 99 was refused, in a call
+whose read of it had answered just before. [Do2VStats](statistics-2var/Do2VStats.md) writes
+it.
+
+**Its name differs from the Inference app's [coefDet](inference/coefDet.md)
+only in case** (HP help). The two live in different folders, so neither file
+needs a suffix.
+
+The interpreter does not implement it, so `hpprime run` cannot check a program
+that uses it (unverified).
+
+### Related
+
+[Do2VStats](statistics-2var/Do2VStats.md) · [Corr](statistics-2var/Corr.md) · [apps.qualified-names](../topics/apps.md#apps.qualified-names)
+
+---
+
+<a name="Corr"></a>
+
+## Corr
+
+The correlation coefficient of the Statistics 2Var data, which Do2VStats writes: refused until the app has data.
+
+| | |
+|---|---|
+| Syntax | `Statistics_2Var.Corr` → real |
+| Group | statistics-2var |
+| Runs on the PC | no |
+
+### Examples
+
+| Call | Result | Known from |
+|---|---|---|
+| `EXPR("Corr")` | *error* | [emulator](results.tsv) |
+| `EXPR("Statistics_2Var.Corr")` | *error* | [emulator](results.tsv) |
+| `EXPR("Statistics_2Var.C1:={1,2,3,4}"); EXPR("Statistics_2Var.C2:={2,3,5,9}"); EXPR("Statistics_2Var.Do2VStats(Statistics_2Var.S1)"); RETURN EXPR("Statistics_2Var.Corr");` | `0.959166304663` | [emulator](results.tsv) |
+| `LOCAL o, r; EXPR("Statistics_2Var.C1:={1,2,3,4}"); EXPR("Statistics_2Var.C2:={2,3,5,9}"); EXPR("Statistics_2Var.Do2VStats(Statistics_2Var.S1)"); o := EXPR("Statistics_2Var.Corr"); IFERR EXPR("Statistics_2Var.Corr:=99"); r := EXPR("Statistics_2Var.Corr"); THEN r := "refused"; END; IFERR EXPR("Statistics_2Var.Corr:=" + STRING(o)); THEN r := r; END; RETURN r;` | `"refused"` | [emulator](results.tsv) |
+
+### Behaviour
+
+**A program reaches it with its app's name in front, once there is data**
+(emulator): with the Function app active, `Statistics_2Var.Corr` was refused
+on a reset calculator and answered 0.959166304663 once `C1` and `C2` held data
+and [Do2VStats](statistics-2var/Do2VStats.md) had run on `S1`; `Corr` alone was refused,
+[apps.qualified-names](../topics/apps.md#apps.qualified-names). The bare
+name was not tried with its own app active (unverified).
+
+**Before there is data it is refused, not 0** (emulator), unlike the
+Statistics 1Var results, which read 0, as [MeanX](statistics-1var/MeanX.md)
+does. A program reading it should catch the error.
+
+**It holds the correlation coefficient** (emulator): with `{1,2,3,4}` in `C1`
+and `{2,3,5,9}` in `C2`, and [Do2VStats](statistics-2var/Do2VStats.md) run on `S1`, it
+answered 0.959166304663, which is 11.5 over the square root of 5 times 28.75.
+
+**A program cannot set it** (emulator): assigning 99 was refused, in a call
+whose read of it had answered just before. [Do2VStats](statistics-2var/Do2VStats.md) writes
+it.
+
+**Its name differs from the Inference app's [corr](inference/corr.md) only
+in case** (HP help). The two live in different folders, so neither file needs
+a suffix.
+
+The interpreter does not implement it, so `hpprime run` cannot check a program
+that uses it (unverified).
+
+### Related
+
+[Do2VStats](statistics-2var/Do2VStats.md) · [MeanY](statistics-2var/MeanY.md) · [apps.qualified-names](../topics/apps.md#apps.qualified-names)
 
 ---
 
@@ -18,11 +141,12 @@ Every entry in this group, in full. Each one is written in its own file, and tha
 
 ## Do2VStats
 
-Computes the two-variable statistics, and its data set could not be filled.
+Computes the two-variable statistics of an analysis and writes them into the app's variables; answers 1.
 
 | | |
 |---|---|
 | Syntax | `Do2VStats(Sn)` |
+| Syntax | `Statistics_2Var.Do2VStats(Statistics_2Var.Sn)` |
 | Group | statistics-2var |
 | Runs on the PC | no |
 
@@ -32,38 +156,94 @@ Computes the two-variable statistics, and its data set could not be filled.
 |---|---|---|
 | `EXPR("S1:=[[1,2],[2,4],[3,6]]")` | *error* | [emulator](results.tsv) |
 | `EXPR("Do2VStats(S1)")` | *error* | [emulator](results.tsv) |
+| `EXPR("Statistics_2Var.C1:={1,2,3,4}")` | `{1,2,3,4}` | [emulator](results.tsv) |
+| `EXPR("Statistics_2Var.C2:={2,3,5,9}")` | `{2,3,5,9}` | [emulator](results.tsv) |
+| `EXPR("Statistics_2Var.Do2VStats(Statistics_2Var.S1)")` | `1` | [emulator](results.tsv) |
 
 ### Behaviour
 
-**The first row is why the second one cannot mean much** (emulator).
-Assigning a matrix to `S1` is itself refused, and reading `S1` back afterwards
-is refused too, so the app's first data set was never filled and this command
-was asked about nothing.
+**Bare it was refused because another app was active** (emulator): the first
+two rows were taken with the Function app active,
+[apps.reset-leaves-function-active](../topics/apps.md#apps.reset-leaves-function-active).
+With the app's name in front, under the same condition, it answered 1 once the
+columns held data,
+[apps.qualified-names](../topics/apps.md#apps.qualified-names).
 
-**That was measured on purpose** (emulator). An earlier batch called this
-command after an assignment without checking whether the assignment worked,
-and drew a conclusion from the refusal. The same mistake in the `function`
-group produced a wrong reading that had to be corrected, so the setup is now
-a row of its own.
+**The data goes in the columns** (emulator): `Statistics_2Var.C1:={1,2,3,4}`
+and `Statistics_2Var.C2:={2,3,5,9}` answered their lists. The first row, a
+matrix assigned to `S1`, was refused with the Function app active, as every
+bare name of this app is, and this entry took it to mean the data could not be
+filled. `S1` is the analysis the command takes; whether it can be assigned at
+all was not tried (unverified).
 
-**`F1` and `S1` behave differently** (emulator). The function app's variable
-accepted an assignment -- storing a number rather than a function, which is
-its own problem -- while this one refuses assignment outright.
+**It writes its results into the app, and answers only 1** (emulator): after
+it ran, [MeanY](statistics-2var/MeanY.md) read 4.75, [Corr](statistics-2var/Corr.md) 0.959166304663 and
+[CoefDet](statistics-2var/CoefDet.md) 0.92, all three refused before, and
+`Statistics_2Var.MeanX` read 2.5.
 
-**So this group is still unresolved** (unverified), and honestly so: three of
-its five names refuse on data sets that could not be filled,
-[residue](statistics-2var/residue.md) answers because it needs no data set, and nothing here
-says whether the commands work.
+**On a reset calculator `S1` pairs `C1` as x with `C2` as y** (emulator): the
+means came out 2.5 and 4.75, those of the two columns in that order.
 
-The probe is a way to put data into `S1` at all (unverified), which is
-pressing keys in the Statistics app rather than a batch.
+[Resid](statistics-2var/Resid.md), [SetIndep](statistics-2var/SetIndep.md) and [SetDepend](statistics-2var/SetDepend.md) were
+not tried with the app's name in front (unverified).
 
 The interpreter does not implement it, so `hpprime run` cannot check a program
 that uses it (unverified).
 
 ### Related
 
-[Resid](statistics-2var/Resid.md) · [SetIndep](statistics-2var/SetIndep.md) · [residue](statistics-2var/residue.md)
+[MeanY](statistics-2var/MeanY.md) · [Corr](statistics-2var/Corr.md) · [residue](statistics-2var/residue.md) · [apps.qualified-names](../topics/apps.md#apps.qualified-names)
+
+---
+
+<a name="MeanY"></a>
+
+## MeanY
+
+The mean of the second column of the Statistics 2Var data, which Do2VStats writes: refused until the app has data.
+
+| | |
+|---|---|
+| Syntax | `Statistics_2Var.MeanY` → real |
+| Group | statistics-2var |
+| Runs on the PC | no |
+
+### Examples
+
+| Call | Result | Known from |
+|---|---|---|
+| `EXPR("MeanY")` | *error* | [emulator](results.tsv) |
+| `EXPR("Statistics_2Var.MeanY")` | *error* | [emulator](results.tsv) |
+| `EXPR("Statistics_2Var.C1:={1,2,3,4}"); EXPR("Statistics_2Var.C2:={2,3,5,9}"); EXPR("Statistics_2Var.Do2VStats(Statistics_2Var.S1)"); RETURN EXPR("Statistics_2Var.MeanY");` | `4.75` | [emulator](results.tsv) |
+| `LOCAL o, r; EXPR("Statistics_2Var.C1:={1,2,3,4}"); EXPR("Statistics_2Var.C2:={2,3,5,9}"); EXPR("Statistics_2Var.Do2VStats(Statistics_2Var.S1)"); o := EXPR("Statistics_2Var.MeanY"); IFERR EXPR("Statistics_2Var.MeanY:=99"); r := EXPR("Statistics_2Var.MeanY"); THEN r := "refused"; END; IFERR EXPR("Statistics_2Var.MeanY:=" + STRING(o)); THEN r := r; END; RETURN r;` | `"refused"` | [emulator](results.tsv) |
+
+### Behaviour
+
+**A program reaches it with its app's name in front, once there is data**
+(emulator): with the Function app active, `Statistics_2Var.MeanY` was refused
+on a reset calculator and answered 4.75 once `C1` and `C2` held data and
+[Do2VStats](statistics-2var/Do2VStats.md) had run on `S1`; `MeanY` alone was refused,
+[apps.qualified-names](../topics/apps.md#apps.qualified-names). The bare
+name was not tried with its own app active (unverified).
+
+**Before there is data it is refused, not 0** (emulator), unlike the
+Statistics 1Var results, which read 0, as [MeanX](statistics-1var/MeanX.md)
+does. A program reading it should catch the error.
+
+**It holds the mean of the second column** (emulator): with `{1,2,3,4}` in
+`C1` and `{2,3,5,9}` in `C2`, and [Do2VStats](statistics-2var/Do2VStats.md) run on `S1`, it
+answered 4.75.
+
+**A program cannot set it** (emulator): assigning 99 was refused, in a call
+whose read of it had answered just before. [Do2VStats](statistics-2var/Do2VStats.md) writes
+it.
+
+The interpreter does not implement it, so `hpprime run` cannot check a program
+that uses it (unverified).
+
+### Related
+
+[Do2VStats](statistics-2var/Do2VStats.md) · [Corr](statistics-2var/Corr.md) · [apps.qualified-names](../topics/apps.md#apps.qualified-names)
 
 ---
 
@@ -240,3 +420,468 @@ that uses it (unverified).
 ### Related
 
 [Do2VStats](statistics-2var/Do2VStats.md) · [Resid](statistics-2var/Resid.md)
+
+---
+
+<a name="sCov"></a>
+
+## sCov
+
+The sample covariance of the Statistics 2Var data, which Do2VStats writes: refused until the app has data.
+
+| | |
+|---|---|
+| Syntax | `Statistics_2Var.sCov` → real |
+| Group | statistics-2var |
+| Runs on the PC | no |
+
+### Examples
+
+| Call | Result | Known from |
+|---|---|---|
+| `EXPR("sCov")` | *error* | [emulator](results.tsv) |
+| `EXPR("Statistics_2Var.sCov")` | *error* | [emulator](results.tsv) |
+| `EXPR("Statistics_2Var.C1:={1,2,3,4}"); EXPR("Statistics_2Var.C2:={2,3,5,9}"); EXPR("Statistics_2Var.Do2VStats(Statistics_2Var.S1)"); RETURN EXPR("Statistics_2Var.sCov");` | `3.83333333333` | [emulator](results.tsv) |
+| `LOCAL o, r; EXPR("Statistics_2Var.C1:={1,2,3,4}"); EXPR("Statistics_2Var.C2:={2,3,5,9}"); EXPR("Statistics_2Var.Do2VStats(Statistics_2Var.S1)"); o := EXPR("Statistics_2Var.sCov"); IFERR EXPR("Statistics_2Var.sCov:=99"); r := EXPR("Statistics_2Var.sCov"); THEN r := "refused"; END; IFERR EXPR("Statistics_2Var.sCov:=" + STRING(o)); THEN r := r; END; RETURN r;` | `"refused"` | [emulator](results.tsv) |
+
+### Behaviour
+
+**A program reaches it with its app's name in front, once there is data**
+(emulator): with the Function app active, `Statistics_2Var.sCov` was refused
+on a reset calculator and answered 3.83333333333 once `C1` and `C2` held data
+and [Do2VStats](statistics-2var/Do2VStats.md) had run on `S1`; `sCov` alone was refused,
+[apps.qualified-names](../topics/apps.md#apps.qualified-names). The bare
+name was not tried with its own app active (unverified).
+
+**Before there is data it is refused, not 0** (emulator), unlike the
+Statistics 1Var results, which read 0, as [MeanX](statistics-1var/MeanX.md)
+does. A program reading it should catch the error.
+
+**It holds the sample covariance** (emulator): with `{1,2,3,4}` in `C1` and
+`{2,3,5,9}` in `C2`, and [Do2VStats](statistics-2var/Do2VStats.md) run on `S1`, it answered
+3.83333333333, dividing by one less than the count: 11.5/3, where 11.5 is the
+sum of the products of the deviations.
+
+**A program cannot set it** (emulator): assigning 99 was refused, in a call
+whose read of it had answered just before. [Do2VStats](statistics-2var/Do2VStats.md) writes
+it.
+
+The interpreter does not implement it, so `hpprime run` cannot check a program
+that uses it (unverified).
+
+### Related
+
+[Do2VStats](statistics-2var/Do2VStats.md) · [Corr](statistics-2var/Corr.md) · [apps.qualified-names](../topics/apps.md#apps.qualified-names)
+
+---
+
+<a name="sY"></a>
+
+## sY
+
+The sample standard deviation of the second column of the Statistics 2Var data, which Do2VStats writes: refused until the app has data.
+
+| | |
+|---|---|
+| Syntax | `Statistics_2Var.sY` → real |
+| Group | statistics-2var |
+| Runs on the PC | no |
+
+### Examples
+
+| Call | Result | Known from |
+|---|---|---|
+| `EXPR("sY")` | *error* | [emulator](results.tsv) |
+| `EXPR("Statistics_2Var.sY")` | *error* | [emulator](results.tsv) |
+| `EXPR("Statistics_2Var.C1:={1,2,3,4}"); EXPR("Statistics_2Var.C2:={2,3,5,9}"); EXPR("Statistics_2Var.Do2VStats(Statistics_2Var.S1)"); RETURN EXPR("Statistics_2Var.sY");` | `3.09569593683` | [emulator](results.tsv) |
+| `LOCAL o, r; EXPR("Statistics_2Var.C1:={1,2,3,4}"); EXPR("Statistics_2Var.C2:={2,3,5,9}"); EXPR("Statistics_2Var.Do2VStats(Statistics_2Var.S1)"); o := EXPR("Statistics_2Var.sY"); IFERR EXPR("Statistics_2Var.sY:=99"); r := EXPR("Statistics_2Var.sY"); THEN r := "refused"; END; IFERR EXPR("Statistics_2Var.sY:=" + STRING(o)); THEN r := r; END; RETURN r;` | `"refused"` | [emulator](results.tsv) |
+
+### Behaviour
+
+**A program reaches it with its app's name in front, once there is data**
+(emulator): with the Function app active, `Statistics_2Var.sY` was refused on
+a reset calculator and answered 3.09569593683 once `C1` and `C2` held data and
+[Do2VStats](statistics-2var/Do2VStats.md) had run on `S1`; `sY` alone was refused,
+[apps.qualified-names](../topics/apps.md#apps.qualified-names). The bare
+name was not tried with its own app active (unverified).
+
+**Before there is data it is refused, not 0** (emulator), unlike the
+Statistics 1Var results, which read 0, as [MeanX](statistics-1var/MeanX.md)
+does. A program reading it should catch the error.
+
+**It holds the sample standard deviation of the second column** (emulator):
+with `{1,2,3,4}` in `C1` and `{2,3,5,9}` in `C2`, and
+[Do2VStats](statistics-2var/Do2VStats.md) run on `S1`, it answered 3.09569593683, dividing by
+one less than the count: the square root of 28.75/3. The population one is
+[σY](statistics-2var/σY-var.md).
+
+**A program cannot set it** (emulator): assigning 99 was refused, in a call
+whose read of it had answered just before. [Do2VStats](statistics-2var/Do2VStats.md) writes
+it.
+
+The interpreter does not implement it, so `hpprime run` cannot check a program
+that uses it (unverified).
+
+### Related
+
+[Do2VStats](statistics-2var/Do2VStats.md) · [Corr](statistics-2var/Corr.md) · [apps.qualified-names](../topics/apps.md#apps.qualified-names)
+
+---
+
+<a name="serrY"></a>
+
+## serrY
+
+The standard error of the mean of the second column of the Statistics 2Var data, which Do2VStats writes: refused until the app has data.
+
+| | |
+|---|---|
+| Syntax | `Statistics_2Var.serrY` → real |
+| Group | statistics-2var |
+| Runs on the PC | no |
+
+### Examples
+
+| Call | Result | Known from |
+|---|---|---|
+| `EXPR("serrY")` | *error* | [emulator](results.tsv) |
+| `EXPR("Statistics_2Var.serrY")` | *error* | [emulator](results.tsv) |
+| `EXPR("Statistics_2Var.C1:={1,2,3,4}"); EXPR("Statistics_2Var.C2:={2,3,5,9}"); EXPR("Statistics_2Var.Do2VStats(Statistics_2Var.S1)"); RETURN EXPR("Statistics_2Var.serrY");` | `1.54784796842` | [emulator](results.tsv) |
+| `LOCAL o, r; EXPR("Statistics_2Var.C1:={1,2,3,4}"); EXPR("Statistics_2Var.C2:={2,3,5,9}"); EXPR("Statistics_2Var.Do2VStats(Statistics_2Var.S1)"); o := EXPR("Statistics_2Var.serrY"); IFERR EXPR("Statistics_2Var.serrY:=99"); r := EXPR("Statistics_2Var.serrY"); THEN r := "refused"; END; IFERR EXPR("Statistics_2Var.serrY:=" + STRING(o)); THEN r := r; END; RETURN r;` | `"refused"` | [emulator](results.tsv) |
+
+### Behaviour
+
+**A program reaches it with its app's name in front, once there is data**
+(emulator): with the Function app active, `Statistics_2Var.serrY` was refused
+on a reset calculator and answered 1.54784796842 once `C1` and `C2` held data
+and [Do2VStats](statistics-2var/Do2VStats.md) had run on `S1`; `serrY` alone was refused,
+[apps.qualified-names](../topics/apps.md#apps.qualified-names). The bare
+name was not tried with its own app active (unverified).
+
+**Before there is data it is refused, not 0** (emulator), unlike the
+Statistics 1Var results, which read 0, as [MeanX](statistics-1var/MeanX.md)
+does. A program reading it should catch the error.
+
+**It holds the standard error of the mean of the second column** (emulator):
+with `{1,2,3,4}` in `C1` and `{2,3,5,9}` in `C2`, and
+[Do2VStats](statistics-2var/Do2VStats.md) run on `S1`, it answered 1.54784796842, the sample
+deviation, 3.09569593683, over the square root of the count, 4.
+
+**A program cannot set it** (emulator): assigning 99 was refused, in a call
+whose read of it had answered just before. [Do2VStats](statistics-2var/Do2VStats.md) writes
+it.
+
+The interpreter does not implement it, so `hpprime run` cannot check a program
+that uses it (unverified).
+
+### Related
+
+[Do2VStats](statistics-2var/Do2VStats.md) · [Corr](statistics-2var/Corr.md) · [apps.qualified-names](../topics/apps.md#apps.qualified-names)
+
+---
+
+<a name="ssY"></a>
+
+## ssY
+
+The sum of the squared deviations of the second column of the Statistics 2Var data, which Do2VStats writes: refused until the app has data.
+
+| | |
+|---|---|
+| Syntax | `Statistics_2Var.ssY` → real |
+| Group | statistics-2var |
+| Runs on the PC | no |
+
+### Examples
+
+| Call | Result | Known from |
+|---|---|---|
+| `EXPR("ssY")` | *error* | [emulator](results.tsv) |
+| `EXPR("Statistics_2Var.ssY")` | *error* | [emulator](results.tsv) |
+| `EXPR("Statistics_2Var.C1:={1,2,3,4}"); EXPR("Statistics_2Var.C2:={2,3,5,9}"); EXPR("Statistics_2Var.Do2VStats(Statistics_2Var.S1)"); RETURN EXPR("Statistics_2Var.ssY");` | `28.75` | [emulator](results.tsv) |
+| `LOCAL o, r; EXPR("Statistics_2Var.C1:={1,2,3,4}"); EXPR("Statistics_2Var.C2:={2,3,5,9}"); EXPR("Statistics_2Var.Do2VStats(Statistics_2Var.S1)"); o := EXPR("Statistics_2Var.ssY"); IFERR EXPR("Statistics_2Var.ssY:=99"); r := EXPR("Statistics_2Var.ssY"); THEN r := "refused"; END; IFERR EXPR("Statistics_2Var.ssY:=" + STRING(o)); THEN r := r; END; RETURN r;` | `"refused"` | [emulator](results.tsv) |
+
+### Behaviour
+
+**A program reaches it with its app's name in front, once there is data**
+(emulator): with the Function app active, `Statistics_2Var.ssY` was refused on
+a reset calculator and answered 28.75 once `C1` and `C2` held data and
+[Do2VStats](statistics-2var/Do2VStats.md) had run on `S1`; `ssY` alone was refused,
+[apps.qualified-names](../topics/apps.md#apps.qualified-names). The bare
+name was not tried with its own app active (unverified).
+
+**Before there is data it is refused, not 0** (emulator), unlike the
+Statistics 1Var results, which read 0, as [MeanX](statistics-1var/MeanX.md)
+does. A program reading it should catch the error.
+
+**It holds the sum of the squared deviations of the second column from its
+mean** (emulator): with `{1,2,3,4}` in `C1` and `{2,3,5,9}` in `C2`, and
+[Do2VStats](statistics-2var/Do2VStats.md) run on `S1`, it answered 28.75, which is 119 less 19
+squared over 4.
+
+**A program cannot set it** (emulator): assigning 99 was refused, in a call
+whose read of it had answered just before. [Do2VStats](statistics-2var/Do2VStats.md) writes
+it.
+
+The interpreter does not implement it, so `hpprime run` cannot check a program
+that uses it (unverified).
+
+### Related
+
+[Do2VStats](statistics-2var/Do2VStats.md) · [Corr](statistics-2var/Corr.md) · [apps.qualified-names](../topics/apps.md#apps.qualified-names)
+
+---
+
+<a name="ΣXY"></a>
+
+## ΣXY
+
+The sum of the products of the pairs of the Statistics 2Var data, which Do2VStats writes: refused until the app has data.
+
+| | |
+|---|---|
+| Syntax | `Statistics_2Var.ΣXY` → real |
+| Group | statistics-2var |
+| Runs on the PC | no |
+
+### Examples
+
+| Call | Result | Known from |
+|---|---|---|
+| `EXPR("ΣXY")` | *error* | [emulator](results.tsv) |
+| `EXPR("Statistics_2Var.ΣXY")` | *error* | [emulator](results.tsv) |
+| `EXPR("Statistics_2Var.C1:={1,2,3,4}"); EXPR("Statistics_2Var.C2:={2,3,5,9}"); EXPR("Statistics_2Var.Do2VStats(Statistics_2Var.S1)"); RETURN EXPR("Statistics_2Var.ΣXY");` | `59` | [emulator](results.tsv) |
+| `LOCAL o, r; EXPR("Statistics_2Var.C1:={1,2,3,4}"); EXPR("Statistics_2Var.C2:={2,3,5,9}"); EXPR("Statistics_2Var.Do2VStats(Statistics_2Var.S1)"); o := EXPR("Statistics_2Var.ΣXY"); IFERR EXPR("Statistics_2Var.ΣXY:=99"); r := EXPR("Statistics_2Var.ΣXY"); THEN r := "refused"; END; IFERR EXPR("Statistics_2Var.ΣXY:=" + STRING(o)); THEN r := r; END; RETURN r;` | `"refused"` | [emulator](results.tsv) |
+
+### Behaviour
+
+**A program reaches it with its app's name in front, once there is data**
+(emulator): with the Function app active, `Statistics_2Var.ΣXY` was refused on
+a reset calculator and answered 59 once `C1` and `C2` held data and
+[Do2VStats](statistics-2var/Do2VStats.md) had run on `S1`; `ΣXY` alone was refused,
+[apps.qualified-names](../topics/apps.md#apps.qualified-names). The bare
+name was not tried with its own app active (unverified).
+
+**Before there is data it is refused, not 0** (emulator), unlike the
+Statistics 1Var results, which read 0, as [MeanX](statistics-1var/MeanX.md)
+does. A program reading it should catch the error.
+
+**It holds the sum of the products of each pair** (emulator): with `{1,2,3,4}`
+in `C1` and `{2,3,5,9}` in `C2`, and [Do2VStats](statistics-2var/Do2VStats.md) run on `S1`, it
+answered 59, which is 2+6+15+36.
+
+**A program cannot set it** (emulator): assigning 99 was refused, in a call
+whose read of it had answered just before. [Do2VStats](statistics-2var/Do2VStats.md) writes
+it.
+
+The interpreter does not implement it, so `hpprime run` cannot check a program
+that uses it (unverified).
+
+### Related
+
+[Do2VStats](statistics-2var/Do2VStats.md) · [Corr](statistics-2var/Corr.md) · [apps.qualified-names](../topics/apps.md#apps.qualified-names)
+
+---
+
+<a name="ΣY"></a>
+
+## ΣY
+
+The sum of the second column of the Statistics 2Var data, which Do2VStats writes: refused until the app has data.
+
+| | |
+|---|---|
+| Syntax | `Statistics_2Var.ΣY` → real |
+| Group | statistics-2var |
+| Runs on the PC | no |
+
+### Examples
+
+| Call | Result | Known from |
+|---|---|---|
+| `EXPR("ΣY")` | *error* | [emulator](results.tsv) |
+| `EXPR("Statistics_2Var.ΣY")` | *error* | [emulator](results.tsv) |
+| `EXPR("Statistics_2Var.C1:={1,2,3,4}"); EXPR("Statistics_2Var.C2:={2,3,5,9}"); EXPR("Statistics_2Var.Do2VStats(Statistics_2Var.S1)"); RETURN EXPR("Statistics_2Var.ΣY");` | `19` | [emulator](results.tsv) |
+| `LOCAL o, r; EXPR("Statistics_2Var.C1:={1,2,3,4}"); EXPR("Statistics_2Var.C2:={2,3,5,9}"); EXPR("Statistics_2Var.Do2VStats(Statistics_2Var.S1)"); o := EXPR("Statistics_2Var.ΣY"); IFERR EXPR("Statistics_2Var.ΣY:=99"); r := EXPR("Statistics_2Var.ΣY"); THEN r := "refused"; END; IFERR EXPR("Statistics_2Var.ΣY:=" + STRING(o)); THEN r := r; END; RETURN r;` | `"refused"` | [emulator](results.tsv) |
+
+### Behaviour
+
+**A program reaches it with its app's name in front, once there is data**
+(emulator): with the Function app active, `Statistics_2Var.ΣY` was refused on
+a reset calculator and answered 19 once `C1` and `C2` held data and
+[Do2VStats](statistics-2var/Do2VStats.md) had run on `S1`; `ΣY` alone was refused,
+[apps.qualified-names](../topics/apps.md#apps.qualified-names). The bare
+name was not tried with its own app active (unverified).
+
+**Before there is data it is refused, not 0** (emulator), unlike the
+Statistics 1Var results, which read 0, as [MeanX](statistics-1var/MeanX.md)
+does. A program reading it should catch the error.
+
+**It holds the sum of the second column** (emulator): with `{1,2,3,4}` in `C1`
+and `{2,3,5,9}` in `C2`, and [Do2VStats](statistics-2var/Do2VStats.md) run on `S1`, it
+answered 19.
+
+**A program cannot set it** (emulator): assigning 99 was refused, in a call
+whose read of it had answered just before. [Do2VStats](statistics-2var/Do2VStats.md) writes
+it.
+
+The interpreter does not implement it, so `hpprime run` cannot check a program
+that uses it (unverified).
+
+### Related
+
+[Do2VStats](statistics-2var/Do2VStats.md) · [Corr](statistics-2var/Corr.md) · [apps.qualified-names](../topics/apps.md#apps.qualified-names)
+
+---
+
+<a name="ΣY2"></a>
+
+## ΣY2
+
+The sum of the squares of the second column of the Statistics 2Var data, which Do2VStats writes: refused until the app has data.
+
+| | |
+|---|---|
+| Syntax | `Statistics_2Var.ΣY2` → real |
+| Group | statistics-2var |
+| Runs on the PC | no |
+
+### Examples
+
+| Call | Result | Known from |
+|---|---|---|
+| `EXPR("ΣY2")` | *error* | [emulator](results.tsv) |
+| `EXPR("Statistics_2Var.ΣY2")` | *error* | [emulator](results.tsv) |
+| `EXPR("Statistics_2Var.C1:={1,2,3,4}"); EXPR("Statistics_2Var.C2:={2,3,5,9}"); EXPR("Statistics_2Var.Do2VStats(Statistics_2Var.S1)"); RETURN EXPR("Statistics_2Var.ΣY2");` | `119` | [emulator](results.tsv) |
+| `LOCAL o, r; EXPR("Statistics_2Var.C1:={1,2,3,4}"); EXPR("Statistics_2Var.C2:={2,3,5,9}"); EXPR("Statistics_2Var.Do2VStats(Statistics_2Var.S1)"); o := EXPR("Statistics_2Var.ΣY2"); IFERR EXPR("Statistics_2Var.ΣY2:=99"); r := EXPR("Statistics_2Var.ΣY2"); THEN r := "refused"; END; IFERR EXPR("Statistics_2Var.ΣY2:=" + STRING(o)); THEN r := r; END; RETURN r;` | `"refused"` | [emulator](results.tsv) |
+
+### Behaviour
+
+**A program reaches it with its app's name in front, once there is data**
+(emulator): with the Function app active, `Statistics_2Var.ΣY2` was refused on
+a reset calculator and answered 119 once `C1` and `C2` held data and
+[Do2VStats](statistics-2var/Do2VStats.md) had run on `S1`; `ΣY2` alone was refused,
+[apps.qualified-names](../topics/apps.md#apps.qualified-names). The bare
+name was not tried with its own app active (unverified).
+
+**Before there is data it is refused, not 0** (emulator), unlike the
+Statistics 1Var results, which read 0, as [MeanX](statistics-1var/MeanX.md)
+does. A program reading it should catch the error.
+
+**It holds the sum of the squares of the second column** (emulator): with
+`{1,2,3,4}` in `C1` and `{2,3,5,9}` in `C2`, and [Do2VStats](statistics-2var/Do2VStats.md) run
+on `S1`, it answered 119, which is 4+9+25+81.
+
+**A program cannot set it** (emulator): assigning 99 was refused, in a call
+whose read of it had answered just before. [Do2VStats](statistics-2var/Do2VStats.md) writes
+it.
+
+The interpreter does not implement it, so `hpprime run` cannot check a program
+that uses it (unverified).
+
+### Related
+
+[Do2VStats](statistics-2var/Do2VStats.md) · [Corr](statistics-2var/Corr.md) · [apps.qualified-names](../topics/apps.md#apps.qualified-names)
+
+---
+
+<a name="σCov"></a>
+
+## σCov
+
+The population covariance of the Statistics 2Var data, which Do2VStats writes: refused until the app has data.
+
+| | |
+|---|---|
+| Syntax | `Statistics_2Var.σCov` → real |
+| Group | statistics-2var |
+| Runs on the PC | no |
+
+### Examples
+
+| Call | Result | Known from |
+|---|---|---|
+| `EXPR("σCov")` | *error* | [emulator](results.tsv) |
+| `EXPR("Statistics_2Var.σCov")` | *error* | [emulator](results.tsv) |
+| `EXPR("Statistics_2Var.C1:={1,2,3,4}"); EXPR("Statistics_2Var.C2:={2,3,5,9}"); EXPR("Statistics_2Var.Do2VStats(Statistics_2Var.S1)"); RETURN EXPR("Statistics_2Var.σCov");` | `2.875` | [emulator](results.tsv) |
+| `LOCAL o, r; EXPR("Statistics_2Var.C1:={1,2,3,4}"); EXPR("Statistics_2Var.C2:={2,3,5,9}"); EXPR("Statistics_2Var.Do2VStats(Statistics_2Var.S1)"); o := EXPR("Statistics_2Var.σCov"); IFERR EXPR("Statistics_2Var.σCov:=99"); r := EXPR("Statistics_2Var.σCov"); THEN r := "refused"; END; IFERR EXPR("Statistics_2Var.σCov:=" + STRING(o)); THEN r := r; END; RETURN r;` | `"refused"` | [emulator](results.tsv) |
+
+### Behaviour
+
+**A program reaches it with its app's name in front, once there is data**
+(emulator): with the Function app active, `Statistics_2Var.σCov` was refused
+on a reset calculator and answered 2.875 once `C1` and `C2` held data and
+[Do2VStats](statistics-2var/Do2VStats.md) had run on `S1`; `σCov` alone was refused,
+[apps.qualified-names](../topics/apps.md#apps.qualified-names). The bare
+name was not tried with its own app active (unverified).
+
+**Before there is data it is refused, not 0** (emulator), unlike the
+Statistics 1Var results, which read 0, as [MeanX](statistics-1var/MeanX.md)
+does. A program reading it should catch the error.
+
+**It holds the population covariance** (emulator): with `{1,2,3,4}` in `C1`
+and `{2,3,5,9}` in `C2`, and [Do2VStats](statistics-2var/Do2VStats.md) run on `S1`, it
+answered 2.875, dividing by the count: 11.5/4.
+
+**A program cannot set it** (emulator): assigning 99 was refused, in a call
+whose read of it had answered just before. [Do2VStats](statistics-2var/Do2VStats.md) writes
+it.
+
+The interpreter does not implement it, so `hpprime run` cannot check a program
+that uses it (unverified).
+
+### Related
+
+[Do2VStats](statistics-2var/Do2VStats.md) · [Corr](statistics-2var/Corr.md) · [apps.qualified-names](../topics/apps.md#apps.qualified-names)
+
+---
+
+<a name="σY"></a>
+
+## σY
+
+The population standard deviation of the second column of the Statistics 2Var data, which Do2VStats writes: refused until the app has data.
+
+| | |
+|---|---|
+| Syntax | `Statistics_2Var.σY` → real |
+| Group | statistics-2var |
+| Runs on the PC | no |
+
+### Examples
+
+| Call | Result | Known from |
+|---|---|---|
+| `EXPR("σY")` | *error* | [emulator](results.tsv) |
+| `EXPR("Statistics_2Var.σY")` | *error* | [emulator](results.tsv) |
+| `EXPR("Statistics_2Var.C1:={1,2,3,4}"); EXPR("Statistics_2Var.C2:={2,3,5,9}"); EXPR("Statistics_2Var.Do2VStats(Statistics_2Var.S1)"); RETURN EXPR("Statistics_2Var.σY");` | `2.68095132369` | [emulator](results.tsv) |
+| `LOCAL o, r; EXPR("Statistics_2Var.C1:={1,2,3,4}"); EXPR("Statistics_2Var.C2:={2,3,5,9}"); EXPR("Statistics_2Var.Do2VStats(Statistics_2Var.S1)"); o := EXPR("Statistics_2Var.σY"); IFERR EXPR("Statistics_2Var.σY:=99"); r := EXPR("Statistics_2Var.σY"); THEN r := "refused"; END; IFERR EXPR("Statistics_2Var.σY:=" + STRING(o)); THEN r := r; END; RETURN r;` | `"refused"` | [emulator](results.tsv) |
+
+### Behaviour
+
+**A program reaches it with its app's name in front, once there is data**
+(emulator): with the Function app active, `Statistics_2Var.σY` was refused on
+a reset calculator and answered 2.68095132369 once `C1` and `C2` held data and
+[Do2VStats](statistics-2var/Do2VStats.md) had run on `S1`; `σY` alone was refused,
+[apps.qualified-names](../topics/apps.md#apps.qualified-names). The bare
+name was not tried with its own app active (unverified).
+
+**Before there is data it is refused, not 0** (emulator), unlike the
+Statistics 1Var results, which read 0, as [MeanX](statistics-1var/MeanX.md)
+does. A program reading it should catch the error.
+
+**It holds the population standard deviation of the second column**
+(emulator): with `{1,2,3,4}` in `C1` and `{2,3,5,9}` in `C2`, and
+[Do2VStats](statistics-2var/Do2VStats.md) run on `S1`, it answered 2.68095132369, dividing by
+the count: the square root of 28.75/4. The sample one is [sY](statistics-2var/sY.md).
+
+**A program cannot set it** (emulator): assigning 99 was refused, in a call
+whose read of it had answered just before. [Do2VStats](statistics-2var/Do2VStats.md) writes
+it.
+
+The interpreter does not implement it, so `hpprime run` cannot check a program
+that uses it (unverified).
+
+### Related
+
+[Do2VStats](statistics-2var/Do2VStats.md) · [Corr](statistics-2var/Corr.md) · [apps.qualified-names](../topics/apps.md#apps.qualified-names)

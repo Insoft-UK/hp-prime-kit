@@ -1,31 +1,31 @@
 ---
 status: executing
 progress:
-  total_phases: 10
-  completed_phases: 7
-  total_plans: 36
-  completed_plans: 35
-  percent: 70
+  total_phases: 12
+  completed_phases: 11
+  total_plans: 43
+  completed_plans: 43
+  percent: 92
 ---
 
 # Project State
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-09-11)
+See: .planning/PROJECT.md (updated 2026-09-24)
 
 **Core value:** Everything the documentation says about the Prime states how it is known, and the agents built on it never claim more than it does.
-**Current focus:** Milestone 1, the documentation. Phase 9: guided path, index and README, ahead of Phases 8 and 8.1 at the user's choice
+**Current focus:** Milestone 1, the documentation. Phase 10 next, the last: what a PC can catch
 
 ## Current Position
 
 Milestone: 1 of 2 (the documentation)
-Phase: 9 of 10 (guided path, index and README); Phase 8 paused, and Phase 8.1 inserted before 9
-Plan: 3 of 4 done in phase 9, 09-01 the model index, 09-02 planning language and 09-03 the guided path; 4 done of phase 8, and phase 7 closed with 7. 598 entries, 117 facts, 847 rows in results.tsv
-Status: Phase 8 paused, not closed. 130 of 172 app variables have an entry: the whole `triangle-solver`, `function`, `inference` and `finance` groups. 42 left, in six apps
-Last activity: 2026-09-23 — plan 09-03: the six steps of the guided path rewritten to link 51 facts, `docs/start/` under the same checks as the entries, 19 errors on the path corrected (the context's three and sixteen more found by reading), the starter's `AREA` renamed `CIRCAREA` at the user's choice, and `ppl.one-based` narrowed to what was measured. Before that, 2026-09-22, commit 9704074, made outside the plan in answer to issue #1 on GitHub: every lint finding carries its fact's label, and a rule is an error only as far as its measurement reaches. Before that, 2026-09-16, plan 09-02: planning language and "this kit" out of 100 pages, a check that refuses "phase" and "this kit", and a glossary of batch, harness and probe in `format.md`. Before that, plan 09-01: `docs/llms.txt` generated at 74,939 bytes of a 100,000 budget, the check for examples nobody ran, and 21 `unverified` examples relabelled, which settled `ppl.locals-initialised-one-line` from a row Phase 5 had stored for it and never written down. Before that, Phase 9 questioned: four decisions from the user, 66 names found that no phase had taken, now Phase 8.1, and eight decisions proposed in `09-CONTEXT.md`. Before that, the Finance round: 50 of 68 variables answer from any app, 9 need Finance selected, 9 refuse either way; with Finance active every number becomes text with two decimals; and `Xlist` turned out not to be alone. Before that, 2026-09-15, the Inference round: 49 of 50 variables answer with the app active, the app ships with a worked example loaded, `DoInference` answers and writes its results where Phase 7 recorded a refusal, and the one name that refused is spelled on HP’s list with a codepoint the calculator does not accept. Before that, the Function app round. `F1:='X^2-4'` stores the expression where `F1:=X^2-4` stored a number, so a batch fills `F1` unaided and the whole group answered with no keypresses; and the function commands turn out **not** to write their own variables, where `DoSolve` did. Before that, the Phase 8 probe, two batches and 48 rows. A reset calculator turns out to have the Function app active, so "no app open" is not a condition the Prime has and seven entries said it was. The app rule reaches variables as well as functions, a program can set one and the value stays, and `DoSolve` answers once something has put a triangle in the app — where Phase 7 recorded a refusal
+Phase: 8 complete and verified. Next, Phase 10, the last of milestone 1. Order since 2026-09-24: 9 and 9.1 → 8.1 → the rest of 8 (all complete) → 10
+Plan: phases 8, 8.1, 9 and 9.1 complete and verified; 09-01 to 09-03 committed and pushed, everything since uncommitted at the user's request; phase 8 closed with 5 plans. 706 entries, 122 facts, 1238 lines in results.tsv
+Status: Phase 8 closed. All 172 app variables have an entry, and 706 of the 706 names that get one. 122 facts, 1238 lines in results.tsv
+Last activity: 2026-09-25 — plan 08-05 and Phase 8 closed, at the user's word to go on with Phase 8. Questioned first, two choices: probe `App.Variable` before seven rounds with the app selected by hand, and measure the statistics with data. Two batches with no app selected, 165 rows, both compile controls right: a program reaches another app's variables and functions with the app's name in front, in source and through `EXPR`, now `apps.qualified-names`. 42 entries, the last app variables: 706 of 706 names. Every statistic matched the hand computation; `Statistics_1Var.MeanX` and `Statistics_2Var.MeanX` are two values; `Triangle_Solver.SSS` from the Function app answers radians; `Solve.SOLVE(X^2-4=0,X,1)` answers 2 and `Solve.Solve` is still refused. `hpprime run` fixed three ways: a qualified name was a syntax error, a Greek initial a traceback, and a name on HP's list "undefined"; now "not covered", with a test. I told the user 39 of 42 answered qualified at once; it was 28, corrected. Suite 14,713 passed. Before that, plan 08.1-04 and Phase 8.1 closed. `hpprime examples --compile` built and tested, then 22 programs and 2 controls on the emulator, both controls right. 9 locals do not compile (the limit is 8); a function's `END` without `;` does not compile; `ENDCASE`, `ENDFUNC` do not; a `LOCAL` in a nested block, `EXPORT` with 2 to 6 initialised, three initialised locals, `LOCAL i` and `e`, and a literal `L(0)` all compile; `x = 2;` compiles and assigns nothing; a program exporting `AREA` hides the Function app's; `Check` named the first of two syntax errors, contradicting `ppl.check-last-error`'s old title; `WAIT(-1)` waited both times. The linter has 13 rules, the interpreter refuses what does not compile. Suite 13,550 passed. Before that, plan 08.1-03: 69 calls, the harness waiting three hours through its own `timeout`. 30 entries for the plot view, and with them all 65 variables of Home and the system and `GET`: CMD-12 complete, 664 of 706 names. The app's mode settings are shifted by one against Home's and override them once not 0 -- angle, complex numbers, number format -- so `apps.app-angle-overrides-home` became `apps.app-mode-overrides-home` before it was ever published. Drawing units follow the plot window: `C→PX(0,0)` moves with `Xmin` and `Ymax`. The parameter, polar and sequence ranges refuse with the Function app active. `HAngle` 2 is gradians. Suite 13,513 passed. Before that, plan 08.1-02: 46 calls, collected by a watcher after the harness gave up waiting at 30 minutes. 16 entries for the app's mode and numeric view. The active app's `AAngle` overrides Home's `HAngle` for a program's trigonometry, now `apps.app-angle-overrides-home`; a string indexed answers a character code, now `ppl.string-index-code`; `MOD` sits with `/`, `NTHROOT` binds tighter than `^` and a minus sign; `Base` 0 to 3 are binary, octal, decimal, hexadecimal. The interpreter follows every row. 634 entries, 121 facts, suite 12,970 passed. Before that, plan 08.1-01: Phase 8.1 questioned (four decisions from the user, all sixteen open questions taken) and its first batch run, 71 calls, all read back. 20 entries, Home's settings, the system's, `Ans` and `GET`. A list read at 0 answers its LAST element and one assigned at 0 appends, a matrix at 0 is an error; `MOD` binds like `*` and its remainder takes the divisor's sign, against HP's help; `NTHROOT` binds tighter than `*`; the calculator ignores case in command names, now `ppl.names-ignore-case`; `STRING` follows `HFormat` and `HDigits`. The interpreter and the linter follow. 618 entries, 119 facts, suite 12,689 passed. Before that, Phase 9.1 complete and verified, questioned first with four decisions from the user. `hpprime run` answers `9 MOD 4` and `3 NTHROOT 8` as the emulator did, refuses the call forms as the calculator does, refuses `9 MOD 4 + 100` because how `MOD` binds was never measured, and never prints a traceback: 114 interpreter tests. `hpprime examples` keeps a stored row a different answer would replace, refuses a probe on a stored call, loses one row and not a batch to a cell it cannot read, reads the two infinities, and dates a row the day `M9.hpmat` was written: 56 tests. One new fact, `formats.number-infinity`. Suite 12,344 passed, 0 failed. Before that, the README approved by the user and Phase 9 closed: 09-04's summary, and a verification that counts 598 entries and 117 facts in 74,929 bytes of `docs/llms.txt`, 779 of 800 examples stored, 4 by hand on a G2, 17 *no value*, none unrun. Before that, the plan reviewed at the user's request, and four changes applied at their choice: Phase 9.1 inserted before any more batches, for `hpprime run` answering 9 to `9 MOD 4 + 100` and the harness able to replace a stored row or lose a batch to one cell; Phase 8.1 moved ahead of the rest of Phase 8; the open questions every program runs into measured in 8.1's sessions (FACT-06), a list of about a dozen rather than the 22 `unverified` facts, most of which are about formats, libraries and Python; and Phase 10 for CHECK-04's open half. Before that, plan 09-04: the README leads with the documentation and a test holds its numbers; `AGENTS.md`, `SKILL.md` and the paste block send a model to `docs/llms.txt` first; every rule of the paste block cites its fact with its label, and a test holds each citation; the apptest README's settled question closed. Before that, 2026-09-23, plan 09-03: the six steps of the guided path rewritten to link 51 facts, `docs/start/` under the same checks as the entries, 19 errors on the path corrected (the context's three and sixteen more found by reading), the starter's `AREA` renamed `CIRCAREA` at the user's choice, and `ppl.one-based` narrowed to what was measured. Before that, 2026-09-22, commit 9704074, made outside the plan in answer to issue #1 on GitHub: every lint finding carries its fact's label, and a rule is an error only as far as its measurement reaches. Before that, 2026-09-16, plan 09-02: planning language and "this kit" out of 100 pages, a check that refuses "phase" and "this kit", and a glossary of batch, harness and probe in `format.md`. Before that, plan 09-01: `docs/llms.txt` generated at 74,939 bytes of a 100,000 budget, the check for examples nobody ran, and 21 `unverified` examples relabelled, which settled `ppl.locals-initialised-one-line` from a row Phase 5 had stored for it and never written down. Before that, Phase 9 questioned: four decisions from the user, 66 names found that no phase had taken, now Phase 8.1, and eight decisions proposed in `09-CONTEXT.md`. Before that, the Finance round: 50 of 68 variables answer from any app, 9 need Finance selected, 9 refuse either way; with Finance active every number becomes text with two decimals; and `Xlist` turned out not to be alone. Before that, 2026-09-15, the Inference round: 49 of 50 variables answer with the app active, the app ships with a worked example loaded, `DoInference` answers and writes its results where Phase 7 recorded a refusal, and the one name that refused is spelled on HP’s list with a codepoint the calculator does not accept. Before that, the Function app round. `F1:='X^2-4'` stores the expression where `F1:=X^2-4` stored a number, so a batch fills `F1` unaided and the whole group answered with no keypresses; and the function commands turn out **not** to write their own variables, where `DoSolve` did. Before that, the Phase 8 probe, two batches and 48 rows. A reset calculator turns out to have the Function app active, so "no app open" is not a condition the Prime has and seven entries said it was. The app rule reaches variables as well as functions, a program can set one and the value stays, and `DoSolve` answers once something has put a triangle in the app — where Phase 7 recorded a refusal
 
-Progress: [███████░░░] 70%
+Progress: [█████████░] 92%
 
 ## Accumulated Context
 
@@ -38,19 +38,30 @@ Decisions are logged in the Key Decisions table of PROJECT.md. Recent ones:
 - Phase 2: the linter compares the calculator's names without regard to case; whether the calculator does is not measured
 - Phase 3: the user presses the keys on the emulator; the batch runs on a throwaway calculator, Prime_1 — the name the emulator's second window always opens, measured 2026-09-11 — reset before each batch; HP help becomes emulator where the emulator agrees, and a disagreement is flagged, never replaced
 - Phase 3: what a result is stored with is the version number and the build date, never what `VERSION` answers, which carries the calculator's serial number
+- 2026-09-24, from a review of the plan: Phase 9.1 before any more batches; Phase 8.1 ahead of the rest of Phase 8, with the open questions every program runs into; Phase 10 for CHECK-04's open half. Commits are held and made larger, at the user's request
 - 2026-09-23: the starter exports `CIRCAREA`, not `AREA`, which is the Function app's; the rename was chosen over measuring what Home does with the collision
 - 2026-09-22, 9704074: a lint rule is an error only as far as its measurement reaches, a warning labelled `unverified` beyond it; `tests/test_lint.py` fails on an error whose label is not `G2` or `emulator`
 - Phase 9, questioned 2026-09-16: the 65 variables and `GET` become Phase 8.1, inside milestone 1; Phase 9 runs ahead of 8 and 8.1; the index a model loads first is one file with a link on every line; the guided path keeps its six steps, rewritten to link; planning language leaves the documentation, with a check to keep it out
 
 ### Pending Todos
 
-- **For plan 09-04, found by 09-03** (2026-09-23). `AGENTS.md` and
-  `docs/ai/prompts.md` §1 say `L(0)` is a run-time error, which is not
-  measured: what failed is `MID` with a 0, now what `ppl.one-based` says.
-  `examples/apptest/README.md` still asks for the six on-screen label
-  positions to be pressed to settle an ambiguous code, against
-  `interface.soft-labels-not-keys`; the app's own step 3 has to be read
-  before that page is changed
+- **Owned by a phase since 2026-09-24.** The tool problems below are
+  fixed by Phase 9.1 (2026-09-24): the interpreter's silent answer to
+  `9 MOD 4 + 100` and its tracebacks on `CONCAT` and the list forms of
+  `FLOOR`; a probe overwriting a stored row; a batch lost to one infinity; a
+  row dated the day its batch was prepared. Phase 8.1 takes the open
+  questions, and 9.1 added three: how `MOD` and `NTHROOT` bind against the
+  arithmetic operators, `-9 MOD 4`, and `NTHROOT` of a negative number. Also
+  `L(0)` on a list: the interpreter raises it as the calculator's error
+  (`PPLError`), which nothing measured. The others: `a = 2;` as a statement,
+  three locals initialised on one line, `L(0)` on a list, `LOCAL i` and `e`,
+  `WAIT(-1)`, the export that meets an app's name, and the cases the linter
+  warns on as `unverified`. Phase 10 takes CHECK-04's open half. The bullets
+  stay below as the record of what was measured
+- **Done in plan 09-04, found by 09-03** (2026-09-23). `AGENTS.md` and
+  `docs/ai/prompts.md` §1 no longer say `L(0)` is a run-time error, and
+  `examples/apptest/README.md` no longer asks for the labels along the bottom
+  to be pressed to settle a code `interface.soft-labels-not-keys` settled
 
 - **Finance splits three ways** (measured 2026-09-15). With the Function
   app active, 50 of its 68 variables answered. Nine refused and then
@@ -520,6 +531,6 @@ Decisions are logged in the Key Decisions table of PROJECT.md. Recent ones:
 
 ## Session Continuity
 
-Last session: 2026-09-23
-Stopped at: plan 09-03 complete and committed, not pushed; suite 12,287 passed, 0 failed
-Resume with: plan 09-04, the README and the pages above the documentation: decisions 7 and 8 of `09-CONTEXT.md`, the two items it inherits from 09-03 under Pending Todos, and the README goes to the user as a draft before it is committed. Phase 8 resumes after Phase 9 with its 42 variables, and its statistics groups hold the two Greek pairs the suffix rule does not cover -- ΣX against σX and ΣY against σY, both app variables, where a suffix meaning "the variable" separates nothing
+Last session: 2026-09-24
+Stopped at: Phase 8 complete. Uncommitted, at the user's request for larger commits: plan 09-04 and Phase 9's verification, the roadmap reordered, all of Phase 9.1, all of Phase 8.1, and plan 08-05 with Phase 8's verification. Last push: aac8025. Suite 14,713 passed, 0 failed. `docs/llms.txt` is at 91,328 bytes of its 100,000 budget
+Resume with: Phase 10, questioned first: a list of every fact in `docs/topics/` with the lint rule that catches it or why a PC cannot, a rule and two tests for each one that can, and Phase 9's counts taken again. `docs/llms.txt` is at 91,328 bytes of 100,000, so the recount may need the index trimmed. Before it, the commit the user has held since aac8025, when they ask for it.

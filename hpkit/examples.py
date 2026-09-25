@@ -6,9 +6,20 @@ it answers.
     hpprime examples --all               every entry's examples
     hpprime examples ... --probe E=CALL  also a call no entry states yet
     hpprime examples --collect           read a batch not waited for
+    hpprime examples ... --replace       let a different answer replace the
+                                         row results.tsv already holds
     hpprime examples --relabel           HP help and unverified become
                                          emulator where the stored answer
                                          agrees
+    hpprime examples --compile FILE      does each program in FILE compile?
+
+A question a batch cannot ask -- does this compile? -- goes in a file of small
+programs, each headed `[fact-or-entry] NAME`. They are put on the same
+throwaway calculator with two controls, one that compiles and one that does
+not; you press Check on each, run HPKDOC and close the window, and each
+program's file says whether it compiled: the calculator writes a compiled
+block into it when it does. If the controls do not come out as they must,
+nothing is concluded and nothing is stored.
 
 The interpreter is checked against the documentation; this checks the
 documentation against the calculator's own firmware. Each example becomes
@@ -46,6 +57,19 @@ HEAD = 4                # answered, TYPE, the number, the text's length
 RESULTS = ('docs', 'commands', 'results.tsv')
 FIELDS = ('entry', 'call', 'answer', 'type', 'firmware', 'date')
 ERROR = '*error*'
+# An answer whose cells the decoder could not read. It is reported and never
+# stored: what it was is not known.
+UNREADABLE = '*unreadable*'
+
+# What a compile question can answer, and its two controls. ZCBAD fails with
+# ENDIF, measured to fail on a G2 (ppl.no-end-keywords); ZCOK is the smallest
+# function there is.
+COMPILES = '*compiles*'
+REFUSED = '*does not compile*'
+CONTROL = 'control'
+CONTROLS = (('ZCOK', 'EXPORT ZCOK()\nBEGIN\n  RETURN 1;\nEND;\n', True),
+            ('ZCBAD', 'EXPORT ZCBAD()\nBEGIN\n  IF 1 THEN RETURN 1; ENDIF;'
+                      '\n  RETURN 0;\nEND;\n', False))
 
 # Names whose answer belongs to the machine and is not kept. SERIAL answers
 # the calculator's serial number, and results.tsv is committed and published.
@@ -83,6 +107,65 @@ class Case(object):
                 'stated': self.stated, 'label': self.label}
 
 
+class Program(object):
+    """A small program put on the calculator to see whether it compiles.
+    `entry` is the fact or entry its answer belongs to; `name` is the
+    program's own, and what the person picks in the catalogue."""
+
+    def __init__(self, entry, name, source):
+        self.entry, self.name, self.source = entry, name, source
+
+    def as_dict(self):
+        return {'entry': self.entry, 'name': self.name,
+                'source': self.source}
+
+
+def read_programs(path):
+    """-> [Program] from a file of programs, each headed `[entry] NAME`.
+    A line that is `#` alone or starts with `# ` is the file's comment and
+    belongs to no program, wherever it is: PPL has no such comment, so one
+    left in a program would make it fail to compile for a reason that is not
+    the question. Anything else before the first header is refused."""
+    out, cur = [], None
+    for n, line in enumerate(io.open(path, encoding='utf-8'), 1):
+        line = line.rstrip('\r\n')
+        if line == '#' or line.startswith('# '):
+            continue
+        m = re.match(r'^\[([^\]]+)\]\s+([A-Z][A-Z0-9_]*)\s*$', line)
+        if m:
+            cur = Program(m.group(1).strip(), m.group(2), '')
+            out.append(cur)
+        elif cur is not None:
+            cur.source += line + '\n'
+        elif line.strip() and not line.startswith('#'):
+            raise ExamplesError('%s:%d: a program starts with [entry] NAME'
+                                % (path, n))
+    names = [p.name for p in out]
+    taken = set([NAME] + [c[0] for c in CONTROLS])
+    bad = sorted(set(n for n in names if names.count(n) > 1 or n in taken))
+    if bad:
+        raise ExamplesError('%s: a name used twice, or one the tool uses: %s'
+                            % (path, ', '.join(bad)))
+    for p in out:
+        p.source = p.source.strip('\n') + '\n'
+    return out
+
+
+def compiled(path):
+    """Did the calculator compile the program in this file? True when the
+    file carries a compiled block, which the emulator writes into it once the
+    program compiles; None when there is no readable program."""
+    from hpkit import program as P
+    if not os.path.isfile(path):
+        return None
+    data = open(path, 'rb').read()
+    try:
+        start = P.read(data)[2]
+    except P.UnexpectedFormat:
+        return None
+    return P.has_compiled_block(data, start)
+
+
 class Answer(object):
     def __init__(self, answered, type_=None, number=None, text='', cut=False):
         self.answered = answered
@@ -94,6 +177,8 @@ class Answer(object):
     @property
     def displayed(self):
         """The answer the way an entry writes a result."""
+        if self.answered is None:
+            return UNREADABLE
         if not self.answered:
             return ERROR
         if self.type == -1:
@@ -183,8 +268,13 @@ def lint_problems(source):
 # ------------------------------------------------------------ the answers
 
 def _text(row, width):
+    """-> (text, cut), or (None, False) when a cell of it is unreadable."""
+    if len(row) > 3 and row[3] is None:
+        return None, False
     length = int(row[3]) if len(row) > 3 else 0
     codes = row[HEAD:HEAD + min(length, width)]
+    if None in codes:
+        return None, False
     return ''.join(chr(int(c)) for c in codes), length > width
 
 
@@ -197,13 +287,22 @@ def decode(rows, count, width=WIDTH):
             "batch's matrix. Was %s run before the emulator was closed?"
             % (MAT, len(rows), len(rows[0]) if rows else 0, count + 1,
                width + HEAD, NAME))
-    version = _text(rows[0], width)[0] if rows[0][0] == 1 else ''
+    version = (_text(rows[0], width)[0] or '') if rows[0][0] == 1 else ''
     answers = []
     for row in rows[1:]:
+        # A cell nobody has measured decodes as None (numbers.read_hpmat with
+        # strict=False). The number alone can go: the text is the answer as
+        # an entry writes it. Anything else leaves the answer unknown.
+        if row[0] is None or row[1] is None:
+            answers.append(Answer(None))
+            continue
         if row[0] != 1:
             answers.append(Answer(False))
             continue
         text, cut = _text(row, width)
+        if text is None:
+            answers.append(Answer(None))
+            continue
         answers.append(Answer(True, int(row[1]), row[2], text, cut))
     return version, answers
 
@@ -325,8 +424,9 @@ def _state_file():
     return os.path.join(emulator.state_dir(), 'examples.json')
 
 
-def prepare(root, batch, calc=CALC):
-    """Put the batch's program on a freshly reset `calc`. -> its folder."""
+def prepare(root, batch, calc=CALC, programs=()):
+    """Put the batch's program, and any programs to compile, on a freshly
+    reset `calc`. -> its folder."""
     from hpkit import emulator as E, program as P
     source = harness(batch)
     problems = lint_problems(source)
@@ -358,9 +458,13 @@ def prepare(root, batch, calc=CALC):
     stale = os.path.join(folder, 'M%d.hpmat' % MAT)
     if os.path.isfile(stale):
         os.remove(stale)
-    data = P.write(open(P.default_template(), 'rb').read(), source)
+    template = open(P.default_template(), 'rb').read()
     with open(os.path.join(folder, NAME + '.hpprgm'), 'wb') as f:
-        f.write(data)
+        f.write(P.write(template, source))
+    # Not linted: whether they compile is the question.
+    for p in programs:
+        with open(os.path.join(folder, p.name + '.hpprgm'), 'wb') as f:
+            f.write(P.write(template, p.source))
     return folder
 
 
@@ -409,18 +513,27 @@ def _stamp(folder):
     return os.path.getmtime(path) if os.path.isfile(path) else None
 
 
-def keys(calc=CALC):
+def keys(calc=CALC, programs=()):
+    first = ''
+    if programs:
+        first = ('\n  first, for each of these, in this order: [Shift]'
+                 '[Program], pick it, Edit, Check, then Esc, whatever Check '
+                 'says:\n    %s' % ' '.join(p.name for p in programs))
     return ('In the emulator window that has just opened, which should be %s:'
+            '%s'
             '\n  [Shift][Program], pick %s, Edit, then Check, then Esc'
             '\n  on Home, type %s (no brackets) and Enter'
             '\n  then close that window. That is when it writes M%d.'
-            % (calc, NAME, NAME, MAT))
+            % (calc, first, NAME, NAME, MAT))
 
 
-def collect(root, state, answers_from=None):
+def collect(root, state, answers_from=None, replace=False):
     """Read the batch back, write results.tsv. -> [(Case, Answer, verdict)].
 
-    `answers_from` is the calculator folder; by default the one in state."""
+    `answers_from` is the calculator folder; by default the one in state. A
+    row results.tsv already holds is replaced by a different answer only
+    with `replace`, given here or to the run that made the batch; otherwise
+    the stored row stays and the verdict says so."""
     from hpkit import numbers
     folder = answers_from or state['folder']
     if state.get('stamp') is not None and _stamp(folder) == state['stamp']:
@@ -434,13 +547,20 @@ def collect(root, state, answers_from=None):
         raise ExamplesError('%s is not there: %s was not run, or the emulator '
                             'was not closed' % (path, NAME))
     batch = [Case(**c) for c in state['cases']]
-    version, answers = decode(numbers.read_hpmat(open(path, 'rb').read()),
-                              len(batch))
+    version, answers = decode(numbers.read_hpmat(open(path, 'rb').read(),
+                                                 strict=False), len(batch))
     stamp = firmware(version, 'Virtual Calculator %s'
                      % (state.get('exe_version') or '?'))
-    date = state.get('date') or time.strftime('%Y-%m-%d')
+    # The day the batch ran: the emulator writes the matrix when it closes
+    # after running it. The day it was prepared can be the day before.
+    date = time.strftime('%Y-%m-%d', time.localtime(os.path.getmtime(path)))
+    replace = replace or state.get('replace', False)
+    stored = read_results(root)
     rows, out = [], []
     for c, a in zip(batch, answers):
+        if a.answered is None:
+            out.append((c, a, 'UNREADABLE'))
+            continue
         if c.entry.upper() in NEVER_STORED:
             # displayed is derived from these, and both the row below and
             # _report read this same object, so replacing it here is what
@@ -455,29 +575,97 @@ def collect(root, state, answers_from=None):
             verdict = ('same' if agrees(c.stated, shown,
                                         a.number if a.type == 0 else None)
                        else 'DIFFERENT')
-        out.append((c, a, verdict))
-        rows.append(OrderedDict([
+        row = OrderedDict([
             ('entry', c.entry), ('call', c.call),
             ('answer', shown + (' (cut at %d characters)' % WIDTH
                                 if a.cut else '')),
             ('type', '' if a.type is None else '%d' % a.type),
-            ('firmware', stamp), ('date', date)]))
+            ('firmware', stamp), ('date', date)])
+        old = stored.get((c.entry, c.call))
+        if (old is not None and not replace
+                and (old['answer'], old['type']) != (row['answer'],
+                                                     row['type'])):
+            # The evidence on file and this batch disagree. Which is right is
+            # a person's call -- an app active in one run and not the other
+            # has done this -- so the stored row stays until asked.
+            verdict = 'KEPT %s' % old['answer']
+        else:
+            rows.append(row)
+        out.append((c, a, verdict))
+    programs = [Program(**p) for p in state.get('programs', [])]
+    if programs:
+        _collect_compiled(folder, programs, stored, replace, stamp, date,
+                          rows, out)
     write_results(root, rows)
     return out
 
 
+def _collect_compiled(folder, programs, stored, replace, stamp, date, rows,
+                      out):
+    """Whether each program compiled, read from its file. The controls
+    decide whether anything is concluded: ZCOK has to have compiled and
+    ZCBAD not, or the method did not work -- a program not checked, a
+    failed Check that writes a block after all -- and no row is stored."""
+    seen = dict((p.name, compiled(os.path.join(folder, p.name + '.hpprgm')))
+                for p in programs)
+    trusted = all(seen.get(name) is want for name, _, want in CONTROLS)
+    for p in programs:
+        got = seen[p.name]
+        shown = (UNREADABLE if got is None else COMPILES if got else REFUSED)
+        case = Case(p.entry, p.name)
+        answer = Answer(True, None, None, shown)
+        if p.entry == CONTROL:
+            want = dict((n, w) for n, _, w in CONTROLS)[p.name]
+            out.append((case, answer, 'control' if got is want
+                        else 'CONTROL WRONG'))
+            continue
+        if not trusted:
+            out.append((case, answer, 'NOT CONCLUDED'))
+            continue
+        if got is None:
+            out.append((case, answer, 'UNREADABLE'))
+            continue
+        row = OrderedDict([
+            ('entry', p.entry), ('call', p.source), ('answer', shown),
+            ('type', ''), ('firmware', stamp), ('date', date)])
+        old = stored.get((p.entry, _clean(p.source)))
+        if old is not None and not replace and old['answer'] != shown:
+            out.append((case, answer, 'KEPT %s' % old['answer']))
+            continue
+        rows.append(row)
+        out.append((case, answer, 'compile'))
+
+
 def run(root, batch, calc=CALC, wait=True, spawn=None, timeout=1800,
-        pids=None):
+        pids=None, replace=False, programs=()):
     """Prepare the batch, launch an emulator, wait for it, collect.
     `pids` are the running emulators, found when not given."""
     from hpkit import emulator as E
+    if not replace:
+        # A probe reusing a call that already has a row would replace that
+        # row when it is collected. Refused before any keypress is spent.
+        stored = read_results(root)
+        clash = [c for c in batch
+                 if c.stated is None and (c.entry, c.call) in stored]
+        clash += [Case(p.entry, p.name) for p in programs
+                  if (p.entry, _clean(p.source)) in stored]
+        if clash:
+            raise ExamplesError(
+                '%d probe(s) reuse a call results.tsv already holds, and '
+                'would replace its row: %s. Give each a call text of its own, '
+                'or pass --replace to measure it again on purpose.'
+                % (len(clash), '; '.join('%s %s' % (c.entry, c.call)
+                                         for c in clash)))
+    if programs:
+        programs = [Program(CONTROL, n, s) for n, s, _ in CONTROLS] \
+            + list(programs)
     check_opens(E.find_root(), calc, pids)
-    folder = prepare(root, batch, calc)
+    folder = prepare(root, batch, calc, programs)
     exe = E.find_exe()
     state = {'cases': [c.as_dict() for c in batch], 'calc': calc,
              'folder': folder, 'stamp': _stamp(folder),
-             'exe_version': exe_version(exe),
-             'date': time.strftime('%Y-%m-%d')}
+             'exe_version': exe_version(exe), 'replace': replace,
+             'programs': [p.as_dict() for p in programs]}
     target = _state_file()
     if not os.path.isdir(os.path.dirname(target)):
         os.makedirs(os.path.dirname(target))
@@ -491,7 +679,10 @@ def run(root, batch, calc=CALC, wait=True, spawn=None, timeout=1800,
             return subprocess.Popen([exe], cwd=os.path.dirname(exe))
     proc = spawn()
     print('%d call(s) on %s, in %s.' % (len(batch), calc, NAME))
-    print(keys(calc))
+    if programs:
+        print('%d program(s) to compile, two of them controls.'
+              % len(programs))
+    print(keys(calc, programs))
     if not wait:
         print('\nWhen it is closed: hpprime examples --collect')
         return None
@@ -555,16 +746,33 @@ def _report(root, verdicts):
     print('\n%-10s %-*s  %-22s %-22s %s' % ('entry', width, 'call',
                                            'the entry says', 'the emulator',
                                            ''))
-    bad = 0
+    bad = kept = lost = 0
     for c, a, verdict in verdicts:
         if verdict == 'DIFFERENT':
             bad += 1
+        elif verdict.startswith('KEPT'):
+            kept += 1
+        elif verdict in ('UNREADABLE', 'NOT CONCLUDED', 'CONTROL WRONG'):
+            lost += 1
         print('%-10s %-*s  %-22s %-22s %s'
               % (c.entry, width, c.call[:width], (c.stated or '-')[:22],
                  a.displayed[:22], verdict))
     print('\n%d call(s); %d disagree with their entry. The rows are in %s.'
           % (len(verdicts), bad, '/'.join(RESULTS)))
-    return bad
+    if kept:
+        print('%d answer(s) differ from the row results.tsv already holds, '
+              'which was KEPT. To replace them: hpprime examples --collect '
+              '--replace' % kept)
+    if lost:
+        print('%d answer(s) could not be read back, or were not concluded '
+              'because a control came out wrong, and were not stored.' % lost)
+    refused = [c.call for c, a, v in verdicts
+               if v == 'compile' and a.text == REFUSED]
+    if refused:
+        print('Did not compile: %s. If Check was not pressed on one of '
+              'them, that one is not a result: say so, and it is run again.'
+              % ', '.join(refused))
+    return bad + kept + lost
 
 
 def cli(argv):
@@ -587,7 +795,11 @@ def cli(argv):
         if '--collect' in argv:
             with io.open(_state_file(), encoding='utf-8') as f:
                 state = json.loads(f.read())
-            return 1 if _report(root, collect(root, state)) else 0
+            return 1 if _report(root, collect(
+                root, state, replace='--replace' in argv)) else 0
+        programs = []
+        if '--compile' in argv:
+            programs = read_programs(argv[argv.index('--compile') + 1])
         probes, names, skip = [], [], False
         for k, a in enumerate(argv):
             if skip:
@@ -597,13 +809,16 @@ def cli(argv):
                 entry, _, call = argv[k + 1].partition('=')
                 probes.append((entry.strip(), call.strip()))
                 skip = True
+            elif a == '--compile':
+                skip = True
             elif not a.startswith('-'):
                 names.append(a)
         batch = cases(root, None if '--all' in argv else names, probes)
-        if not batch:
+        if not batch and not programs:
             print('nothing to run')
             return 2
-        verdicts = run(root, batch, wait='--no-wait' not in argv)
+        verdicts = run(root, batch, wait='--no-wait' not in argv,
+                       replace='--replace' in argv, programs=programs)
         if verdicts is None:
             return 0
         return 1 if _report(root, verdicts) else 0

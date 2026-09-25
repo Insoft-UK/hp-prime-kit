@@ -186,12 +186,13 @@ Each row links to the fact that says how it is known. The last column is what
 
 | What you do | What happens | Instead | Known from | `hpprime lint` |
 |---|---|---|---|---|
-| `LOCAL` with 13 names | *syntax error* on that line | at most 7 or 8 per `LOCAL`; use groups of 6 | [ppl.local-limit](../topics/ppl.md#ppl.local-limit) | error from 13, warning from 7 to 12 |
+| `LOCAL` with 9 names | *syntax error* on that line | at most 8 per `LOCAL`; use groups of 6 | [ppl.local-limit](../topics/ppl.md#ppl.local-limit) | error from 9, warning at 7 and 8 |
 | `ENDIF`, `ENDFOR`, `ENDWHILE` | *syntax error* | `END` for everything | [ppl.no-end-keywords](../topics/ppl.md#ppl.no-end-keywords) | error |
-| `END` without its `;` | *syntax error*, reported on the next line | `END;` | [ppl.end-semicolon](../topics/ppl.md#ppl.end-semicolon) | error for a block, warning for a function |
+| `END` without its `;` | *syntax error*, on a block's reported on the next line | `END;` | [ppl.end-semicolon](../topics/ppl.md#ppl.end-semicolon) | error |
+| `za = 2;` meaning to assign | nothing is assigned, and no error | `za := 2;` | [ppl.equality-operators](../topics/ppl.md#ppl.equality-operators) | a warning |
 | `n := SIZE(M)(1);` | *syntax error* | `zd := DIM(M);` then `zd(1)` | [ppl.index-call](../topics/ppl.md#ppl.index-call) | error |
 | a `LOCAL` half way down a function | *syntax error* | all of them at the top of the `BEGIN` | [ppl.locals-at-top](../topics/ppl.md#ppl.locals-at-top) | error |
-| `MID(s, 0, 2)` | an error | positions count from 1 | [ppl.one-based](../topics/ppl.md#ppl.one-based) | nothing for `MID`; a warning for a 0 into a list, where it is not measured |
+| `L(0)` on a list | its **last** element, with no error | positions count from 1 | [ppl.one-based](../topics/ppl.md#ppl.one-based) | a warning |
 | `MAIN()` on Home | *syntax error* | `MAIN`, with no parentheses | [ppl.home-no-parentheses](../topics/ppl.md#ppl.home-no-parentheses) | cannot see Home |
 | a program that draws, then returns | you see Home and the returned value, not the drawing | wait for a key before returning | [interface.draw-then-return](../topics/interface.md#interface.draw-then-return) | cannot see it |
 | copying the file into the mirror | nothing is installed | drag it in the CK window | [deploy.ck-mirror](../topics/deploy.md#deploy.ck-mirror) | cannot see it |
@@ -200,9 +201,8 @@ Each row links to the fact that says how it is known. The last column is what
 
 A single `=` in a condition is not on the list. `IF a = 1 THEN` compiles and
 compares, exactly as `==` does
-([ppl.equality-operators](../topics/ppl.md#ppl.equality-operators)). What
-`a = 2;` does as a statement, where `a := 2;` was meant, has not been
-measured, so write `:=` to assign.
+([ppl.equality-operators](../topics/ppl.md#ppl.equality-operators)). It is
+only as a statement that it silently does nothing.
 
 ## When something does not add up
 
@@ -215,8 +215,8 @@ Two consequences:
 
 - An error that does not move after a fix means your hypothesis is false, not
   that the fix was too small. When the editor's *Check* names a line, it is
-  the last line it could not read, so everything below it is clean and
-  everything above it is still unknown
+  one of the bad lines, not necessarily the only one, and whether it is the
+  first or the last depends on the error
   ([ppl.check-last-error](../topics/ppl.md#ppl.check-last-error)).
 - Download somebody else's program and read it.
   [hpcalc.org](https://www.hpcalc.org/prime/) is full of code that runs on real

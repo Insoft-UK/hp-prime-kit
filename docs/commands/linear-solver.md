@@ -6,9 +6,112 @@ Every entry in this group, in full. Each one is written in its own file, and tha
 
 | | |
 |---|---|
+| [LSolution](#LSolution) | The Linear Solver's solution, computed as soon as LSystem is set; refused while LSystem is all zeros. |
+| [LSystem](#LSystem) | The Linear Solver's system, one row per equation with its constant last; setting it solves it. |
 | [LinSolve](#LinSolve) | Solves a linear system given as an augmented matrix. |
 | [Solve2×2](#Solve2×2) | A syntax error even with its own app active, unlike every other app function. |
 | [Solve3×3](#Solve3×3) | A syntax error like its pair, in a group whose other name answers. |
+
+---
+
+<a name="LSolution"></a>
+
+## LSolution
+
+The Linear Solver's solution, computed as soon as LSystem is set; refused while LSystem is all zeros.
+
+| | |
+|---|---|
+| Syntax | `Linear_Solver.LSolution` → list |
+| Group | linear-solver |
+| Runs on the PC | no |
+
+### Examples
+
+| Call | Result | Known from |
+|---|---|---|
+| `EXPR("LSolution")` | *error* | [emulator](results.tsv) |
+| `EXPR("Linear_Solver.LSolution")` | *error* | [emulator](results.tsv) |
+| `EXPR("Linear_Solver.LSystem:=[[2,1,5],[1,-1,1]]"); RETURN EXPR("Linear_Solver.LSolution");` | `{2,1}` | [emulator](results.tsv) |
+| `LOCAL o, r; EXPR("Linear_Solver.LSystem:=[[2,1,5],[1,-1,1]]"); o := EXPR("Linear_Solver.LSolution"); IFERR EXPR("Linear_Solver.LSolution:={5,6}"); r := EXPR("Linear_Solver.LSolution"); THEN r := "refused"; END; IFERR EXPR("Linear_Solver.LSolution:=" + STRING(o)); THEN r := r; END; RETURN r;` | `"refused"` | [emulator](results.tsv) |
+
+### Behaviour
+
+**A program reaches it with its app's name in front, once there is a system**
+(emulator): with the Function app active, `Linear_Solver.LSolution` was
+refused on a reset calculator and answered `{2,1}` once [LSystem](linear-solver/LSystem.md)
+held `[[2,1,5],[1,-1,1]]`; `LSolution` alone was refused,
+[apps.qualified-names](../topics/apps.md#apps.qualified-names). The bare
+name was not tried with its own app active (unverified).
+
+**Refused while the system is all zeros** (emulator), as a reset leaves it,
+rather than answering an empty list. A program reading it should catch the
+error. A system with no solution, or with many, was not tried (unverified).
+
+**Nothing has to run for it to be computed** (emulator): the row that answered
+set [LSystem](linear-solver/LSystem.md) and read this, with no command between. It agrees
+with [LinSolve](linear-solver/LinSolve.md) on the same matrix.
+
+**A program cannot set it** (emulator): assigning `{5,6}` was refused, in a
+call whose read of it had answered just before.
+
+The interpreter does not implement it, so `hpprime run` cannot check a program
+that uses it (unverified).
+
+### Related
+
+[LSystem](linear-solver/LSystem.md) · [LinSolve](linear-solver/LinSolve.md) · [apps.qualified-names](../topics/apps.md#apps.qualified-names)
+
+---
+
+<a name="LSystem"></a>
+
+## LSystem
+
+The Linear Solver's system, one row per equation with its constant last; setting it solves it.
+
+| | |
+|---|---|
+| Syntax | `Linear_Solver.LSystem` → matrix |
+| Syntax | `Linear_Solver.LSystem:=matrix` |
+| Group | linear-solver |
+| Runs on the PC | no |
+
+### Examples
+
+| Call | Result | Known from |
+|---|---|---|
+| `EXPR("LSystem")` | *error* | [emulator](results.tsv) |
+| `EXPR("Linear_Solver.LSystem")` | `[[0,0,0,0],[0,0,0,0],[0,0,0,0]]` | [emulator](results.tsv) |
+| `EXPR("Linear_Solver.LSystem:=[[2,1,5],[1,-1,1]]")` | `[[2,1,5],[1,−1,1]]` | [emulator](results.tsv) |
+| `LOCAL o, r; o := EXPR("Linear_Solver.LSystem"); IFERR EXPR("Linear_Solver.LSystem:=[[1,1,3],[1,-1,1]]"); r := EXPR("Linear_Solver.LSystem"); THEN r := "refused"; END; IFERR EXPR("Linear_Solver.LSystem:=" + STRING(o)); THEN r := r; END; RETURN r;` | `[[1,1,3],[1,−1,1]]` | [emulator](results.tsv) |
+
+### Behaviour
+
+**A program reaches it with its app's name in front** (emulator):
+`Linear_Solver.LSystem` answered `[[0,0,0,0],[0,0,0,0],[0,0,0,0]]`, three
+equations in three unknowns, all 0, with the Function app active, where
+`LSystem` alone was refused,
+[apps.qualified-names](../topics/apps.md#apps.qualified-names). The bare
+name was not tried with its own app active (unverified).
+
+**Setting it solves it** (emulator): set to `[[2,1,5],[1,-1,1]]`, the system
+2x+y=5 and x−y=1, it answered the matrix, and a read of
+[LSolution](linear-solver/LSolution.md) straight after answered `{2,1}` with no command run
+in between. That is the answer [LinSolve](linear-solver/LinSolve.md) gives for the same
+matrix, which shows each row ending with its equation's constant.
+
+**A program can set it** (emulator): set to `[[1,1,3],[1,−1,1]]` through
+`Linear_Solver.LSystem`, it read back `[[1,1,3],[1,−1,1]]`. The row reads the
+first value, sets another, reads again and puts the first one back. A system
+of two equations replaced one of three.
+
+The interpreter does not implement it, so `hpprime run` cannot check a program
+that uses it (unverified).
+
+### Related
+
+[LSolution](linear-solver/LSolution.md) · [LinSolve](linear-solver/LinSolve.md) · [apps.qualified-names](../topics/apps.md#apps.qualified-names)
 
 ---
 

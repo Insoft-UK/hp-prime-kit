@@ -11,13 +11,20 @@ the syntax, and the paste-and-compile cycle in the Connectivity Kit.
 
 ## Start here
 
-Read [`AGENTS.md`](AGENTS.md). It is the operating contract for this
+Load [`docs/llms.txt`](docs/llms.txt). It is the index of the documentation:
+every fact and every command entry on one line, with its link and a one-line
+summary, small enough to load whole. Every claim behind those links says how
+it is known -- `G2`, `emulator`, `HP help` or `unverified` -- and you cite it
+by its identifier, such as `ppl.local-limit`.
+
+Then read [`AGENTS.md`](AGENTS.md). It is the operating contract for this
 repository: what to read before writing PPL, the two gates every program goes
 through, what you must not claim, and what only the human can do. It is short,
 and everything below assumes it.
 
 Then read [`docs/topics/ppl.md`](docs/topics/ppl.md) before writing a
-line, especially §2: four hypotheses that look reasonable and are false.
+line: the limits that break compilation, and the five facts marked
+`refuted hypothesis`, restrictions that look reasonable and do not exist.
 
 ## The loop, in three commands
 

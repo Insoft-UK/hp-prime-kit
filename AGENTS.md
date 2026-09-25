@@ -12,10 +12,16 @@ let you carry it without a calculator.
 
 ## 1. Before you write a line of PPL
 
-Read [`docs/topics/ppl.md`](docs/topics/ppl.md), the limits and the refuted hypotheses: the
-limits that break compilation, and four hypotheses that look reasonable and are
-false. Writing PPL from memory means inventing restrictions that do not exist
-and missing the ones that do.
+Load [`docs/llms.txt`](docs/llms.txt) first. It is the index of the
+documentation: every fact and every command entry on one line, with its link
+and a one-line summary, kept small enough to load whole. Follow the links you
+need from there. Whether a name exists at all is in
+[`docs/commands/names.tsv`](docs/commands/names.tsv), HP's own list.
+
+Then read [`docs/topics/ppl.md`](docs/topics/ppl.md): the limits that break
+compilation, and five hypotheses that look reasonable and are false, each
+marked `refuted hypothesis`. Writing PPL from memory means inventing
+restrictions that do not exist and missing the ones that do.
 
 Then, depending on the task:
 
@@ -29,20 +35,30 @@ Then, depending on the task:
 | writing it in Python | [`docs/topics/micropython.md`](docs/topics/micropython.md) |
 | the binary formats, or moving a lot of data | [`docs/topics/formats.md`](docs/topics/formats.md) |
 | getting it onto the calculator | [`docs/topics/deploy.md`](docs/topics/deploy.md) |
-| every command | [`docs/tools.md`](docs/tools.md) |
+| one PPL command | its entry, linked from [`docs/llms.txt`](docs/llms.txt) |
+| every `hpprime` command | [`docs/tools.md`](docs/tools.md) |
 
-The non-negotiables, as a checklist. The full list, with its evidence, is in
-`ppl.md`:
+The non-negotiables, as a checklist. Each names the fact that holds it, with
+its evidence, in `ppl.md`:
 
-- 1-based everywhere. `L(0)` is a run-time error.
-- `:=` assigns, `==` compares, `<>` is not-equal.
-- `END` closes every block. `ENDIF`, `ENDFOR` and `ENDWHILE` do not exist.
-- All `LOCAL`s at the top of the `BEGIN`, at most 7-8 per statement.
-- You cannot index the result of a call: `SIZE(M)(1)` does not compile.
-- Exported names are global and collide. Prefix them.
+- Indexes start at 1. A 0 is never the first element: for `MID` and a
+  matrix it is an error, and a list read at 0 answers its LAST element
+  (`ppl.one-based`).
+- `:=` assigns, `==` compares, `<>` is not-equal (`ppl.equality-operators`).
+- `END` closes every block. `ENDIF`, `ENDFOR` and `ENDWHILE` do not exist
+  (`ppl.no-end-keywords`), and `END` takes its `;` (`ppl.end-semicolon`).
+- All `LOCAL`s at the top of the `BEGIN` (`ppl.locals-at-top`), at most 8
+  per statement (`ppl.local-limit`).
+- `x = 2;` as a statement assigns nothing, silently: assign with `:=`
+  (`ppl.equality-operators`).
+- You cannot index the result of a call: `SIZE(M)(1)` does not compile
+  (`ppl.index-call`).
+- Exported names are global and collide, with each other and with HP's own
+  names. Prefix them (`ppl.global-namespace`).
 - On Home, a zero-argument function is called without parentheses: `MYFUNC`,
   not `MYFUNC()`. In source, the parentheses are required. Get this right
-  whenever you tell somebody how to test on the calculator.
+  whenever you tell somebody how to test on the calculator
+  (`ppl.home-no-parentheses`).
 
 ## 2. The workflow to follow
 
@@ -102,8 +118,10 @@ Nothing works until a command says it does.
   `hpprime pull` says what is really there. See
   [`deploy.md`](docs/topics/deploy.md).
 - Do not report a platform fact without evidence. If it is in
-  `docs/topics/`, cite the fact by its identifier. If you measured it, say how. If neither, say you
-  are not sure. On this platform a confident wrong number is expensive,
+  `docs/topics/`, cite the fact by its identifier and its label; if it is
+  about one command, cite its entry. If you measured it, say how. If neither,
+  say you are not sure. A fact labelled `unverified` is not evidence either,
+  and says so. On this platform a confident wrong number is expensive,
   because nothing contradicts it until the calculator does.
 
 ## 4. When something fails
@@ -133,7 +151,7 @@ that:
   codes and the menu geometry documented here all came from downloading apps
   and reading them.
 - `time` does not exist in MicroPython on the Prime. If `import time` fails,
-  the bridge is fine and the module is not there.
+  the bridge is fine and the module is not there (`micropython.modules`).
 - The Calculators folder is a mirror, and it is often empty. That is not a
   broken installation.
 

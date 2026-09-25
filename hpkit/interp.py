@@ -109,9 +109,18 @@ def lex(text):
             toks.append(Tok('NUM', float(raw), line))
             i += len(raw)
             continue
-        # identifier or keyword
+        # a name with its app's name in front, Statistics_1Var.MeanX: one
+        # token, which the parser turns into a case not covered
         if c.isalpha() or c == '_':
-            m = re.match(r'[A-Za-z_]\w*', text[i:])
+            q = re.match(r'[^\W\d]\w*\.[^\W\d]\w*', text[i:])
+            if q and q.group(0).split('.')[0].upper() not in KEYWORDS:
+                toks.append(Tok('QID', q.group(0), line))
+                i += len(q.group(0))
+                continue
+        # identifier or keyword. A name can start with a letter outside
+        # ASCII: the list has ΣLIST, σX and Mean₁.
+        if c.isalpha() or c == '_':
+            m = re.match(r'[^\W\d]\w*', text[i:])
             word = m.group(0)
             kind = 'KW' if word.upper() in KEYWORDS else 'ID'
             toks.append(Tok(kind, word.upper() if kind == 'KW' else word,
@@ -141,9 +150,29 @@ def lex(text):
 #              ('break',) ('continue',) ('return',e|None) ('expr',e)
 
 
+# The keywords that close a block. A statement ends at its semicolon, at one of
+# these, or at the end of the file; see Parser.end_statement.
+CLOSERS = ('END', 'ELSE', 'UNTIL', 'THEN', 'DEFAULT')
+
+# Operator words, written between their operands. Measured on the Virtual
+# Calculator 2.4, build 2025-09-15: 9 MOD 4 answers 1 and MOD(9,4) does not
+# compile; 3 NTHROOT 8 answers 2 and NTHROOT(3,8) is refused
+# (docs/commands/arithmetic/MOD.md, docs/commands/catalog/NTHROOT.md).
+#
+# How they bind, measured on 2026-09-24. MOD sits with * and /, left to
+# right: 9 MOD 4 + 100 is 101, 2 * 7 MOD 4 is 2, 8 / 2 MOD 3 is 1 and
+# 9 MOD 4 / 2 is 0.5; ^ and a minus sign bind tighter (2^3 MOD 5 is 3,
+# -9 MOD 4 is 3), and == looser. NTHROOT binds tighter than everything else,
+# ^ and the minus sign included, left to right: 2 ^ 3 NTHROOT 8 is 4,
+# -3 NTHROOT 8 is -2, 2 NTHROOT 3 NTHROOT 64 is 64 to the power 1/sqrt(3).
+INFIX_WORDS = ('MOD', 'NTHROOT')
+INFIX_EXAMPLE = {'MOD': '9 MOD 4', 'NTHROOT': '3 NTHROOT 8'}
+
+
 class Parser(object):
     def __init__(self, toks, filename='<ppl>'):
         self.t, self.i, self.filename = toks, 0, filename
+        self.trailing = None        # why the last statement is not covered
 
     # ------------------------------------------------------------- helpers
     def peek(self, k=0):
@@ -176,6 +205,45 @@ class Parser(object):
         while self.accept('OP', ';'):
             pass
 
+    def end_statement(self):
+        """A statement ends at `;`, at the keyword that closes its block, or
+        at the end of the file. Anything else after it is a word this
+        interpreter cannot read there -- an operator it lacks, as MOD was --
+        and reading that word as the next statement is how `9 MOD 4 + 100`
+        once answered 9. It raises instead."""
+        if self.at('OP', ';'):
+            self.semicolon()
+            return
+        tk = self.peek()
+        if tk.kind == 'EOF' or (tk.kind == 'KW' and tk.val in CLOSERS):
+            return
+        # The statement is not what it looked like, so it must not run as
+        # though it were: statements() replaces it with one that raises when
+        # reached, and the rest of the file still loads. Skip to its end.
+        self.trailing = ('%s:%d: %r after a complete statement is not '
+                         'covered: a statement ends at ; or at the keyword '
+                         'that closes its block'
+                         % (self.filename, tk.line, tk.val))
+        depth = 0
+        while not self.at('EOF'):
+            t = self.peek()
+            if t.kind == 'OP' and t.val in ('(', '{', '['):
+                depth += 1
+            elif t.kind == 'OP' and t.val in (')', '}', ']'):
+                depth -= 1
+            elif depth <= 0 and t.kind == 'OP' and t.val == ';':
+                self.semicolon()
+                return
+            elif depth <= 0 and t.kind == 'KW' and t.val in CLOSERS:
+                return
+            self.i += 1
+
+    def at_end(self):
+        """Is the next token the end of the text, a `;`, or a closer?"""
+        tk = self.peek()
+        return (tk.kind == 'EOF' or (tk.kind == 'OP' and tk.val == ';')
+                or (tk.kind == 'KW' and tk.val in CLOSERS))
+
     # ------------------------------------------------------------ program
     def program(self):
         """-> (functions {name: (params, body)}, globals_ [(name, expr)])"""
@@ -194,14 +262,22 @@ class Parser(object):
                 funcs[name] = (params, body)
             else:
                 # global variable declaration(s)
+                line, valued = self.peek().line, 0
                 while True:
                     init = None
                     if self.accept('OP', ':='):
                         init = self.expr()
+                        valued += 1
                     globs.append((name, init))
                     if not self.accept('OP', ','):
                         break
                     name = self.take('ID').val
+                if valued >= 7:
+                    # Seven on one line failed to compile on a G2
+                    # (ppl.export-initialised); six compiled on the emulator.
+                    raise PPLError('%s:%d: %d variables with initial values in '
+                                   'one EXPORT: seven do not compile on the '
+                                   'calculator' % (self.filename, line, valued))
                 self.semicolon()
             del exported     # everything is visible: there is one namespace
         return funcs, globs
@@ -221,6 +297,13 @@ class Parser(object):
         self.take('KW', 'BEGIN')
         body = self.statements(('END',))
         self.take('KW', 'END')
+        if not self.at('OP', ';'):
+            # Measured on the Virtual Calculator 2.4, build 2025-09-15, on
+            # 2026-09-24: a function whose END has no ; does not compile, at
+            # the end of the file or before another function
+            # (ppl.end-semicolon).
+            self._error("the END that closes a function needs its ';': the "
+                        'calculator does not compile it without')
         self.semicolon()
         return body
 
@@ -233,7 +316,10 @@ class Parser(object):
                 break
             if tk.kind == 'KW' and tk.val in enders:
                 break
-            out.append(self.statement())
+            s = self.statement()
+            if self.trailing is not None:
+                s, self.trailing = ('uncovered', self.trailing), None
+            out.append(s)
         return out
 
     # ----------------------------------------------------------- statements
@@ -251,14 +337,15 @@ class Parser(object):
         e = self.expr()
         if self.accept('OP', ':='):
             value = self.expr()
-            self.semicolon()
-            return ('assign', e, value)
+            self.end_statement()
+            return e if e[0] == 'uncovered' else ('assign', e, value)
         if self.peek().val in ('▶', '=>') and self.peek().kind == 'OP':
             self.i += 1
             target = self.expr()
-            self.semicolon()
-            return ('assign', target, e)
-        self.semicolon()
+            self.end_statement()
+            return (target if target[0] == 'uncovered'
+                    else ('assign', target, e))
+        self.end_statement()
         return ('expr', e)
 
     def _s_local(self):
@@ -270,7 +357,12 @@ class Parser(object):
             decls.append((name, init))
             if not self.accept('OP', ','):
                 break
-        self.semicolon()
+        if len(decls) >= 9:
+            # 9 to 12 failed to compile on the emulator, 13 and more on a G2;
+            # 8 compiles (ppl.local-limit).
+            self._error('%d variables in one LOCAL: 9 and more do not compile '
+                        'on the calculator' % len(decls))
+        self.end_statement()
         return ('local', decls)
 
     def _s_if(self):
@@ -282,7 +374,7 @@ class Parser(object):
         if self.accept('KW', 'ELSE'):
             else_ = self.statements(('END',))
         self.take('KW', 'END')
-        self.semicolon()
+        self.end_statement()
         return ('if', cond, then_, else_)
 
     def _s_case(self):
@@ -302,7 +394,7 @@ class Parser(object):
             else:
                 break
         self.take('KW', 'END')
-        self.semicolon()
+        self.end_statement()
         return ('case', branches, default_)
 
     def _s_for(self):
@@ -321,7 +413,7 @@ class Parser(object):
         self.take('KW', 'DO')
         body = self.statements(('END',))
         self.take('KW', 'END')
-        self.semicolon()
+        self.end_statement()
         return ('for', var, init, enders, step, direction, body)
 
     def _s_while(self):
@@ -330,7 +422,7 @@ class Parser(object):
         self.take('KW', 'DO')
         body = self.statements(('END',))
         self.take('KW', 'END')
-        self.semicolon()
+        self.end_statement()
         return ('while', cond, body)
 
     def _s_repeat(self):
@@ -338,7 +430,7 @@ class Parser(object):
         body = self.statements(('UNTIL',))
         self.take('KW', 'UNTIL')
         cond = self.expr()
-        self.semicolon()
+        self.end_statement()
         return ('repeat', body, cond)
 
     def _s_iferr(self):
@@ -350,28 +442,28 @@ class Parser(object):
         if self.accept('KW', 'ELSE'):
             else_ = self.statements(('END',))
         self.take('KW', 'END')
-        self.semicolon()
+        self.end_statement()
         return ('iferr', attempt, on_error, else_)
 
     def _s_break(self):
         self.take('KW', 'BREAK')
         levels = None
-        if not self.at('OP', ';') and not self.at('EOF'):
+        if not self.at_end():
             levels = self.expr()
-        self.semicolon()
+        self.end_statement()
         return ('break', levels)
 
     def _s_continue(self):
         self.take('KW', 'CONTINUE')
-        self.semicolon()
+        self.end_statement()
         return ('continue',)
 
     def _s_return(self):
         self.take('KW', 'RETURN')
         e = None
-        if not self.at('OP', ';') and not self.at('KW', 'END'):
+        if not self.at_end():
             e = self.expr()
-        self.semicolon()
+        self.end_statement()
         return ('return', e)
 
     def _s_begin(self):
@@ -427,8 +519,13 @@ class Parser(object):
 
     def _mul(self):
         n = self._unary()
-        while self.at('OP') and self.peek().val in ('*', '/'):
-            op = self.take('OP').val
+        while True:
+            if self.at('OP') and self.peek().val in ('*', '/'):
+                op = self.take('OP').val
+            elif self.at('ID') and self.peek().val == 'MOD':
+                op = self.take('ID').val
+            else:
+                break
             n = ('bin', op, n, self._unary())
         return n
 
@@ -442,10 +539,19 @@ class Parser(object):
         return self._power()
 
     def _power(self):
-        n = self._postfix()
+        n = self._root()
         if self.at('OP', '^'):
             self.i += 1
             return ('bin', '^', n, self._unary())   # right-associative
+        return n
+
+    def _root(self):
+        """a NTHROOT b: tighter than ^ and a minus sign, left to right
+        (INFIX_WORDS)."""
+        n = self._postfix()
+        while self.at('ID') and self.peek().val == 'NTHROOT':
+            self.take('ID')
+            n = ('bin', 'NTHROOT', n, self._postfix())
         return n
 
     def _postfix(self):
@@ -459,7 +565,7 @@ class Parser(object):
                     if not self.accept('OP', ','):
                         break
             self.take('OP', ')')
-            n = ('call', n, args)
+            n = n if n[0] == 'uncovered' else ('call', n, args)
         return n
 
     def _primary(self):
@@ -473,6 +579,11 @@ class Parser(object):
         if tk.kind == 'ID':
             self.i += 1
             return ('var', tk.val)
+        if tk.kind == 'QID':
+            self.i += 1
+            return ('uncovered', '%s:%d: %s, a name with its app\'s name in '
+                    'front, is not covered' % (self.filename, tk.line,
+                                               tk.val))
         if self.at('OP', '('):
             self.i += 1
             e = self.expr()
@@ -556,6 +667,45 @@ def _endless(word):
             'key it never will here: GETKEY always reports "no key pressed" '
             'on the PC, which is what makes a wait loop endless. Run that '
             'part on the calculator.' % (word, LOOP_LIMIT))
+
+
+# What Python raises when a builtin or an operator is handed something it
+# was not written for. None of them is the calculator's verdict, so each
+# becomes Unsupported where it is caught, never a traceback.
+PYTHON_FAILURES = (TypeError, ValueError, IndexError, KeyError,
+                   AttributeError, ZeroDivisionError, OverflowError)
+
+
+def _kind(v):
+    """How a value is named in a message: 'a number', 'a list'..."""
+    if isinstance(v, bool) or isinstance(v, (int, float)):
+        return 'a number'
+    if isinstance(v, str):
+        return 'a string'
+    if isinstance(v, list):
+        return 'a list'
+    if isinstance(v, Matrix):
+        return 'a matrix'
+    return 'a %s' % type(v).__name__
+
+
+def _nthroot(n, x):
+    """n NTHROOT x. Measured on the Virtual Calculator 2.4, build
+    2025-09-15: 3 NTHROOT 8 answers 2, 3 NTHROOT (-8) answers -2, the real
+    odd root, and 2 NTHROOT (-4) is refused with HComplex at 0, as a reset
+    calculator has it. A degree that is not a whole number, or not above 0,
+    was not measured."""
+    if not (isinstance(n, float) and isinstance(x, float)):
+        raise Unsupported('NTHROOT between %s and %s is not covered'
+                          % (_kind(n), _kind(x)))
+    if n <= 0 or (x < 0 and n != int(n)):
+        raise Unsupported('%r NTHROOT %r has not been measured' % (n, x))
+    if x < 0:
+        if int(n) % 2 == 0:
+            raise PPLError('an even root of a negative number is refused while '
+                           'HComplex is 0')
+        return -((-x) ** (1.0 / n))
+    return x ** (1.0 / n)
 
 
 def _truth(v):
@@ -649,6 +799,8 @@ class Machine(object):
 
     def _stmt(self, s, frame):
         kind = s[0]
+        if kind == 'uncovered':
+            raise Unsupported(s[1])
         if kind == 'local':
             for name, init in s[1]:
                 frame[name] = (self.evaluate(init, frame) if init is not None
@@ -771,13 +923,20 @@ class Machine(object):
                 if len(idx) != 2:
                     raise PPLError('a matrix is indexed with two indices')
                 f, c = idx
+                if 0 in idx:
+                    raise Unsupported('%s(%d,%d) := ...: assigning to a matrix '
+                                      'with an index of 0 has not been '
+                                      'measured' % (name, f, c))
                 self._check_range(f, 1, len(container.rows), name)
                 self._check_range(c, 1, len(container.rows[0]), name)
                 container.rows[f - 1][c - 1] = value
                 return
             if isinstance(container, list):
                 i = idx[0]
-                if i == len(container) + 1:   # append at the end, a PPL idiom
+                # Both append. L(0) := v was measured on the Virtual
+                # Calculator 2.4, build 2025-09-15: {10,20,30} became
+                # {10,20,30,40}.
+                if i == len(container) + 1 or i == 0:
                     container.append(value)
                     return
                 self._check_range(i, 1, len(container), name)
@@ -811,7 +970,10 @@ class Machine(object):
                 # GETKEY is written without parentheses in PPL -- it is in
                 # the reference and in every example here -- so a bare name
                 # has to reach the builtin, not read as a variable.
-                return BUILTINS[name.upper()](self, [])
+                return self._builtin(name.upper(), [])
+            if _listed(name):
+                raise Unsupported('%s is on HP\'s list of names and is not '
+                                  'covered' % name)
             raise PPLError('undefined variable: %s' % name)
         if kind == 'seq':
             return [self.evaluate(x, frame) for x in e[1]]
@@ -821,10 +983,16 @@ class Machine(object):
         if kind == 'un':
             v = self.evaluate(e[2], frame)
             if e[1] == '-':
-                return -v
+                try:
+                    return -v
+                except PYTHON_FAILURES:
+                    raise Unsupported('a minus sign before %s is not covered'
+                                      % _kind(v))
             return 0.0 if _truth(v) else 1.0
         if kind == 'bin':
             return self._bin(e[1], e[2], e[3], frame)
+        if kind == 'uncovered':
+            raise Unsupported(e[1])
         if kind == 'call':
             return self._call_node(e, frame)
         raise Unsupported('expression %s' % kind)
@@ -837,6 +1005,17 @@ class Machine(object):
             return 1.0 if (_truth(self.evaluate(ia, frame)) or
                            _truth(self.evaluate(ib, frame))) else 0.0
         a, b = self.evaluate(ia, frame), self.evaluate(ib, frame)
+        try:
+            return self._arith(op, a, b)
+        except PYTHON_FAILURES:
+            raise Unsupported('%s between %s and %s is not covered'
+                              % (op, _kind(a), _kind(b)))
+
+    def _arith(self, op, a, b):
+        if op == 'MOD':
+            return self._builtin('MOD', [a, b])
+        if op == 'NTHROOT':
+            return _nthroot(a, b)
         if op == '+':
             if isinstance(a, str) or isinstance(b, str):
                 return _as_text(a) + _as_text(b)
@@ -891,10 +1070,23 @@ class Machine(object):
             if name in self.funcs:
                 return self.call(name,
                                   *[self.evaluate(a, frame) for a in arg_nodes])
-            # 3) a system function
-            fn = BUILTINS.get(name.upper())
-            if fn is not None:
-                return fn(self, [self.evaluate(a, frame) for a in arg_nodes])
+            # 3) an operator word written as a call, which the calculator
+            #    refuses at compile time (INFIX_WORDS)
+            if name.upper() in INFIX_WORDS:
+                if name in INFIX_WORDS:
+                    raise PPLError('%s is written between its operands, as in '
+                                   '%s: the calculator refuses %s(...) when '
+                                   'it compiles' % (name, INFIX_EXAMPLE[name],
+                                                    name))
+                raise Unsupported('%s is a CAS name: not covered' % name)
+            # 4) a system function
+            if name.upper() in BUILTINS:
+                return self._builtin(name.upper(),
+                                     [self.evaluate(a, frame)
+                                      for a in arg_nodes])
+            if _listed(name):
+                raise Unsupported('%s is on HP\'s list of names and is not '
+                                  'covered' % name)
             raise PPLError('no such %s (not a variable, not a function, '
                            'not a supported command)' % name)
 
@@ -912,6 +1104,18 @@ class Machine(object):
                 return self._index(container, [self.evaluate(a, frame)
                                            for a in arg_nodes], '(nested)')
         raise Unsupported('a call on an expression')
+
+    def _builtin(self, name, args):
+        """Every builtin is called through here. One that fails on what it
+        was given -- CONCAT handed a number, FLOOR a list -- would otherwise
+        end the run with a Python traceback; it is a case not covered, and
+        says so."""
+        try:
+            return BUILTINS[name](self, args)
+        except PYTHON_FAILURES:
+            raise Unsupported('%s given %s is not covered'
+                              % (name, ', '.join(_kind(a) for a in args)
+                                 or 'nothing'))
 
     def _is_container(self, e, frame):
         """Is the base of this indexing a container variable?
@@ -985,7 +1189,17 @@ class Machine(object):
             raise PPLError('too many indices for %s' % name)
         if len(ie) != 1:
             raise PPLError('%s is indexed with a single index' % name)
+        if ie[0] == 0 and isinstance(container, list) and container:
+            # Measured on the Virtual Calculator 2.4, build 2025-09-15: a
+            # list read at 0 answers its LAST element, {10,20,30} gives 30.
+            # An empty list, a string and a matrix read at 0 are errors,
+            # which _check_range raises.
+            return container[-1]
         self._check_range(ie[0], 1, len(container), name)
+        if isinstance(container, str):
+            # A string indexed answers the character's code, not the
+            # character: "abc" at 2 gave 98 on the same build.
+            return float(ord(container[ie[0] - 1]))
         return container[ie[0] - 1]
 
 
@@ -1044,7 +1258,13 @@ def _b_expr(m, a):
     text = a[0]
     if not isinstance(text, str) or not text:
         raise PPLError('EXPR on an empty string')
-    tree = Parser(lex(text), '<EXPR>').expr()
+    p = Parser(lex(text), '<EXPR>')
+    tree = p.expr()
+    if not p.at('EOF'):
+        # the rest of the string would be dropped, and half an expression
+        # answered as though it were the whole
+        raise Unsupported('EXPR: %r after the expression is not covered'
+                          % p.peek().val)
     return m.evaluate(tree, {})
 
 
@@ -1316,6 +1536,24 @@ def _b_inverse(m, a):
 # become one here.
 BARE_BUILTINS = set(['GETKEY'])
 
+_LISTED = None
+
+
+def _listed(name):
+    """Is `name` on HP's list, docs/commands/names.tsv? A name the calculator
+    has and this does not implement is a case not covered, never an
+    undefined variable: Xmin answers on the calculator."""
+    global _LISTED
+    if _LISTED is None:
+        try:
+            from hpkit import names
+        except ImportError:
+            sys.path.insert(0, os.path.dirname(os.path.dirname(
+                os.path.abspath(__file__))))
+            from hpkit import names
+        _LISTED = names.known()
+    return name.lower() in _LISTED
+
 # A loop that never ends would hang the tool with no message, and the usual
 # way to write one here is not a mistake: a wait loop is correct PPL, and
 # GETKEY on the PC always reports "no key pressed", so it can never leave.
@@ -1386,22 +1624,22 @@ def _b_log(m, a):
 
 
 def _b_mod(m, a):
-    """MOD(a, b) -> the remainder of the EUCLIDEAN division.
+    """a MOD b -> the remainder, with the sign of the divisor.
 
-    HP's help for MOD says "Returns the remainder of the Euclidean division
-    value1/value2", and a Euclidean remainder is never negative: MOD(-1,3)
-    is 2. This was `math.fmod`, which keeps the dividend's sign and answered
-    -1 -- a silent sign flip in anything that wraps an index with MOD.
-
-    Unverified against firmware 2.4.15515: the wording comes from HP's 13217
-    help dump, and no published example uses a negative DIVISOR, so that
-    case follows the definition rather than a measurement.
+    HP's help for MOD calls it the remainder of the Euclidean division, which
+    is never negative. The emulator disagrees for a negative divisor: on the
+    Virtual Calculator 2.4, build 2025-09-15, (-9) MOD 4 answered 3 and
+    9 MOD (-4) answered -3, which is the floored remainder, the one that takes
+    the divisor's sign. A Euclidean one would have given 1. This was the
+    Euclidean remainder until those rows came back.
     """
     x, b = a[0], a[1]
     if b == 0:
         raise PPLError('MOD by zero')
-    r = math.fmod(x, abs(b))
-    return r + abs(b) if r < 0 else r
+    r = math.fmod(x, b)
+    if r != 0 and (r < 0) != (b < 0):
+        r += b
+    return r
 
 
 BUILTINS = {
@@ -1471,12 +1709,22 @@ def cli(argv):
         return 2
     m = Machine()
     for f in files:
-        m.load_file(f)
+        try:
+            m.load_file(f)
+        except (PPLError, Unsupported) as e:
+            print('%s: ERROR: %s' % (os.path.basename(f), e))
+            return 1
         print('loaded %s' % os.path.basename(f))
     print('  %d function(s), %d global(s)' % (len(m.funcs), len(m.globals_)))
     for expr in calls:
-        tree = Parser(lex(expr), '<--call>').expr()
         try:
+            p = Parser(lex(expr), '<--call>')
+            tree = p.expr()
+            if not p.at('EOF'):
+                # what follows the expression would be dropped, and an answer
+                # for half a call is the one thing this must never print
+                raise Unsupported('%r after the expression is not covered'
+                                  % p.peek().val)
             r = m.evaluate(tree, {})
         except (PPLError, Unsupported) as e:
             print('%s -> ERROR: %s' % (expr, e))

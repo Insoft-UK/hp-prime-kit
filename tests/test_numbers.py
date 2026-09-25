@@ -85,6 +85,33 @@ def known_values():
     except N.UnexpectedFormat:
         ok(True, 'rejects a mantissa that is not BCD')
 
+    # The two infinities, as the Virtual Calculator wrote them on 2026-09-13:
+    # the bytes F3 91 99 99 99 99 99 29 for valuation(X^2+X), and the same
+    # ending in 69 for Dirac(0).
+    ok(N.decode(bytes.fromhex('F391999999999929')) == float('-inf'),
+       'decodes the negative infinity the emulator wrote')
+    ok(N.decode(bytes.fromhex('F391999999999969')) == float('inf'),
+       'decodes the positive infinity the emulator wrote')
+    for hexa, what in (('F391999999999939', 'another sign nibble'),
+                       ('F291999999999929', 'nibble 2 with exponent 498'),
+                       ('F391999999999829', 'nibble 2 with another mantissa')):
+        try:
+            v = N.decode(bytes.fromhex(hexa))
+            ok(False, 'still refuses %s' % what, 'gave %r' % v)
+        except N.UnexpectedFormat:
+            ok(True, 'still refuses %s' % what)
+
+    good = N.write_hpmat([[1.0, 2.0], [3.0, 4.0]])
+    bad = good[:16 + 8] + bytes.fromhex('F391999999999939') + good[16 + 16:]
+    try:
+        N.read_hpmat(bad)
+        ok(False, 'a matrix with a bad cell is refused when strict')
+    except N.UnexpectedFormat:
+        ok(True, 'a matrix with a bad cell is refused when strict')
+    ok(N.read_hpmat(bad, strict=False) == [[1.0, None], [3.0, 4.0]],
+       'and read with that one cell missing when not',
+       '%r' % N.read_hpmat(bad, strict=False))
+
 
 def rosetta():
     """The compiled block against the source of the same file."""

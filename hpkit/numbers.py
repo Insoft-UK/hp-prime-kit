@@ -70,6 +70,17 @@ class UnexpectedFormat(Exception):
     pass
 
 
+# The two infinities. Measured on the Virtual Calculator 2.4, build
+# 2025-09-15, on 2026-09-13: valuation(X^2+X), which STRING shows as -Inf,
+# came back with sign nibble 2; Dirac(0), shown as +Inf, with sign nibble 6;
+# both with exponent 499 and a mantissa of twelve nines. MAXREAL has the same
+# exponent and mantissa with an ordinary sign, 9.99999999999E499, so it is
+# the nibble that marks infinity. Only that exact pattern is read: any other
+# nibble still raises, and so do 2 and 6 with anything else around them.
+INFINITIES = {2: float('-inf'), 6: float('inf')}
+INFINITY_EXP = 499
+
+
 def decode(b):
     """8 bytes -> float. Raises if they are not valid BCD."""
     if len(b) != 8:
@@ -82,6 +93,8 @@ def decode(b):
     if set(digits) - set('0123456789'):
         raise UnexpectedFormat('mantissa that is not BCD: %s' % digits)
     sign = (w >> 60) & 0xF
+    if sign in INFINITIES and exp == INFINITY_EXP and digits == '9' * 12:
+        return INFINITIES[sign]
     if sign not in (0, 9):
         raise UnexpectedFormat('unexpected sign nibble: %X' % sign)
     if digits == '0' * 12:
@@ -116,8 +129,12 @@ def encode(x):
 
 # --------------------------------------------------------------- .hpmat
 
-def read_hpmat(data):
-    """-> list of rows (lists of float). Complex matrices raise."""
+def read_hpmat(data, strict=True):
+    """-> list of rows (lists of float). Complex matrices raise.
+
+    With strict=False a cell that does not decode is None instead of an
+    exception for the whole matrix, so that one number nobody has measured
+    costs that cell and not every other one."""
     if len(data) < 16:
         raise UnexpectedFormat('an .hpmat is at least 16 bytes')
     kind, rank, rows, cols = struct.unpack_from('<2xHIII', data, 0)
@@ -143,7 +160,12 @@ def read_hpmat(data):
         row = []
         for j in range(cols):
             o = 16 + 8 * (i * cols + j)
-            row.append(decode(data[o:o + 8]))
+            try:
+                row.append(decode(data[o:o + 8]))
+            except UnexpectedFormat:
+                if strict:
+                    raise
+                row.append(None)
         out.append(row)
     return out
 

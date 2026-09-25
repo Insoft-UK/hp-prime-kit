@@ -47,7 +47,7 @@ NOTES = [
      'named: optional arguments left, right, center, tail'),
     ('SeqPlot', 'app variable', 'sequence', '14730',
      'added: a Sequence app variable'),
-    ('GET', 'unknown', '', '2.2',
+    ('GET', 'unknown', 'other', '2.2',
      'named: behaves consistently on outputs of QPI; what it is is not known'),
     ('ListToMat', 'function', 'matrix', '2.4',
      'named: now an error on a list holding a string'),

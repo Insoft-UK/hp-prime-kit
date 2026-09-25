@@ -308,6 +308,38 @@ decoded and compared exactly, 44,718 re-encoded byte for byte, and 1,616
 negatives inside that comparison -- the negatives are what fix the sign
 nibble at 9 rather than 1, which a sample without them cannot tell.
 
+<a name="formats.number-infinity"></a>
+## Infinity is marked by a sign nibble of its own
+
+| | |
+|---|---|
+| Identifier | `formats.number-infinity` |
+| Kind | rule |
+| Known from | emulator |
+
+Negative infinity is sign nibble 2 and positive infinity sign nibble 6, each
+with exponent 499 and a mantissa of twelve nines:
+
+```
+F3 91 99 99 99 99 99 29     -Inf     sign 2, mantissa 999999999999, exp 499
+F3 91 99 99 99 99 99 69     +Inf     sign 6, the same otherwise
+```
+
+The exponent and the mantissa are those of the largest real, so the sign
+nibble is the only thing that tells infinity from it. A reader that knows
+only 0 and 9 refuses both, and `hpkit.numbers` reads exactly these two
+patterns and nothing wider: another nibble, or 2 or 6 with anything else
+around them, is still refused, because nothing has been measured there.
+
+**Evidence.** Measured on the Virtual Calculator 2.4, build 2025-09-15, on
+2026-09-13, by reading the cells of two batches' `M9.hpmat` that the decoder
+had refused. `valuation(X^2+X)` gave the first word, and `STRING` of the same
+call answered `"-Inf"` while `TYPE` answered 0, an ordinary real
+([results.tsv](../commands/results.tsv)); `Dirac(0)` gave the second, and
+`STRING` answered `"+Inf"`. In the same batch
+[MAXREAL](../commands/catalog/MAXREAL.md) decoded as 9.99999999999E499: the
+same exponent and mantissa with sign 0.
+
 <a name="formats.hpmat"></a>
 ## An .hpmat is that number format with a 16-byte header
 

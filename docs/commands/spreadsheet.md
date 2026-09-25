@@ -10,6 +10,8 @@ Every entry in this group, in full. Each one is written in its own file, and tha
 | [AVERAGE](#AVERAGE) | The mean of a list, once the Spreadsheet app is active. |
 | [CellHasData](#CellHasData) | Says whether the current cell holds anything, and answers 0 on an empty sheet. |
 | [ClearCell](#ClearCell) | Empties the current cell, and answers 0 with the app active. |
+| [Col](#Col) | A Spreadsheet variable, 0 on a reset calculator, which a program cannot set. |
+| [ColWidth](#ColWidth) | A Spreadsheet setting, −1 on a reset calculator, which a program can set. |
 | [ConfT1mean](#ConfT1mean) | A t confidence interval for one mean, refused from Home. |
 | [ConfT2mean](#ConfT2mean) | A t confidence interval for two means, refused from Home. |
 | [ConfZ1mean](#ConfZ1mean) | A z confidence interval for one mean, refused from Home. |
@@ -25,9 +27,11 @@ Every entry in this group, in full. Each one is written in its own file, and tha
 | [PredX](#PredX) | Predicts an x from a y and a fitted model, refused from Home. |
 | [PredY](#PredY) | Predicts a y from an x and a fitted model, refused from Home. |
 | [REGRS](#REGRS) | A regression over a range, refused from Home. |
+| [Row](#Row) | A Spreadsheet variable, 0 on a reset calculator, which a program cannot set. |
+| [RowHeight](#RowHeight) | A Spreadsheet setting, −1 on a reset calculator, which a program can set. |
 | [STAT1](#STAT1) | One-variable statistics over a range, refused from Home. |
 | [STAT2](#STAT2) | Two-variable statistics over a range, refused from Home. |
-| [SUM](#SUM) | Adds up a list, once the Spreadsheet app is active. |
+| [SUM](#SUM) | Adds up a list; refused unless the Spreadsheet app is active or named in front of it. |
 
 ---
 
@@ -112,7 +116,9 @@ contrast. Nothing about the values 1, 2, 3 against 2, 4, 6 matters here.
 **This is the row that carried the rule from keys pressed by hand into a program**
 (emulator). The rule itself was found by hand -- see
 [SUM](spreadsheet/SUM.md) -- and this one shows it holds for a batch as well, so the
-harness can measure these names once somebody selects the app first.
+harness can measure these names once somebody selects the app first, or
+writes the app's name in front of the call, as [SUM](spreadsheet/SUM.md) was,
+[apps.qualified-names](../topics/apps.md#apps.qualified-names).
 
 **Only four of the group's twenty-two names answer even then** (emulator):
 this one, [SUM](spreadsheet/SUM.md), [CellHasData](spreadsheet/CellHasData.md) and
@@ -232,6 +238,102 @@ that uses it (unverified).
 ### Related
 
 [CellHasData](spreadsheet/CellHasData.md) · [SUM](spreadsheet/SUM.md)
+
+---
+
+<a name="Col"></a>
+
+## Col
+
+A Spreadsheet variable, 0 on a reset calculator, which a program cannot set.
+
+| | |
+|---|---|
+| Syntax | `Spreadsheet.Col` → real |
+| Group | spreadsheet |
+| Runs on the PC | no |
+
+### Examples
+
+| Call | Result | Known from |
+|---|---|---|
+| `EXPR("Col")` | *error* | [emulator](results.tsv) |
+| `EXPR("Spreadsheet.Col")` | `0` | [emulator](results.tsv) |
+| `LOCAL o, r; o := EXPR("Spreadsheet.Col"); IFERR EXPR("Spreadsheet.Col:=2"); r := EXPR("Spreadsheet.Col"); THEN r := "refused"; END; IFERR EXPR("Spreadsheet.Col:=" + STRING(o)); THEN r := r; END; RETURN r;` | `"refused"` | [emulator](results.tsv) |
+
+### Behaviour
+
+**What it holds is read from its name** (unverified): HP's list gives the name
+and its app, and nothing more.
+
+**A program reaches it with its app's name in front** (emulator):
+`Spreadsheet.Col` answered `0` with the Function app active, where `Col` alone
+was refused,
+[apps.qualified-names](../topics/apps.md#apps.qualified-names). The bare
+name was not tried with its own app active (unverified).
+
+**A program cannot set it** (emulator): assigning 2 was refused, in a call
+whose read of it had answered just before.
+
+**HP's list gives `ColWidth RowHeight Row Col Cell` where a syntax would go**
+(HP help), which reads as a menu line rather than a syntax.
+
+**Its name differs from the CAS command `col` only in case** (HP help).
+
+The interpreter does not implement it, so `hpprime run` cannot check a program
+that uses it (unverified).
+
+### Related
+
+[Row](spreadsheet/Row.md) · [ColWidth](spreadsheet/ColWidth.md) · [apps.qualified-names](../topics/apps.md#apps.qualified-names)
+
+---
+
+<a name="ColWidth"></a>
+
+## ColWidth
+
+A Spreadsheet setting, −1 on a reset calculator, which a program can set.
+
+| | |
+|---|---|
+| Syntax | `Spreadsheet.ColWidth` → real |
+| Syntax | `Spreadsheet.ColWidth:=value` |
+| Group | spreadsheet |
+| Runs on the PC | no |
+
+### Examples
+
+| Call | Result | Known from |
+|---|---|---|
+| `EXPR("ColWidth")` | *error* | [emulator](results.tsv) |
+| `EXPR("Spreadsheet.ColWidth")` | `−1` | [emulator](results.tsv) |
+| `LOCAL o, r; o := EXPR("Spreadsheet.ColWidth"); IFERR EXPR("Spreadsheet.ColWidth:=40"); r := EXPR("Spreadsheet.ColWidth"); THEN r := "refused"; END; IFERR EXPR("Spreadsheet.ColWidth:=" + STRING(o)); THEN r := r; END; RETURN r;` | `40` | [emulator](results.tsv) |
+
+### Behaviour
+
+**What it holds is read from its name** (unverified): HP's list gives the name
+and its app, and nothing more.
+
+**A program reaches it with its app's name in front** (emulator):
+`Spreadsheet.ColWidth` answered `−1` with the Function app active, where
+`ColWidth` alone was refused,
+[apps.qualified-names](../topics/apps.md#apps.qualified-names). The bare
+name was not tried with its own app active (unverified).
+
+**A program can set it** (emulator): set to 40 through `Spreadsheet.ColWidth`,
+it read back 40. The row reads the first value, sets another, reads again and
+puts the first one back.
+
+**HP's list gives `ColWidth RowHeight Row Col Cell` where a syntax would go**
+(HP help), which reads as a menu line rather than a syntax.
+
+The interpreter does not implement it, so `hpprime run` cannot check a program
+that uses it (unverified).
+
+### Related
+
+[RowHeight](spreadsheet/RowHeight.md) · [Col](spreadsheet/Col.md) · [apps.qualified-names](../topics/apps.md#apps.qualified-names)
 
 ---
 
@@ -827,6 +929,102 @@ that uses it (unverified).
 
 ---
 
+<a name="Row"></a>
+
+## Row
+
+A Spreadsheet variable, 0 on a reset calculator, which a program cannot set.
+
+| | |
+|---|---|
+| Syntax | `Spreadsheet.Row` → real |
+| Group | spreadsheet |
+| Runs on the PC | no |
+
+### Examples
+
+| Call | Result | Known from |
+|---|---|---|
+| `EXPR("Row")` | *error* | [emulator](results.tsv) |
+| `EXPR("Spreadsheet.Row")` | `0` | [emulator](results.tsv) |
+| `LOCAL o, r; o := EXPR("Spreadsheet.Row"); IFERR EXPR("Spreadsheet.Row:=3"); r := EXPR("Spreadsheet.Row"); THEN r := "refused"; END; IFERR EXPR("Spreadsheet.Row:=" + STRING(o)); THEN r := r; END; RETURN r;` | `"refused"` | [emulator](results.tsv) |
+
+### Behaviour
+
+**What it holds is read from its name** (unverified): HP's list gives the name
+and its app, and nothing more.
+
+**A program reaches it with its app's name in front** (emulator):
+`Spreadsheet.Row` answered `0` with the Function app active, where `Row` alone
+was refused,
+[apps.qualified-names](../topics/apps.md#apps.qualified-names). The bare
+name was not tried with its own app active (unverified).
+
+**A program cannot set it** (emulator): assigning 3 was refused, in a call
+whose read of it had answered just before.
+
+**HP's list gives `ColWidth RowHeight Row Col Cell` where a syntax would go**
+(HP help), which reads as a menu line rather than a syntax.
+
+**Its name differs from the CAS command `row` only in case** (HP help).
+
+The interpreter does not implement it, so `hpprime run` cannot check a program
+that uses it (unverified).
+
+### Related
+
+[Col](spreadsheet/Col.md) · [ColWidth](spreadsheet/ColWidth.md) · [apps.qualified-names](../topics/apps.md#apps.qualified-names)
+
+---
+
+<a name="RowHeight"></a>
+
+## RowHeight
+
+A Spreadsheet setting, −1 on a reset calculator, which a program can set.
+
+| | |
+|---|---|
+| Syntax | `Spreadsheet.RowHeight` → real |
+| Syntax | `Spreadsheet.RowHeight:=value` |
+| Group | spreadsheet |
+| Runs on the PC | no |
+
+### Examples
+
+| Call | Result | Known from |
+|---|---|---|
+| `EXPR("RowHeight")` | *error* | [emulator](results.tsv) |
+| `EXPR("Spreadsheet.RowHeight")` | `−1` | [emulator](results.tsv) |
+| `LOCAL o, r; o := EXPR("Spreadsheet.RowHeight"); IFERR EXPR("Spreadsheet.RowHeight:=30"); r := EXPR("Spreadsheet.RowHeight"); THEN r := "refused"; END; IFERR EXPR("Spreadsheet.RowHeight:=" + STRING(o)); THEN r := r; END; RETURN r;` | `30` | [emulator](results.tsv) |
+
+### Behaviour
+
+**What it holds is read from its name** (unverified): HP's list gives the name
+and its app, and nothing more.
+
+**A program reaches it with its app's name in front** (emulator):
+`Spreadsheet.RowHeight` answered `−1` with the Function app active, where
+`RowHeight` alone was refused,
+[apps.qualified-names](../topics/apps.md#apps.qualified-names). The bare
+name was not tried with its own app active (unverified).
+
+**A program can set it** (emulator): set to 30 through
+`Spreadsheet.RowHeight`, it read back 30. The row reads the first value, sets
+another, reads again and puts the first one back.
+
+**HP's list gives `ColWidth RowHeight Row Col Cell` where a syntax would go**
+(HP help), which reads as a menu line rather than a syntax.
+
+The interpreter does not implement it, so `hpprime run` cannot check a program
+that uses it (unverified).
+
+### Related
+
+[ColWidth](spreadsheet/ColWidth.md) · [Col](spreadsheet/Col.md) · [apps.qualified-names](../topics/apps.md#apps.qualified-names)
+
+---
+
 <a name="STAT1"></a>
 
 ## STAT1
@@ -919,7 +1117,7 @@ that uses it (unverified).
 
 ## SUM
 
-Adds up a list, once the Spreadsheet app is active.
+Adds up a list; refused unless the Spreadsheet app is active or named in front of it.
 
 | | |
 |---|---|
@@ -933,10 +1131,11 @@ Adds up a list, once the Spreadsheet app is active.
 |---|---|---|
 | `SUM({1,2,3})` | `6` | G2 |
 | `EXPR("SUM({1,2,3})")` | *error* | [emulator](results.tsv) |
+| `EXPR("Spreadsheet.SUM({1,2,3})")` | `6` | [emulator](results.tsv) |
 
 ### Behaviour
 
-**The two rows are the same call and differ in one thing: whether the
+**The first two rows are the same call and differ in one thing: whether the
 Spreadsheet was the active app** (G2). With it active, typing this on Home
 answers 6; from a batch with another app active, it is refused. The command
 does not have to be typed in a cell -- selecting the app is enough.
@@ -956,6 +1155,11 @@ names under their own menu too and those answered. The rule is about the
 harness can measure these names, provided somebody selects the app first --
 which it cannot do on its own, because it resets the calculator before every
 run.
+
+**Or the call carries the app's name** (emulator): the last row,
+`Spreadsheet.SUM({1,2,3})` from a batch with the Function app active,
+answered 6, [apps.qualified-names](../topics/apps.md#apps.qualified-names). The other names of the group were not tried that way
+(unverified).
 
 **Only four of the twenty-two answer even then, and the other eighteen split
 into two kinds** (emulator). `STAT1`, `STAT2`, `REGRS` and `AMORT` want a

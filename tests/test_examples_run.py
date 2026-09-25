@@ -447,6 +447,228 @@ def the_never_stored():
         shutil.rmtree(tmp, ignore_errors=True)
 
 
+def the_evidence_kept():
+    """A batch never loses or replaces evidence in silence: a cell it cannot
+    read costs its row and no more, a different answer does not replace a
+    stored row unless asked, a probe cannot reuse a stored call, and a row
+    carries the day the batch ran."""
+    tmp = copy_docs()
+    folder = tempfile.mkdtemp(prefix='hpexkeep-')
+    path = os.path.join(folder, 'M%d.hpmat' % X.MAT)
+    cols = X.WIDTH + X.HEAD
+    bad_cell = bytes.fromhex('F391999999999939')      # a sign nibble of 3
+
+    def matrix(rows, spoil=()):
+        data = bytearray(N.write_hpmat(rows))
+        for r, c in spoil:
+            o = 16 + 8 * (r * cols + c)
+            data[o:o + 8] = bad_cell
+        with open(path, 'wb') as f:
+            f.write(bytes(data))
+        ran = time.mktime((2026, 1, 2, 12, 0, 0, 0, 0, -1))
+        os.utime(path, (ran, ran))
+
+    def state(*cases):
+        return {'cases': [c.as_dict() for c in cases], 'calc': X.CALC,
+                'folder': folder, 'stamp': None}
+
+    try:
+        # One unreadable number, one unreadable character of text.
+        matrix([row(True, 2, 0, VERSION), row(True, 0, 5.0, '5'),
+                row(True, 2, 0, 'x')], spoil=[(1, 2), (2, X.HEAD)])
+        verdicts = X.collect(tmp, state(X.Case('LEFT', 'ZPROBE(1)'),
+                                        X.Case('LEFT', 'ZPROBE(2)')))
+        stored = X.read_results(tmp)
+        ok([v for _, _, v in verdicts] == ['probe', 'UNREADABLE'],
+           'one bad cell costs its row, not the batch',
+           [v for _, _, v in verdicts])
+        first = stored.get(('LEFT', 'ZPROBE(1)'))
+        ok(first is not None and first['answer'] == '5',
+           'a row whose number alone is unreadable is kept from its text',
+           first)
+        ok(('LEFT', 'ZPROBE(2)') not in stored,
+           'a row whose text is unreadable is not stored')
+        ok(first is not None and first['date'] == '2026-01-02',
+           'a row carries the day the matrix was written, the day it ran',
+           first and first['date'])
+
+        # A different answer does not replace the stored row.
+        matrix([row(True, 2, 0, VERSION), row(True, 2, 0, 'z')])
+        case = X.Case('LEFT', 'ZPROBE(1)', '"z"')
+        verdicts = X.collect(tmp, state(case))
+        kept = X.read_results(tmp)[('LEFT', 'ZPROBE(1)')]
+        ok(verdicts[0][2].startswith('KEPT') and kept['answer'] == '5',
+           'a different answer leaves the stored row, and says so',
+           (verdicts[0][2], kept['answer']))
+        X.collect(tmp, state(case), replace=True)
+        ok(X.read_results(tmp)[('LEFT', 'ZPROBE(1)')]['answer'] == '"z"',
+           'and replaces it when asked')
+        verdicts = X.collect(tmp, state(case))
+        ok(verdicts[0][2] == 'same',
+           'the same answer again is simply written', verdicts[0][2])
+
+        # A probe on a call that already has a row is refused before the
+        # emulator opens: the guard comes before anything else is looked at.
+        try:
+            X.run(tmp, [X.Case('LEFT', 'ZPROBE(1)')], pids=[])
+            ok(False, 'a probe reusing a stored call is refused')
+        except X.ExamplesError as e:
+            ok('reuse a call' in str(e),
+               'a probe reusing a stored call is refused before anything '
+               'launches', e)
+        try:
+            X.run(tmp, [X.Case('LEFT', 'ZPROBE(1)')], pids=[], replace=True,
+                  spawn=lambda: None)
+        except X.ExamplesError as e:
+            ok('reuse a call' not in str(e),
+               'and let through with --replace', e)
+        else:
+            ok(False, 'and let through with --replace',
+               'the run went on with no emulator window open')
+    finally:
+        shutil.rmtree(folder, ignore_errors=True)
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+PROBES = u"""# two questions
+[test.compile-one] ZQL09
+EXPORT ZQL09()
+BEGIN
+  LOCAL a,b,c,d,e1,f,g,h,k;
+  RETURN 1;
+END;
+
+# a comment between two programs belongs to neither
+[test.compile-two] ZQEND
+EXPORT ZQEND()
+BEGIN
+  IF 1 THEN RETURN 1; ENDCASE;
+END;
+"""
+
+
+def the_compile_questions():
+    """Does a program compile? Each goes on the calculator with two controls,
+    and its own file says: the emulator writes a compiled block into it once
+    it compiles. The controls decide whether anything is concluded."""
+    import io as _io
+    tmp = tempfile.mkdtemp(prefix='hpexcomp-')
+    saved_env = {k: os.environ.get(k) for k in ('HPPRIME_EMU_ROOT',
+                                                'HPPRIME_KIT_STATE',
+                                                'HPPRIME_EMU_EXE')}
+    real_compiled = X.compiled
+    try:
+        path = os.path.join(tmp, 'probes.txt')
+        with _io.open(path, 'w', encoding='utf-8', newline='\n') as f:
+            f.write(PROBES)
+        programs = X.read_programs(path)
+        ok([(p.entry, p.name) for p in programs]
+           == [('test.compile-one', 'ZQL09'), ('test.compile-two', 'ZQEND')]
+           and programs[0].source.startswith('EXPORT ZQL09()')
+           and programs[0].source.endswith('END;\n')
+           and '#' not in programs[0].source
+           and programs[1].source.endswith('END;\n'),
+           'a file of programs is read, each with its fact and its source',
+           [(p.entry, p.name) for p in programs])
+        for bad, what in ((u'EXPORT F()\n', 'source before any header'),
+                          (u'[x] ZCOK\nEXPORT F()\n', 'a control\'s name'),
+                          (PROBES + u'[x] ZQL09\nEXPORT F()\n',
+                           'a name used twice')):
+            with _io.open(path, 'w', encoding='utf-8', newline='\n') as f:
+                f.write(bad)
+            try:
+                X.read_programs(path)
+                ok(False, 'a file with %s is refused' % what)
+            except X.ExamplesError:
+                ok(True, 'a file with %s is refused' % what)
+
+        from hpkit import program as P
+        template = open(P.default_template(), 'rb').read()
+        plain = os.path.join(tmp, 'PLAIN.hpprgm')
+        with open(plain, 'wb') as f:
+            f.write(P.write(template, 'EXPORT F()\nBEGIN\n  RETURN 1;\nEND;'))
+        ok(X.compiled(plain) is False and X.compiled(plain + 'x') is None,
+           'a file with no compiled block reads as not compiled, and no file '
+           'as nothing')
+
+        # The whole run, with a stand-in for the emulator. It compiles what
+        # `good` names, which is how the controls are made to come out right
+        # or wrong.
+        calcs = os.path.join(tmp, 'Calculators')
+        prime = os.path.join(calcs, 'Prime')
+        os.makedirs(prime)
+        with open(os.path.join(prime, E.LIVE_FILE), 'wb') as f:
+            f.write(b'saved')
+        os.environ['HPPRIME_EMU_ROOT'] = calcs
+        os.environ['HPPRIME_KIT_STATE'] = os.path.join(tmp, 'state')
+        os.environ['HPPRIME_EMU_EXE'] = os.path.join(tmp, 'none.exe')
+        lock(os.path.join(tmp, 'Temporal'), 0, 5151)
+        root = copy_docs()
+        marks = set()
+        X.compiled = lambda p: (None if not os.path.isfile(p)
+                                else os.path.basename(p) in marks)
+
+        def emulator_that_compiles(good):
+            def stand_in():
+                calc = os.path.join(calcs, X.CALC)
+                names = sorted(f for f in os.listdir(calc)
+                               if f.endswith('.hpprgm'))
+                ok(names == ['HPKDOC.hpprgm', 'ZCBAD.hpprgm', 'ZCOK.hpprgm',
+                             'ZQEND.hpprgm', 'ZQL09.hpprgm'],
+                   'the programs and both controls are on %s' % X.CALC,
+                   names)
+                marks.clear()
+                marks.update(n + '.hpprgm' for n in good)
+                with open(os.path.join(calc, 'M%d.hpmat' % X.MAT), 'wb') as f:
+                    f.write(N.write_hpmat([row(True, 2, 0, VERSION)]))
+                later = time.time() + 5
+                os.utime(os.path.join(calc, E.LIVE_FILE), (later, later))
+                return Finished()
+            return stand_in
+
+        verdicts = X.run(root, [], pids=[5151], programs=programs,
+                         spawn=emulator_that_compiles(['ZCBAD', 'ZQL09']))
+        got = dict((c.call, v) for c, _, v in verdicts)
+        ok(got == {'ZCOK': 'CONTROL WRONG', 'ZCBAD': 'CONTROL WRONG',
+                   'ZQL09': 'NOT CONCLUDED', 'ZQEND': 'NOT CONCLUDED'},
+           'controls that come out wrong conclude nothing', got)
+        stored = X.read_results(root)
+        ok(not [k for k in stored if k[0] in ('test.compile-one',
+                                              'test.compile-two')],
+           'and nothing is stored')
+
+        verdicts = X.run(root, [], pids=[5151], programs=programs,
+                         spawn=emulator_that_compiles(['ZCOK', 'ZQL09']))
+        shown = dict((c.call, a.displayed) for c, a, _ in verdicts)
+        ok(shown == {'ZCOK': X.COMPILES, 'ZCBAD': X.REFUSED,
+                     'ZQL09': X.COMPILES, 'ZQEND': X.REFUSED},
+           'with the controls right, each program says whether it compiled',
+           shown)
+        stored = X.read_results(root)
+        mine = [(k[0], r['answer']) for k, r in stored.items()
+                if k[0] in ('test.compile-one', 'test.compile-two')]
+        ok(sorted(mine) == [('test.compile-one', X.COMPILES),
+                            ('test.compile-two', X.REFUSED)],
+           'and each answer is stored under its fact, with the source as its '
+           'call', mine)
+        try:
+            X.run(root, [], pids=[5151], programs=programs[:1],
+                  spawn=emulator_that_compiles([]))
+            ok(False, 'a program already answered is refused')
+        except X.ExamplesError as e:
+            ok('reuse a call' in str(e),
+               'a program already answered is refused before anything '
+               'launches', e)
+        shutil.rmtree(root, ignore_errors=True)
+    finally:
+        X.compiled = real_compiled
+        for k, v in saved_env.items():
+            os.environ.pop(k, None)
+            if v is not None:
+                os.environ[k] = v
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
 def main():
     print('-- the program')
     the_program()
@@ -464,6 +686,10 @@ def main():
     the_next_window()
     print('\n-- the run, with a stand-in for the emulator')
     the_run()
+    print('\n-- evidence is never lost or replaced in silence')
+    the_evidence_kept()
+    print('\n-- does a program compile')
+    the_compile_questions()
     print('\nPASS: %d   FAIL: %d' % (PASS[0], FAIL[0]))
     return 1 if FAIL[0] else 0
 

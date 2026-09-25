@@ -89,7 +89,7 @@ Direct links:
 ---
 
 <a name="ppl.local-limit"></a>
-## One LOCAL statement holds at most 7 or 8 variables
+## One LOCAL statement holds at most 8 variables
 
 | | |
 |---|---|
@@ -97,14 +97,15 @@ Direct links:
 | Kind | rule |
 | Known from | G2 |
 
-A `LOCAL` statement with more variables than that does not compile, and the
+A `LOCAL` statement with 9 or more variables does not compile, and the
 compiler reports only *syntax error* on its line. Several `LOCAL` statements
 in a row do work, so declare the variables in groups of 6.
 
 **Evidence.** Measured against programs that compile on the same calculator, a
 G2 with firmware 2.4.15515: one that declares 8 compiles, and three others
-stop at 7. The functions that failed declared 13, 16 and 18. `hpprime lint`
-catches it.
+stop at 7. The functions that failed declared 13, 16 and 18. Between the two,
+9, 10, 11 and 12 were measured on the Virtual Calculator 2.4, build 2025-09-15, on 2026-09-24, by `hpprime examples --compile`, with its two controls coming out as they must: none compiled ([results.tsv](../commands/results.tsv)). `hpprime lint` catches
+9 and more as an error.
 
 <a name="ppl.locals-at-top"></a>
 ## Every local is declared at the top of the BEGIN
@@ -116,10 +117,14 @@ catches it.
 | Known from | G2 |
 
 A `LOCAL` statement half way down a function does not compile. All of them go
-together, first thing inside `BEGIN`.
+together, first thing inside `BEGIN`. One at the top of a block nested inside
+the function, after code, does compile and work.
 
 **Evidence.** A compile error on a G2 with firmware 2.4.15515, recorded in the
-table of limits that break compilation. `hpprime lint` catches it.
+table of limits that break compilation. The nested block was measured on the Virtual Calculator 2.4, build 2025-09-15, on 2026-09-24, by `hpprime examples --compile`, with its two controls coming out as they must:
+`LOCAL zb;` opening an `IF` block after `za := 1;` compiled, and the
+function answered 3 ([results.tsv](../commands/results.tsv)). `hpprime lint` catches the first and leaves the
+second alone.
 
 <a name="ppl.index-call"></a>
 ## The result of a call cannot be indexed where it is produced
@@ -130,11 +135,16 @@ table of limits that break compilation. `hpprime lint` catches it.
 | Kind | rule |
 | Known from | G2 |
 
-`SIZE(M)(1)` does not compile. Assign the result to a variable and index the
-variable: `d := DIM(M);` and then `d(1)`.
+`SIZE(M)(1)` does not compile, and neither does the same shape on a
+function a program defines, in its own file or in another program. Assign the
+result to a variable and index the variable: `d := DIM(M);` and then
+`d(1)`.
 
 **Evidence.** A compile error on a G2 with firmware 2.4.15515, recorded in the
-table of limits that break compilation. `hpprime lint` catches it as
+table of limits that break compilation. The programs' own functions were
+measured on the Virtual Calculator 2.4, build 2025-09-15, on 2026-09-24, by `hpprime examples --compile`, with its two controls coming out as they must: a function returning `{10,20,30}`, called and indexed with `(2)`
+where it is produced, did not compile whether it was defined in the same
+file or in a program compiled before it ([results.tsv](../commands/results.tsv)). `hpprime lint` catches it as
 `index-call`.
 
 <a name="ppl.export-initialised"></a>
@@ -146,12 +156,13 @@ table of limits that break compilation. `hpprime lint` catches it as
 | Kind | rule |
 | Known from | G2 |
 
-`EXPORT A:=1, B:=2, …;` failed with seven initialised variables on one line.
-One declaration per line compiles.
+`EXPORT A:=1, B:=2, …;` failed with seven initialised variables on one line;
+two, four and six compile. One declaration per line compiles.
 
 **Evidence.** A compile error on a G2 with firmware 2.4.15515, recorded in the
-table of limits that break compilation. Where the limit lies between two and
-seven was not measured; one per line avoids the question.
+table of limits that break compilation. Two, four and six on one line were
+measured on the Virtual Calculator 2.4, build 2025-09-15, on 2026-09-24, by `hpprime examples --compile`, with its two controls coming out as they must, and all three compiled ([results.tsv](../commands/results.tsv)); three and five were not tried, and
+one per line avoids the question.
 
 <a name="ppl.no-end-keywords"></a>
 ## END closes everything: there is no ENDIF or ENDFOR
@@ -162,12 +173,14 @@ seven was not measured; one per line avoids the question.
 | Kind | rule |
 | Known from | G2 |
 
-`ENDIF`, `ENDFOR` and `ENDWHILE` do not exist in PPL. Every block ends with
-`END`, and a function's `END` carries a `;`.
+`ENDIF`, `ENDFOR`, `ENDWHILE`, `ENDCASE` and `ENDFUNC` do not exist in PPL.
+Every block ends with `END`, and a function's `END` carries a `;`.
 
 **Evidence.** A compile error on a G2 with firmware 2.4.15515, recorded in the
-table of limits that break compilation. `hpprime lint` catches it, and the
-names are not on the list of names in `docs/commands/names.tsv`.
+table of limits that break compilation, for the first three. `ENDCASE`
+closing a `CASE` and `ENDFUNC` closing a function were measured on the Virtual Calculator 2.4, build 2025-09-15, on 2026-09-24, by `hpprime examples --compile`, with its two controls coming out as they must, and
+neither compiled ([results.tsv](../commands/results.tsv)). `ENDPROC` was not tried. `hpprime lint` catches them,
+and the names are not on the list of names in `docs/commands/names.tsv`.
 
 <a name="ppl.minus-sign"></a>
 ## The calculator writes a negative with the mathematical minus sign
@@ -202,11 +215,20 @@ one whose codepoints are `0x2212 0x31`, stored in
 | Known from | G2 |
 
 Lists, strings and matrices start at 1: the first element is element 1. A 0
-where a position in a string is expected is an error, not the first
-character. **What a 0 does as an index into a list or a matrix has not been
-measured**, so count on neither the first element nor an error. This is the
-most common mistake coming from Python, and it is silent in the cases where
-the index is computed.
+is never the first element, and what it is depends on where it goes:
+
+| | |
+|---|---|
+| a position in a string, `MID(s, 0, 2)` | an error |
+| a list read at 0, `L(0)` | its **last** element |
+| a list assigned at 0, `L(0) := v` | `v` added at the end |
+| an empty list read at 0 | an error |
+| a string read at 0, `S(0)` | an error |
+| a matrix read at 0, `M(0)` or `M(0, 1)` | an error |
+
+The list is the trap. Coming from Python, `L(0)` means the first element,
+and here it answers the last one with no error; when the index is computed,
+nothing in the source shows it.
 
 **Screen coordinates are the exception: they count from 0.** A point of the
 screen or of a grob starts at `(0,0)`, and a drawing command takes it without
@@ -218,15 +240,66 @@ name is not one of the calculator's own, which is what keeps
 **Evidence.** `MID("abcdef", 0, 2)` is an error on a G2 with firmware
 2.4.15515 and on the Virtual Calculator 2.4, build 2025-09-15
 ([results.tsv](../commands/results.tsv)), while every measured example that
-indexes from 1 answers. HP's help says the same. No list or matrix has been
-indexed with 0 in a measurement, so `hpprime lint` warns on a literal 0
-passed to a name the file does not define, which may be a list, as
-`one-based`, labelled `unverified`.
+indexes from 1 answers. HP's help says the same. The list and matrix rows
+were measured on the same build on 2026-09-24, with the 0 held in a variable
+so that the program compiled whatever the answer: `{10,20,30}` read at 0
+answered 30, assigned 40 at 0 became `{10,20,30,40}`, and `[[1,2],[3,4]]`
+read at 0, with one index or two, was refused; so were an empty list and
+the string `"abc"` read at 0 ([results.tsv](../commands/results.tsv)). A
+literal 0 written in the source, `zl(0)`, compiles too, and answered 30,
+measured on the Virtual Calculator 2.4, build 2025-09-15, on 2026-09-24, by `hpprime examples --compile`, with its two controls coming out as they must. `hpprime lint` warns on a
+literal 0 passed to a name the file does not define, which may be a list, as
+`one-based`, labelled `emulator`.
 
 The exception is measured on the same build: `C→PX(0,0)` answers `{160,109}`,
 `GETPIX(G1,0,0)` answers a colour, and `LINE`, `RECT` and `TRIANGLE` all draw
 with a 0 among their corners
 ([results.tsv](../commands/results.tsv)).
+
+<a name="ppl.string-index-code"></a>
+## A string indexed answers a character code, not a character
+
+| | |
+|---|---|
+| Identifier | `ppl.string-index-code` |
+| Kind | rule |
+| Known from | emulator |
+
+A string held in a variable can be indexed like a list, and what comes back
+is the code of the character, a number: `"abc"` at 2 answers 98, not `"b"`.
+[ASC](../commands/strings/ASC.md) answers the same codes for the whole
+string, and [MID](../commands/strings/MID.md) is how to get the character as
+text. A comparison against `"b"` fails, with no error, because the two are
+not the same type.
+
+**Evidence.** Measured on the Virtual Calculator 2.4, build 2025-09-15, on
+2026-09-24: `LOCAL zs, zi; zs := "abc"; zi := 2; RETURN zs(zi);` answered 98,
+a real ([results.tsv](../commands/results.tsv)). The index was held in a
+variable so that the program compiled whatever the answer. Until then the
+interpreter on the PC answered `"b"`.
+
+<a name="ppl.names-ignore-case"></a>
+## The calculator reads a command's name without regard to case
+
+| | |
+|---|---|
+| Identifier | `ppl.names-ignore-case` |
+| Kind | rule |
+| Known from | emulator |
+
+`alog(2)` and `Alog(2)` answer 100, as `ALOG(2)` does, and `xpon(1000)`
+answers 3: a name HP writes in capitals is found in any case. It is the
+assumption `hpprime lint` was built on, which never flags a spelling that
+differs from the list only in case.
+
+It does not make case irrelevant everywhere. A lower-case name can also be a
+CAS command of its own, and those were kept out of the measurement: both
+names tried exist on HP's list in capitals only.
+
+**Evidence.** Measured on the Virtual Calculator 2.4, build 2025-09-15, on
+2026-09-24, with each call inside `EXPR`, so through Home's reading of an
+expression; a program's source compiled with the name in lower case was not
+tried ([results.tsv](../commands/results.tsv)).
 
 <a name="ppl.equality-operators"></a>
 ## == compares, := assigns, <> is not-equal
@@ -249,9 +322,12 @@ reader would think.
 
 `hpprime lint` called it an error until this was measured, and the rule was
 removed rather than softened: a linter that flags legal, correct code is
-worse than one rule short. What is still worth knowing is what a bare `=`
-does as a **statement** -- `a = 2;` where `a := 2;` was meant might compare
-and throw the answer away -- and nobody has measured that.
+worse than one rule short.
+
+**As a statement it is a trap.** `za = 2;` compiles, and assigns nothing: it
+compares `za` with 2 and throws the answer away. Written where `za := 2;` was
+meant, the program runs, raises nothing, and keeps the old value.
+`hpprime lint` warns on it as `equality-statement`.
 
 **Evidence.** Measured on the Virtual Calculator 2.4, build 2025-09-15, on
 2026-09-12, with programs written by hand because the harness lints what it
@@ -260,9 +336,9 @@ holding `IF a = 1 THEN RETURN 5; ELSE RETURN 6; END;` reported its only error
 further down, in a function about
 [ppl.end-semicolon](#ppl.end-semicolon), so everything above compiled. That
 it compares: `IF a = 2 THEN RETURN 5; ELSE RETURN 6; END;` with `a` at 1
-answered 6, and `IF a = 2 THEN a := 99; END; RETURN a;` answered 1. Whether a
-bare `=` means the same as a **statement**, where `a = 2;` might silently do
-nothing in place of `a := 2;`, has not been measured.
+answered 6, and `IF a = 2 THEN a := 99; END; RETURN a;` answered 1. The
+statement was measured on the Virtual Calculator 2.4, build 2025-09-15, on 2026-09-24, by `hpprime examples --compile`, with its two controls coming out as they must: `LOCAL za; za := 1; za = 2; RETURN za;` compiled
+and answered 1 ([results.tsv](../commands/results.tsv)).
 
 <a name="ppl.end-semicolon"></a>
 ## END carries a semicolon
@@ -274,17 +350,21 @@ nothing in place of `a := 2;`, has not been measured.
 | Known from | emulator |
 
 It is `END;`, both for a function and for a block inside one. A missing
-semicolon does not compile, and the error is reported on the **next** line:
-the compiler carries on past the `END`, swallows what follows and fails
-there, so the line the calculator names is not the line to fix.
+semicolon does not compile. On a block's `END` the error is reported on the
+**next** line: the compiler carries on past the `END`, swallows what follows
+and fails there, so the line the calculator names is not the line to fix. On
+a function's own `END` it does not compile either, even when that `END` is
+the last line of the file.
 
 **Evidence.** Measured on the Virtual Calculator 2.4, build 2025-09-15, on
 2026-09-12, with a program written by hand for the question. Its second
 function held `IF 1 == 1 THEN z := 2; END` on line 12 and `RETURN z;` on line
 13, and the editor's `Check` answered *syntax error* on line 13. The first
 function of the same program, which compiled, is the evidence for
-[ppl.equality-operators](#ppl.equality-operators). `hpprime lint` catches a
-line that is exactly `END` as `end-semicolon`.
+[ppl.equality-operators](#ppl.equality-operators). A function's own `END`
+without its `;` was measured on the Virtual Calculator 2.4, build 2025-09-15, on 2026-09-24, by `hpprime examples --compile`, with its two controls coming out as they must: last in the file, and with another function
+after it, neither compiled ([results.tsv](../commands/results.tsv)). `hpprime lint` catches a line that is exactly
+`END` as `end-semicolon`.
 
 <a name="ppl.global-index-other-program"></a>
 ## Indexing a global from another program is not a compile error
@@ -379,32 +459,33 @@ with the name unchanged, on a G2 with firmware 2.4.15515.
 
 The hypothesis was that a `LOCAL` statement cannot give initial values to
 several variables at once, and it is false: `LOCAL za := 2, zb := 3;`
-compiles, and both values are there when the function runs. Published
-tutorial code writes three the same way, `local x1:=160, x2:=299, x3:=21`;
-more than two on one line has not been run. Exported globals are different:
+compiles, and both values are there when the function runs, and so does
+three, as published tutorial code writes it. Exported globals are different:
 see [ppl.export-initialised](#ppl.export-initialised).
 
 **Evidence.** Run on the Virtual Calculator 2.4, build 2025-09-15, in the
 batch stored on 2026-09-12: `LOCAL za := 2, zb := 3; RETURN za + zb;`,
 compiled as the body of a function in a program that passed the editor's
-`Check`, answered 5. The three-variable form is from a tutorial published by
-E. Shore, and has not been compiled.
+`Check`, answered 5. The three-variable form, which a tutorial published by
+E. Shore uses, was measured on the Virtual Calculator 2.4, build 2025-09-15, on 2026-09-24, by `hpprime examples --compile`, with its two controls coming out as they must: `LOCAL za := 1, zb := 2, zc := 3;` compiled
+and the function answered 6 ([results.tsv](../commands/results.tsv)).
 
 <a name="ppl.i-e-as-locals"></a>
-## Whether i and e work as local names is not known
+## i and e work as local names
 
 | | |
 |---|---|
 | Identifier | `ppl.i-e-as-locals` |
 | Kind | rule |
-| Known from | unverified |
+| Known from | emulator |
 
-`i` is the imaginary unit and `e` Euler's number. Whether a local of either
-name compiles, and what it does to arithmetic if it does, has not been
-measured. Prefixed names (`zi`, `ze`) cost nothing and avoid the question.
+`i` is the imaginary unit and `e` Euler's number, and a local of either name
+compiles and holds what it is given: inside the function the local is the
+number, not the constant. Prefixed names (`zi`, `ze`) still read better next
+to arithmetic that uses the constants.
 
-**Evidence.** None. Two programs, one declaring `LOCAL i` and one declaring
-`LOCAL e`, each doing arithmetic with the name, would settle it.
+**Evidence.** Measured on the Virtual Calculator 2.4, build 2025-09-15, on 2026-09-24, by `hpprime examples --compile`, with its two controls coming out as they must: `LOCAL i; i := 2; RETURN i * 3;` answered 6, and
+`LOCAL e; e := 2; RETURN e + 1;` answered 3 ([results.tsv](../commands/results.tsv)).
 
 ---
 
@@ -655,9 +736,15 @@ An `EXPORT`ed name is visible from Home and from every other program, so two
 programs exporting `AREA` collide, and so does a program exporting a name an
 app already uses. Prefix them.
 
+**A program's name hides an app's function of the same name.** A program
+exporting `AREA`, which is the Function app's, compiled, and `AREA(2)` on
+Home then answered 12.5663706144, the program's, with the Function app
+active. So a program that exports an app's name takes that function away
+from Home for as long as it is installed.
+
 **Evidence.** Recorded in a table of run-time traps, measured on a G2
-with firmware 2.4.15515. What the calculator does when the collision is with
-an app's own function, rather than another program's, has not been measured.
+with firmware 2.4.15515. The collision with an app's function was measured
+on the Virtual Calculator 2.4, build 2025-09-15, on 2026-09-24, by `hpprime examples --compile`, with its two controls coming out as they must, `AREA(2)` read through `EXPR` ([results.tsv](../commands/results.tsv)).
 
 <a name="ppl.decimal-point"></a>
 ## The decimal point in source is always a dot
@@ -692,7 +779,7 @@ mechanism the open question in
 for globals.
 
 <a name="ppl.check-last-error"></a>
-## Check names the last bad line, not the first
+## Which bad line Check names depends on what is wrong with it
 
 | | |
 |---|---|
@@ -700,20 +787,23 @@ for globals.
 | Kind | rule |
 | Known from | emulator |
 
-When the editor's Check refuses a program, the line it names is the last one
-it could not read, not the first. Everything below that line is therefore
-clean; everything above it is still unknown. Fixing the named line makes the
-next report move backwards through the program, not forwards, so a program
-with several bad lines takes one round per bad line to clear.
+When the editor's Check refuses a program with several bad lines, it names
+one of them, and which one depends on the kind of error. With two plain
+syntax errors far apart, it named the **first**. With calls it could not
+read, it named the **last**, and fixing each moved the report backwards
+through the program. So the named line is a place to start, not a promise
+about the lines above or below it: a program with several bad lines takes one
+round per bad line to clear, in either order.
 
 **Evidence.** Measured on the Virtual Calculator 2.4, build 2025-09-15, with
 three generated programs that differed only in a few calls. Their bad lines
 were 31, 33 and 35 in the first, 31 and 33 in the second and 31 alone in the
 third, and Check named 35, then 33, then 31. Which calls were bad was settled
 separately by running each one inside `EXPR`, where a bad call is a value on
-its row instead of a refusal of the whole program. A program carrying two
-deliberate errors far apart would confirm the rule directly and has not been
-run.
+its row instead of a refusal of the whole program. The first-line case was
+measured on the same build on 2026-09-24: a program with `za := za + ;` on
+lines 4 and 12 and nothing else wrong, and Check named line 4, read off the
+screen by the person pressing it.
 
 <a name="ppl.speed-anchor"></a>
 ## The one speed figure there is

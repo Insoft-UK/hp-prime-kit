@@ -14,7 +14,7 @@ Every entry in this group, in full. Each one is written in its own file, and tha
 | [DoSolve](#DoSolve) | Solves the triangle the app holds, once something has put one there. |
 | [SAS](#SAS) | Two sides and the angle between them. |
 | [SSA](#SSA) | Two sides and an angle not between them, the ambiguous case. |
-| [SSS](#SSS) | Solves a triangle from three sides, and answers in degrees. |
+| [SSS](#SSS) | Solves a triangle from three sides, in degrees while its app is active. |
 | [SideA](#SideA) | The side opposite angle A, and a program can both read it and set it. |
 | [SideB](#SideB) | The side opposite angle B. |
 | [SideC](#SideC) | The side opposite angle C. |
@@ -147,10 +147,12 @@ The angle opposite side A, which DoSolve writes rather than reads.
 | `EXPR("  AngleA")` | `36.8698976458` | [emulator](results.tsv) |
 | `EXPR("AngleA")` | *error* | [emulator](results.tsv) |
 | `EXPR("AngleA:=30")` | *error* | [emulator](results.tsv) |
+| `EXPR("Triangle_Solver.AngleA")` | `−1` | [emulator](results.tsv) |
+| `EXPR("ZQREAD()")` | `−1` | [emulator](results.tsv) |
 
 ### Behaviour
 
-**The last two rows are the same calls with another app active** (emulator),
+**The third and fourth rows are the same calls with another app active** (emulator),
 and they are the clearest evidence here that the app rule can reach
 a variable, not only a function. It does not reach every one: most of the
 Finance app's variables answer from any app,
@@ -183,6 +185,12 @@ wrong and nothing raises.
 app active and refused for that reason. Whether setting an angle and leaving
 a side unknown makes `DoSolve` solve the other way round is the obvious next
 row, and this documentation does not have it.
+
+**With its app's name in front it answers from another app** (emulator):
+in the last two rows, with the Function app active, `Triangle_Solver.AngleA`
+read −1, and so did `ZQREAD`, a program whose source returns
+`Triangle_Solver.AngleA`, [apps.qualified-names](../topics/apps.md#apps.qualified-names). Assigning it that way was not tried
+(unverified).
 
 The interpreter does not implement it, so `hpprime run` cannot check a program
 that uses it (unverified).
@@ -473,7 +481,7 @@ that uses it (unverified).
 
 ## SSS
 
-Solves a triangle from three sides, and answers in degrees.
+Solves a triangle from three sides, in degrees while its app is active.
 
 | | |
 |---|---|
@@ -488,11 +496,12 @@ Solves a triangle from three sides, and answers in degrees.
 | `EXPR("SSS(6,8,10)")` | `{36.8698976458,53.1301023542,90}` | [emulator](results.tsv) |
 | `SSS(3,4,5)` | `{36.8698976458,53.1301023542,90}` | G2 |
 | `EXPR("SSS(3,4,5)")` | *error* | [emulator](results.tsv) |
+| `EXPR("Triangle_Solver.SSS(3,4,5)")` | `{0.643501108793,0.927295218002,1.57079632679}` | [emulator](results.tsv) |
 
 ### Behaviour
 
-**Three rows, and together they settle the group** (emulator and G2). The
-last is a batch with another app active and is refused. The middle is the
+**The first three rows settle the group** (emulator and G2). The
+third is a batch with another app active and is refused. The second is the
 same call typed by hand with the Triangle Solver selected, and it answers.
 The first is a batch **with the app selected before the program ran**, and it
 answers too -- so the rule reaches inside a program and the harness can
@@ -505,11 +514,17 @@ digit. One was read off the screen by hand and the other was decoded from the
 calculator's memory by the harness; agreeing to ten figures is what makes
 both trustworthy.
 
-**The answer is in degrees, and that is a trap** (G2). The three numbers are
+**With its app active the answer is in degrees, and that is a trap** (G2). The three numbers are
 the angles of that triangle in degrees and they sum to 180. Everything else
 this documentation has measured is in radians:
 [angle](geometry/angle.md) answers half of pi for a right angle,
 [apps.triangle-solver-degrees](../topics/apps.md#apps.triangle-solver-degrees).
+
+**Called with its app's name in front from another app, it answers in
+radians** (emulator): the last row, `Triangle_Solver.SSS(3,4,5)` with the
+Function app active, answered the same three angles in radians, summing to
+pi. The unit follows the app that is active, not the app the command belongs
+to, [apps.qualified-names](../topics/apps.md#apps.qualified-names).
 
 **The angles come back smallest first, matching the sides in the order
 given** (emulator): 36.87 opposite the shortest side, the right angle

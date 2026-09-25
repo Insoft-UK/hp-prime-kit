@@ -46,7 +46,10 @@ the agents built on it never claim more than it does.
 
 Inferred from the existing repository, and added phase by phase.
 
-- ✓ `hpprime lint`: twelve rules, each from an error measured on a G2 — existing
+- ✓ `hpprime lint`: thirteen rules, each naming the fact it comes from and that fact's label, and an error only as far as the measurement reaches — existing, narrowed on 2026-09-22 (9704074) after a report of false alarms in issue #1, and its unverified cases measured in Phase 8.1
+- ✓ An entry for every variable of Home and the system, and for `GET`; the open questions a program runs into measured, and `hpprime examples --compile` to ask whether a program compiles — Phase 8.1
+- ✓ An entry for every name the list documents, 706 of 706: every statement, command, Home function, app function, app variable and variable, and `GET` — Phases 5 to 8.1, closed with Phase 8 on 2026-09-25
+- ✓ A program reaches another app's variables and functions with the app's name in front, `Statistics_1Var.MeanX`, measured in source and through `EXPR`, and `hpprime run` calls it not covered rather than an error — Phase 8
 - ✓ `hpprime run`: runs the real PPL file on the PC, and raises instead of inventing a result — existing
 - ✓ `hpprime write` / `read` / `verify`: the `.hpprgm` container in both directions — existing
 - ✓ `hpprime build` / `verify`: `.hpappdir` apps, PPL and Python — existing
@@ -69,15 +72,18 @@ Inferred from the existing repository, and added phase by phase.
 - ✓ The platform topics carried over in the fixed format, none lost: every fact with an identifier, one statement, how it is known and its evidence, the refuted hypotheses and the unverified items included — Phase 4
 - ✓ Every lint message names the fact it comes from, and the deploy page explains the send from the Connectivity Kit by hand, marked as done once — Phase 4
 - ✓ An entry for every statement and program command, every Home function and every app function, each example with a Virtual Calculator result or a reason — Phases 5 to 7
+- ✓ The guided path linking its facts, `docs/llms.txt` within its budget, a README that leads with the documentation, and no example left unrun — Phase 9
+- ✓ `hpprime run` answers as the calculator does or says it does not cover the case, never a partial answer or a traceback; `MOD` and `NTHROOT` written between their operands — Phase 9.1
+- ✓ A batch on the emulator never replaces a stored row or loses a batch to one cell without saying so, and dates its rows the day they ran — Phase 9.1
 
 ### Active: Milestone 1, the documentation
 
 Numbered in `REQUIREMENTS.md`.
 
-- [ ] An entry for every PPL statement, command, Home function, app function, app variable and variable, and for `GET`: syntax, what it does, its arguments and what it returns, an example, the known edge cases, and its status. Done through the app functions; the app variables are Phase 8, the variables and `GET` Phase 8.1
 - [ ] Every example is run on the Virtual Calculator 2.4.15515, or says why it cannot be
 - [ ] A person can learn from zero with a guided path and look anything up in the reference
 - [ ] A model can load one entry or one topic without the rest, from an index
+- [ ] Every fact a PC could catch has a lint rule, or says why not — Phase 10
 
 ### Active: Milestone 2, the agent kit, built on the documentation
 
@@ -99,7 +105,7 @@ Deferred in `REQUIREMENTS.md`; planned when milestone 1 is done.
 
 - CAS commands — the choice was PPL command by command, not the whole platform. They are on the list for the linter, and can be a later milestone
 - How-to guides, explanation pages and a Spanish version — not chosen for milestone 1; the guided path and the reference cover what a person needs, and a second language doubles the maintenance of every page
-- Growing the interpreter in milestone 1 — the user's choice: it only learns the list of names; it grows in milestone 2
+- Growing the interpreter in milestone 1 — the user's choice: it only learns the list of names; it grows in milestone 2. One exception, chosen on 2026-09-24: `MOD` and `NTHROOT` as operators, the forms the calculator accepts, where it had accepted the one it refuses
 - Automating the keypresses on the emulator — the user's choice for Phase 3: the user presses them, a few batches in all
 - Two repositories — one repository with two layers. The documentation can be split out later with `git subtree split`, history included, if it gains contributors of its own
 - Rewriting the Python tools — they are validated; they change only where the new structure needs them to
@@ -157,9 +163,10 @@ Deferred in `REQUIREMENTS.md`; planned when milestone 1 is done.
     TermoHP with a 65,515-character source. Already fixed on 2026-09-10
     (cd14080), with a test over the five sizes that used to trip it; this
     document said otherwise until Phase 3 looked.
-  - The kit's starter program exports a function called `AREA`, which is also
-    the name of a Function app function. What the calculator does with that
-    has not been measured.
+  - What the calculator does when a program exports a name an app already
+    has, such as `AREA`, has not been measured. The starter no longer does
+    it: it exports `CIRCAREA` since 2026-09-23. The measurement is on Phase
+    8.1's list.
 - **Reference firmware.** G2, 2.4 revision 15515. There are no G1 measurements.
 
 ## Constraints
@@ -190,11 +197,11 @@ Deferred in `REQUIREMENTS.md`; planned when milestone 1 is done.
 | An example the emulator confirms goes from `HP help` to `emulator`; a disagreement is flagged, never replaced | The user's choice for Phase 3 | — Pending |
 | The interpreter does not grow in milestone 1; it only learns the list of names | The user's choice on 2026-09-11 | ✓ Good: lint reads the list (Phase 2) |
 | For people, milestone 1 has the guided path and the reference, nothing more | The user's choice on 2026-09-11 | — Pending |
-| App variables get entries, in their own phase after the app functions | The user's choice on 2026-09-11 | — Pending |
+| App variables get entries, in their own phase after the app functions | The user's choice on 2026-09-11 | ✓ Good: 172 of 172, the last 42 in two unattended batches (08-05) |
 | The list of names comes from HP's own sources, rebuilt by a maintainer's script; the sources stay outside the repository | Downloaded on 2026-09-11 with the user's permission | ✓ Good (Phase 2) |
 | CAS names are on the list, known to the linter, not documented | CAS is out of scope, but a program may call it | ✓ Good (Phase 2) |
 | `unknown-name` is a warning for a file alone and an error with `--set` | The user's choice for Phase 2: a file may call another program's export | ✓ Good (Phase 2) |
-| The linter compares the calculator's names without regard to case | Never flag a spelling the calculator might accept; the calculator's own behaviour is not measured | — Pending |
+| The linter compares the calculator's names without regard to case | Never flag a spelling the calculator might accept; the calculator's own behaviour is not measured | ✓ Good: the calculator reads `alog(2)` as `ALOG(2)`, `ppl.names-ignore-case` (08.1-01) |
 | Keep the measured facts and the Python tools; redo the structure, the docs and the entry points | They are validated on hardware; the problem is the shape, not the content | ✓ Good so far |
 | The redo happens on a local branch `redo` | The user's choice on 2026-09-11: `main` stays intact until the redo is ready | ✓ Good: `main` moved to it by fast-forward on 2026-09-14 |
 | The kit targets Claude Code only, with the content kept in one source | The user's choice on 2026-09-11; Claude Code has skills, agents and hooks natively | — Pending |
@@ -209,6 +216,15 @@ Deferred in `REQUIREMENTS.md`; planned when milestone 1 is done.
 | Planning language comes out of the documentation, and a check keeps it out | The user's choice on 2026-09-16; harness, batch and probe are explained once instead | ✓ Good: 132 rewrites, and the check refuses "phase" and "this kit" (09-02) |
 | The model index is `docs/llms.txt`, generated, with a budget of 100,000 bytes the check enforces | Approved with Phase 9's context on 2026-09-16: inside `docs/` so the documentation can still be split out, and loaded whole, so its size is watched | ✓ Good: 74,939 bytes for 598 entries and 117 facts (09-01) |
 | An example nobody has run fails the check | Approved on 2026-09-16 (CHECK-02): no stored answer is allowed only for *no value*, a G2 measurement, or the interpreter | ✓ Good: it reports nothing today, and holds that (09-01) |
+| The starter exports `CIRCAREA`, not `AREA` | The user's choice on 2026-09-23, over measuring what Home does with the collision first: `AREA` is the Function app's, and a reset calculator has that app active | ✓ Good: the guided path promises nothing unmeasured (09-03) |
+| Phase 9.1 before any more batches: the tools stop answering wrong and losing evidence in silence | The user's choice on 2026-09-24, from a review of the plan: `hpprime run` answered 9 to `9 MOD 4 + 100` with the linter clean, and the harness could replace a stored row or lose a batch to one cell | ✓ Good: every case refused or answered as measured, and the harness keeps what it cannot settle (Phase 9.1) |
+| The interpreter matches the calculator on `MOD` and `NTHROOT`, and refuses what is not measured about them | The user's choice for Phase 9.1 on 2026-09-24, over both forms raising: a deliberate exception to milestone 1's rule that the interpreter does not grow, because it corrected a form accepted wrongly | ✓ Good: `9 MOD 4 + 100` is refused until the binding is measured (Phase 9.1) |
+| Phase 8.1 ahead of the rest of Phase 8 | The user's choice on 2026-09-24: the variables of Home and the system reach every program, the 42 app variables left reach six apps | ✓ Good: nothing in 8.1 waited for Phase 8 |
+| Probe `App.Variable` before seven rounds with the app selected by hand | The user's choice on 2026-09-25 | ✓ Good: it works, in source and through `EXPR`, so the last 42 took two batches nobody had to prepare (08-05) |
+| Statistics measured with data and their `Do` command, not only read on a reset calculator | The user's choice on 2026-09-25 | ✓ Good: every value matched the hand computation, and the quartiles showed their method (08-05) |
+| The open questions a program runs into are measured in Phase 8.1's sessions | The user's choice on 2026-09-24: each one measured turns a lint warning into an error, or removes it | ✓ Good: `L(0)` is the last element, `x = 2;` assigns nothing, 9 locals do not compile, `Check` can name the first bad line (08.1) |
+| Compile questions answered by small programs, two controls and `Check` | The user's choice for Phase 8.1 on 2026-09-24, over the person reading out each `Check` | ✓ Good: both controls right on the first complete run; `hpprime examples --compile` (08.1-04) |
+| CHECK-04's open half gets Phase 10, which closes milestone 1 | The user's choice on 2026-09-24: no phase owned it, so the milestone could not close | — Pending |
 | `--relabel` moves `unverified` to `emulator` too, never `G2` | Approved on 2026-09-16: a label weaker than the measurement understates it as surely as a stronger one overstates it | ✓ Good: 21 examples moved, and a fact measured in Phase 5 and never written down was settled with them (09-01) |
 
 ## Evolution
@@ -229,4 +245,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with the current state
 
 ---
-*Last updated: 2026-09-16, when Phase 9 was questioned and Phase 8.1 inserted*
+*Last updated: 2026-09-25, when Phase 8 closed: every name the list documents has an entry*
